@@ -107,6 +107,8 @@
 | MCP | search / get-atom / cite als Tools; Operationen durch Capability beschnitten |
 | Abrechnung | Euro-Konto beim Betreiber; Metering aus audit.jsonl — Rechnung auditierbar aus dem Baum |
 
+**Entwicklung vs. Betrieb (Cloud-Klarheit):** Build-Werkzeuge (Spec-Autoren, Code-Generatoren, CI) dürfen in der Cloud sein — sie sehen Artefakte, keine Nutzdaten. Die **Runtime niemals**: Deutung, Inferenz, Speicherung laufen beim Nutzer; Cloud-KI ist nur der bewusst gewählte, redigierte, auditierte Ausnahmeweg über den Gateway — nie Standardpfad, nie im Verborgenen.
+
 ### 2.7 Sync (Tresor-Verbund)
 
 | Aspekt | Spezifikation |
