@@ -92,3 +92,39 @@ Die Code-Analyse des Teams (oben) + die On-Chain-Inventur des Ops zusammen ergeb
 2. **Key-Pfad prüfen:** `.env` (Quelle) → `secrets.env` (Deploy) → **Pod-Env** — die Kette hat an irgendeiner Stelle einen Bruch, sonst stünde `walletAddress: 0xD78E…` statt `"read-only"`. Da der Code die Adresse aus dem Key ableitet (anchor-routes.ts:162), wäre die Adresse die perfekte Verifikation: **im chain/status auftauchende 0xD78E… = Key angekommen.**
 3. **Scheduler bauen (Team-Empfehlung übernehmen):** ohne Batcher/Timer bleiben die 9 Batches Hand-Submits (`POST /api/chain/submit`). Vorschlag: Scheduler + `mode: "read-only" | "anchoring"` im Status — dann zeigt das Monitoring beides ehrlich.
 4. **(a) bleibt wie vom Team gelöst:** Migration `2026-04-19-embedding_tq.sql` anwenden — mit dem Teams-Befund, dass die Route „staging-only until Phase 14 cutover" war (simple-index.ts:842-844): das erklärt, warum die Spalte in Prod fehlt. Entweder Migration nachziehen oder Route bis Phase 14 sperren.
+
+
+---
+
+## ABSCHLUSS-BERICHT: Migration k3s + Scheduler-Deploy — LIVE VERIFIZIERT ✅
+
+*Verifiziert von der Spec-/Live-Seite (Hermes) am 30.08., nach dem 14:37–14:48-UTC-Fenster*
+
+### Live-Bestätigung (api-gitchain.0711.io, gemessen):
+
+```
+mode: "read-only"                        ← Stufe 1 exakt wie geplant (ehrlich: Key noch nicht da)
+scheduler: {laeuft: true, intervalMs: 900000 (15 Min), letzterTick: null,
+            verarbeiteteBatches: 0, fehlversuche: 0, fehlerhafteBatches: []}  ← DER SCHEDULER LEBT
+confirmed/pending: 0/9 · connected: true · network: base-sepolia
+POST /api/chain/submit ohne Auth → 400 "batchId is required" (Route offen — Absicherung steht aus)
+```
+
+**Alle DoD-Punkte S.1/S.2/S.3 sind live sichtbar:** Scheduler läuft (letzterTick null, weil noch
+kein Key → nichts zu tun, kein Fehler), mode-Feld ehrlich, Metriken vorhanden.
+
+### Die restliche Strecke bis "verankert von selbst" (Ops-Liste, final):
+
+1. **Auth vor /api/chain/submit** (offen — heute kann jeder mit :3361-Zugang rufen; P1, Security)
+2. **DEPLOYER_PRIVATE_KEY als Secret** (chain-Modul, blockchain.ts:115 — verifiziert am Baum)
+3. **CONTENT_CERTIFICATE_ADDRESS_MAINNET** konsolidieren (Netz-Decision sepolia/mainnet)
+4. Drain: 9 Batches × 15 Min ≈ 2¼ h nach Scharfschaltung
+5. Phase-3-Inspektor-Ablösung + Kleinkram (Test-PAT, FQDN-Flip, ExternalName, PORT_CONTRACT-Merge)
+
+### Sicherheits-Reminder (SEPARAT und DRINGEND):
+
+**Das in der Shell-History getippte Passwort: löschen + wechseln.**
+history -c löscht nur die Session; die Datei ~/.bash_history (oder zsh-Äquivalent) enthält die
+Zeile weiter. Konkret: Passwort JETZT ändern (das ist der einzig sichere Weg), dann optional
+die History-Zeile entfernen (sed -i '/<fragment>/d' ~/.bash_history in einer NEUEN Shell).
+Priorität über allem Kleinkram — Credentials in History sind Angriffsfläche Nr. 1.
