@@ -3,3 +3,4 @@ app/dist/
 app/release/
 docs/gitchain-ref/vault/
 docs/gitchain-ref/brain/
+app/.env
