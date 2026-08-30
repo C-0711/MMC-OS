@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* System: Schrift 28/17/15/13/11 · Radius 20/12/999 · Raster 8/12/16/24 */
+    body { margin: 0; }
+    a { color: #0060df; }
+    .tel {
+      width: 390px; height: 844px; overflow: hidden; position: relative;
+      display: flex; flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 17px; color: #1d1d1f; -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(120% 90% at 15% 12%, #f0e4cf 0%, rgba(240, 228, 207, 0) 45%),
+        linear-gradient(150deg, #b8d3ea 0%, #7fb0dd 38%, #2f6fbe 68%, #9db8d4 100%);
+    }
+    .tel::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,0.35) 46%, rgba(255,255,255,0.06) 52%, rgba(255,255,255,0) 60%);
+    }
+    .sicher { flex: none; height: 56px; }
+    .rumpf { flex: 1; min-height: 0; overflow: hidden; position: relative; z-index: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
+    .glas {
+      background: rgba(248, 250, 253, 0.82);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 20px 46px -18px rgba(20, 40, 70, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    .h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .t15 { font-size: 15px; }
+    .t13 { font-size: 13px; }
+    .sub { color: rgba(0, 0, 0, 0.45); }
+    .etikett { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(0,0,0,.42); }
+    .prim {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 52px; font-size: 17px; font-weight: 600; color: #fff; background: #0a84ff;
+      border-radius: 999px; padding: 0 24px; box-shadow: 0 10px 26px -8px rgba(10, 132, 255, 0.7);
+    }
+    .still {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 52px; font-size: 15px; font-weight: 500; color: #0060df;
+      background: rgba(255,255,255,.6); border-radius: 999px; padding: 0 20px;
+    }
+    .blatt {
+      width: 56px; height: 72px; flex: none; border-radius: 12px; background: #fff;
+      box-shadow: 0 2px 8px rgba(20,40,70,.18);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .zug { font-size: 13px; font-weight: 500; border-radius: 999px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px; }
+    .zug-ok { color: #1c7d3e; background: rgba(52,199,89,.16); }
+    .av { border-radius: 50%; flex: none; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .leiste {
+      flex: none; z-index: 1; padding: 8px 12px 28px; display: flex; gap: 4px;
+      background: rgba(255,255,255,.5); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,255,255,.6);
+    }
+    .reiter { flex: 1; height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border-radius: 12px; font-size: 11px; color: rgba(0,0,0,.5); }
+    .reiter.an { color: #0060df; background: rgba(255,255,255,.7); font-weight: 600; }
+    .rund { border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; }
+  </style>
+</helmet>
+
+<div class="tel">
+  <div class="sicher"></div>
+
+  <div class="rumpf">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div class="rund" style="width: 36px; height: 36px; background: rgba(255,255,255,.5)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.6)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+      </div>
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.5); border-radius: 999px; padding: 8px 16px 8px 12px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <span class="t15" style="font-weight: 600">Versicherungen</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 16px; overflow: hidden">
+
+      <div style="align-self: flex-end; max-width: 84%; padding: 12px 16px; line-height: 1.5; border-radius: 20px 20px 6px 20px; background: #0a84ff; color: #fff">Bin ich bei einem Wasserschaden versichert, und wie hoch ist die Selbstbeteiligung?</div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 92%">
+        <div class="glas" style="padding: 12px 16px; line-height: 1.55; border-radius: 20px 20px 20px 6px">
+          Ja, Leitungswasserschäden sind mitversichert. Die Selbstbeteiligung beträgt <b>150,00 EUR</b> je Schadenfall.
+        </div>
+
+        <div style="background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 20px -8px rgba(20,40,70,.4)">
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 8px">
+            <div class="etikett">Hausratversicherung — Leistungen</div>
+            <div class="t13" style="display: flex; gap: 12px"><span class="sub" style="width: 118px; flex: none">Leitungswasser</span><span>mitversichert</span></div>
+            <div class="t13" style="display: flex; gap: 12px"><span class="sub" style="width: 118px; flex: none">Selbstbeteiligung</span><span style="background: rgba(255,214,10,.42); padding: 1px 5px; border-radius: 4px; font-weight: 600">150,00 EUR je Schadenfall</span></div>
+          </div>
+          <div style="padding: 10px 16px; border-top: 1px solid rgba(0,0,0,.07); background: rgba(0,0,0,.02); display: flex; align-items: center; gap: 8px">
+            <span style="flex: none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.32)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg></span>
+            <span class="t13 sub" style="flex: 1">Hausratversicherung.pdf · S. 4</span>
+            <span class="t13" style="font-weight: 500; color: #0060df">öffnen</span>
+          </div>
+        </div>
+
+        <div class="t13 sub" style="display: flex; align-items: center; gap: 8px; padding-left: 4px">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #34c759; flex: none"></span>
+          gedacht auf deiner H200v — nichts hat das Haus verlassen
+        </div>
+      </div>
+
+      <div class="t15" style="margin-top: auto; color: rgba(0,0,0,.6); background: rgba(255,255,255,.55); border-radius: 999px; padding: 12px 16px; align-self: flex-start">Wer ist mein Ansprechpartner bei einem Schaden?</div>
+    </div>
+
+    <div style="flex: none; padding-bottom: 16px">
+      <div class="glas" style="display: flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 6px 6px 20px; height: 52px">
+        <span style="flex: 1; color: rgba(0,0,0,.4)">Frag deine Versicherungen …</span>
+        <span class="rund" style="width: 40px; height: 40px; background: #0a84ff">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="leiste">
+    <div class="reiter ">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+      Eingang
+    </div>
+    <div class="reiter an">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Fragen
+    </div>
+    <div class="reiter ">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg>
+      Dabei
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    a { color: #0a6ed1; } a:hover { color: #084f96; }
+    .schreibtisch {
+      width: 1360px; height: 900px; overflow: hidden; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      color: #1d1d1f; -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(120% 90% at 15% 12%, #f0e4cf 0%, rgba(240, 228, 207, 0) 45%),
+        linear-gradient(150deg, #b8d3ea 0%, #7fb0dd 38%, #2f6fbe 68%, #9db8d4 100%);
+    }
+    .fenster {
+      width: 1256px; height: 812px; border-radius: 10px; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 30px 70px -20px rgba(10, 25, 50, .55), 0 0 0 .5px rgba(0,0,0,.28);
+    }
+    .fenster-koerper { flex: 1; display: flex; min-height: 0; }
+    /* Seitenleiste: Vibrancy — nimmt den Schreibtisch dahinter auf */
+    .leiste {
+      flex: none; width: 224px; display: flex; flex-direction: column;
+      background: rgba(243, 244, 247, .74);
+      backdrop-filter: blur(48px) saturate(180%); -webkit-backdrop-filter: blur(48px) saturate(180%);
+      border-right: .5px solid rgba(0,0,0,.14);
+    }
+    .inhalt { flex: 1; min-width: 0; display: flex; flex-direction: column; background: #ffffff; }
+    /* Vereinheitlichte Werkzeugleiste */
+    .werkzeug {
+      flex: none; height: 52px; display: flex; align-items: center; gap: 10px;
+      padding: 0 14px; border-bottom: .5px solid rgba(0,0,0,.11);
+    }
+    .werkzeug-leiste { background: rgba(238, 240, 244, .72); backdrop-filter: blur(48px) saturate(180%); -webkit-backdrop-filter: blur(48px) saturate(180%); }
+    .werkzeug-inhalt { background: rgba(252, 252, 253, .92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+    /* Quellenliste */
+    .abschnitt { font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42); padding: 12px 10px 3px 12px; }
+    .zeile {
+      display: flex; align-items: center; gap: 8px; height: 26px;
+      margin: 0 8px; padding: 0 6px; border-radius: 6px; font-size: 13px; color: #1d1d1f;
+    }
+    .zeile.gewaehlt { background: #0a6ed1; color: #fff; }
+    .zeile .zahl { font-size: 11px; color: rgba(0,0,0,.38); font-variant-numeric: tabular-nums; }
+    .zeile.gewaehlt .zahl { color: rgba(255,255,255,.72); }
+    /* Steuerelemente */
+    .knopf {
+      display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px;
+      font-size: 12px; border-radius: 6px; background: #fff;
+      border: .5px solid rgba(0,0,0,.16); box-shadow: 0 1px 1.5px rgba(0,0,0,.06);
+    }
+    .knopf-akzent { background: #0a6ed1; color: #fff; border-color: transparent; }
+    .segment { display: inline-flex; height: 24px; border-radius: 6px; overflow: hidden; border: .5px solid rgba(0,0,0,.16); background: #fff; box-shadow: 0 1px 1.5px rgba(0,0,0,.06); }
+    .segment span { display: inline-flex; align-items: center; padding: 0 9px; border-right: .5px solid rgba(0,0,0,.12); }
+    .segment span:last-child { border-right: none; }
+    .suche {
+      display: inline-flex; align-items: center; gap: 6px; height: 24px; width: 190px; padding: 0 9px;
+      border-radius: 6px; background: rgba(0,0,0,.05); font-size: 12px; color: rgba(0,0,0,.42);
+    }
+    /* Inhaltszeilen */
+    .liste-kopf {
+      display: flex; align-items: center; gap: 12px; height: 26px; padding: 0 16px;
+      font-size: 11px; color: rgba(0,0,0,.45); border-bottom: .5px solid rgba(0,0,0,.09);
+    }
+    .doku { display: flex; align-items: center; gap: 11px; padding: 7px 16px; border-bottom: .5px solid rgba(0,0,0,.06); font-size: 13px; }
+    .doku.gewaehlt { background: rgba(10,110,209,.09); }
+    .status {
+      flex: none; height: 26px; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: rgba(0,0,0,.45); border-top: .5px solid rgba(0,0,0,.09);
+      background: rgba(248,248,250,.9);
+    }
+    .inspektor { flex: none; width: 264px; border-left: .5px solid rgba(0,0,0,.11); background: rgba(250,250,252,.95); display: flex; flex-direction: column; }
+    .insp-titel { font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42); }
+    .zug { font-size: 11px; font-weight: 500; border-radius: 4px; padding: 1.5px 6px; display: inline-flex; align-items: center; gap: 4px; }
+    .av { border-radius: 50%; flex: none; color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+    .neu { position: absolute; top: 14px; right: 18px; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; background: rgba(20,40,70,.55); backdrop-filter: blur(10px); border-radius: 999px; padding: 4px 11px; z-index: 5; }
+  </style>
+</helmet>
+
+<div class="schreibtisch">
+  <div class="neu">CTAX als Fall — statt sechs Behälter</div>
+  <div class="fenster">
+    <div class="fenster-koerper">
+
+      <div class="leiste">
+        <div class="werkzeug werkzeug-leiste" style="justify-content: flex-start">
+          <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+        </div>
+
+        <div style="flex: 1; overflow: hidden; padding-bottom: 8px">
+          <div class="zeile" style="margin-top: 8px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+            <span style="flex: 1">Eingang</span>
+            <span style="min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px; background: #0a84ff; color: #fff; font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center">7</span>
+          </div>
+
+          <div class="abschnitt">Arbeit · 0711</div>
+          <div class="zeile gewaehlt">
+            <span style="width:15px;height:15px;border-radius:4px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;flex:none">CT</span>
+            <span style="flex: 1">CTAX</span>
+            <span style="display: flex">
+              <span class="av" style="width:15px;height:15px;font-size:7px;background:#5e5ce6;margin-left:-3px;border:1px solid #0a84ff">GF</span>
+              <span class="av" style="width:15px;height:15px;font-size:7px;background:#ff9f0a;margin-left:-3px;border:1px solid #0a84ff">SH</span>
+            </span>
+          </div>
+          <div class="zeile">
+            <span style="width:15px;height:15px;border-radius:4px;background:rgba(0,0,0,.09);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:rgba(0,0,0,.5);flex:none">CD</span>
+            <span style="flex: 1">CDOC</span><span class="zahl">48</span>
+          </div>
+          <div class="zeile">
+            <span style="width:15px;height:15px;border-radius:4px;background:rgba(0,0,0,.09);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:rgba(0,0,0,.5);flex:none">BO</span>
+            <span style="flex: 1">BOSCH</span><span class="zahl">23</span>
+          </div>
+          <div class="zeile">
+            <span style="width:15px;height:15px;border-radius:4px;background:rgba(0,0,0,.09);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:rgba(0,0,0,.5);flex:none">OC</span>
+            <span style="flex: 1">OCULUS</span><span class="zahl">9</span>
+          </div>
+
+          <div class="abschnitt">Privat</div>
+          <div class="zeile">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M5 17h14l-1.5-5.5a2 2 0 0 0-2-1.5h-7a2 2 0 0 0-2 1.5z"></path><circle cx="7.5" cy="17" r="1.6"></circle><circle cx="16.5" cy="17" r="1.6"></circle></svg>
+            <span style="flex: 1">Auto</span><span class="zahl">7</span>
+          </div>
+          <div class="zeile">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#30b0a0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9"></path></svg>
+            <span style="flex: 1">Haus &amp; Wohnen</span>
+            <span class="av" style="width:15px;height:15px;font-size:7px;background:#7b8794">MB</span>
+          </div>
+        </div>
+
+        <div style="flex: none; padding: 0 8px 10px">
+          <div class="zeile" style="color: rgba(0,0,0,.5); margin: 0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" style="flex:none"><path d="M12 5v14M5 12h14"></path></svg>
+            <span>Neuer Fall</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="inhalt">
+        <div class="werkzeug werkzeug-inhalt">
+          <div class="segment">
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.55)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></span>
+          </div>
+          <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 4px">
+            <span style="font-size: 13px; font-weight: 600; letter-spacing: -.01em">CTAX</span>
+            <span style="font-size: 11px; color: rgba(0,0,0,.45); margin-top: 1px">ein Fall · Daily, Weekly, Review und Dev liegen darin</span>
+          </div>
+          <span style="flex: 1"></span>
+          <div style="display: flex; padding-right: 4px">
+            <span class="av" style="width:22px;height:22px;font-size:9px;background:#30b0a0;margin-left:-5px;border:1.5px solid #fcfcfd">CB</span>
+            <span class="av" style="width:22px;height:22px;font-size:9px;background:#34c759;margin-left:-5px;border:1.5px solid #fcfcfd">JZ</span>
+            <span class="av" style="width:22px;height:22px;font-size:9px;background:#5e5ce6;margin-left:-5px;border:1.5px solid #fcfcfd">GF</span>
+            <span class="av" style="width:22px;height:22px;font-size:9px;background:#ff9f0a;margin-left:-5px;border:1.5px solid #fcfcfd">SH</span>
+            <span class="av" style="width:22px;height:22px;font-size:9px;background:rgba(0,0,0,.12);color:rgba(0,0,0,.55);margin-left:-5px;border:1.5px solid #fcfcfd">+5</span>
+          </div>
+          <div class="knopf"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"></path></svg>Anrufen</div>
+          <div class="suche"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.38)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Im Fall suchen</div>
+        </div>
+
+        <div style="flex: 1; display: flex; min-height: 0">
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; padding: 16px 18px; gap: 12px">
+
+            <div style="font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42)">Donnerstag</div>
+
+            <div style="border: .5px solid rgba(0,0,0,.11); border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 1px 3px rgba(20,40,70,.07)">
+              <div style="padding: 10px 14px; display: flex; align-items: center; gap: 10px; border-bottom: .5px solid rgba(0,0,0,.08)">
+                <span style="width: 26px; height: 26px; border-radius: 6px; background: rgba(10,132,255,.12); display: flex; align-items: center; justify-content: center; flex: none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"></path></svg></span>
+                <div style="flex: 1"><div style="font-size: 13px; font-weight: 600">Review &amp; Planning · 9 Beteiligte</div><div style="font-size: 11px; color: rgba(0,0,0,.45)">42 min · Mitschrift liegt im Fall</div></div>
+                <span class="zug" style="color:#1c7d3e;background:rgba(52,199,89,.15)">gelesen</span>
+              </div>
+              <div style="padding: 11px 14px; display: flex; flex-direction: column; gap: 9px">
+                <div style="font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42)">Beschlüsse</div>
+                <div style="display: flex; align-items: flex-start; gap: 8px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>
+                  <span style="font-size: 12px; flex: 1">Prelive bleibt bis zum Freigabetermin eingefroren.</span>
+                  <span style="font-size: 11px; color: #0a84ff; text-decoration: underline; text-underline-offset: 2px; flex: none; font-variant-numeric: tabular-nums">04:12</span>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 8px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>
+                  <span style="font-size: 12px; flex: 1">CTAX-197 wird auf die nächste Iteration geschoben.</span>
+                  <span style="font-size: 11px; color: #0a84ff; text-decoration: underline; text-underline-offset: 2px; flex: none; font-variant-numeric: tabular-nums">18:35</span>
+                </div>
+                <div style="height: .5px; background: rgba(0,0,0,.08); margin: 2px 0"></div>
+                <div style="font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42)">Aufgaben</div>
+                <div style="display: flex; align-items: flex-start; gap: 8px">
+                  <span style="width: 13px; height: 13px; border: 1.5px solid rgba(0,0,0,.25); border-radius: 3px; flex: none; margin-top: 2px"></span>
+                  <span style="font-size: 12px; flex: 1">Stefan schickt die Abnahmekriterien bis Montag.</span>
+                  <span class="av" style="width:17px;height:17px;font-size:7px;background:#ff9f0a;flex:none">SH</span>
+                  <span style="font-size: 11px; color: #0a84ff; text-decoration: underline; text-underline-offset: 2px; flex: none; font-variant-numeric: tabular-nums">27:50</span>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 8px">
+                  <span style="width: 13px; height: 13px; border: 1.5px solid rgba(0,0,0,.25); border-radius: 3px; flex: none; margin-top: 2px"></span>
+                  <span style="font-size: 12px; flex: 1">Gerd stellt den Prelive-Zugang für Jan bereit.</span>
+                  <span class="av" style="width:17px;height:17px;font-size:7px;background:#5e5ce6;flex:none">GF</span>
+                  <span style="font-size: 11px; color: #0a84ff; text-decoration: underline; text-underline-offset: 2px; flex: none; font-variant-numeric: tabular-nums">31:04</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42); padding-top: 2px">Dienstag</div>
+
+            <div style="display: flex; align-items: flex-start; gap: 11px; padding: 9px 12px; border-radius: 10px; background: rgba(0,0,0,.028)">
+              <span style="width: 34px; height: 44px; flex: none; border-radius: 4px; background: #fff; box-shadow: 0 1px 4px rgba(20,40,70,.16); display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg></span>
+              <div style="flex: 1; min-width: 0">
+                <div style="font-size: 13px; font-weight: 600">Abnahmeprotokoll CTAX.pdf</div>
+                <div style="font-size: 11px; color: rgba(0,0,0,.45); margin-top: 2px">Stefan Haubrich legte es über seafile.buhl.de ab — beim Ankommen gelesen, nicht nur verlinkt.</div>
+                <div style="display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; align-items: center">
+                  <span class="zug" style="color:#8a5a00;background:rgba(255,159,10,.16)">von extern</span>
+                  <span class="zug" style="color:#1c7d3e;background:rgba(52,199,89,.15)">gelesen</span>
+                  <span style="font-size: 11px; color: rgba(0,0,0,.4)">6 Seiten · 3 Fristen erkannt</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 11px; padding: 9px 12px; border-radius: 10px; background: rgba(0,0,0,.028)">
+              <span style="width: 34px; height: 44px; flex: none; border-radius: 4px; background: linear-gradient(160deg,#dfe7ef,#c2d0de); display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path></svg></span>
+              <div style="flex: 1; min-width: 0">
+                <div style="font-size: 13px; font-weight: 600">ctax-prelive.buhl.de</div>
+                <div style="font-size: 11px; color: rgba(0,0,0,.45); margin-top: 2px">Gerd Flender teilte den Zugang — die Seite gehört zum Beschluss „Prelive eingefroren".</div>
+                <div style="display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap">
+                  <span class="zug" style="color:#8a5a00;background:rgba(255,159,10,.16)">von extern</span>
+                  <span class="zug" style="color:#0060df;background:rgba(10,132,255,.11)">hängt an Beschluss 04:12</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="inspektor">
+            <div style="padding: 13px 16px 12px; display: flex; flex-direction: column; gap: 10px; border-bottom: .5px solid rgba(0,0,0,.09)">
+              <div style="display: flex; align-items: center; gap: 7px">
+                <span class="insp-titel" style="flex: 1">Wer ist drin</span>
+                <span style="font-size: 11px; color: rgba(0,0,0,.45)">9 · 3 extern</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span style="position: relative; flex: none"><span class="av" style="width:22px;height:22px;font-size:9px;background:#30b0a0">CB</span><span style="position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:#34c759;border:1.5px solid #fafafc"></span></span>
+                <span style="font-size: 12px; flex: 1">Christoph Bertsch</span>
+                <span class="zug" style="color:#1c7d3e;background:rgba(52,199,89,.15)">du</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span style="position: relative; flex: none"><span class="av" style="width:22px;height:22px;font-size:9px;background:#34c759">JZ</span><span style="position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:#34c759;border:1.5px solid #fafafc"></span></span>
+                <span style="font-size: 12px; flex: 1">Jan Ziegler</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span class="av" style="width:22px;height:22px;font-size:9px;background:#5e5ce6">GF</span>
+                <div style="flex: 1; min-width: 0"><div style="font-size: 12px">Gerd Flender</div><div style="font-size: 11px; color: rgba(0,0,0,.42)">Buhl</div></div>
+                <span class="zug" style="color:#8a5a00;background:rgba(255,159,10,.18)">extern</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span class="av" style="width:22px;height:22px;font-size:9px;background:#ff9f0a">SH</span>
+                <div style="flex: 1; min-width: 0"><div style="font-size: 12px">Stefan Haubrich</div><div style="font-size: 11px; color: rgba(0,0,0,.42)">Buhl</div></div>
+                <span class="zug" style="color:#8a5a00;background:rgba(255,159,10,.18)">extern</span>
+              </div>
+              <span style="font-size: 11px; color: rgba(0,0,0,.4)">+ 5 weitere</span>
+            </div>
+
+            <div style="padding: 13px 16px; display: flex; flex-direction: column; gap: 11px; flex: 1; overflow: hidden">
+              <div class="insp-titel">Offen aus diesem Fall</div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <div style="font-size: 12px; font-weight: 500">Abnahmekriterien</div>
+                <div style="font-size: 11px; color: rgba(0,0,0,.45)">Stefan Haubrich · bis Montag</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <div style="font-size: 12px; font-weight: 500">Prelive-Zugang für Jan</div>
+                <div style="font-size: 11px; color: rgba(0,0,0,.45)">Gerd Flender · ohne Datum</div>
+              </div>
+
+              <div style="height: .5px; background: rgba(0,0,0,.09)"></div>
+
+              <div class="insp-titel">Termine in diesem Fall</div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span style="font-size: 12px; flex: 1">Daily</span><span style="font-size: 11px; color: rgba(0,0,0,.45)">werktags 9:15</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span style="font-size: 12px; flex: 1">Weekly</span><span style="font-size: 11px; color: rgba(0,0,0,.45)">Mo 10:00</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <span style="font-size: 12px; flex: 1">Review &amp; Planning</span><span style="font-size: 11px; color: rgba(0,0,0,.45)">Do 14:00</span>
+              </div>
+              <div style="font-size: 11px; color: rgba(0,0,0,.4); line-height: 1.45; padding-top: 2px">Kein eigener Kanal je Termin — sie sind Termine desselben Falls.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

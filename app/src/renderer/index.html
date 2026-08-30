@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Der ruhige Raum</title>
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    /* Layout — ein Fenster, vier Zustände */
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Leiste oben */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 28px;
+      border-bottom: var(--border-hairline);
+      flex-shrink: 0;
+    }
+
+    /* .siegel kommt aus tokens.css — rund, Radialverlauf, Serife */
+
+    .zustand {
+      font-size: 13px;
+      color: #8A817A;
+    }
+
+    /* Bühne */
+    main {
+      flex: 1;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 28px 120px;
+      overflow-y: auto;
+    }
+
+    .gruss {
+      font-size: var(--text-headline);
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+
+    .gruss-klein {
+      font-size: 17px;
+      color: #8A817A;
+      margin-bottom: 34px;
+    }
+
+    .alles-ruhig {
+      font-size: 20px;
+      color: var(--salbei);
+      font-style: italic;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    /* Karten */
+    #karten-container {
+      display: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .karte h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .karte p {
+      font-size: var(--text-karte);
+      color: #5A524B;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .beweis-link {
+      font-size: 12px;
+      color: #8A817A;
+      margin: 8px 0;
+    }
+
+    .fussnote {
+      margin: 12px 0;
+    }
+
+    .fussnote summary {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .fussnote summary:hover {
+      color: var(--salbei);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    /* Frag-mich */
+    .frag-mich {
+      position: fixed;
+      bottom: 24px;
+      right: 28px;
+      background: #fff;
+      border: var(--border-hairline);
+      border-radius: var(--radius-pille);
+      padding: 12px 22px;
+      cursor: pointer;
+      font-size: var(--text-karte);
+      color: #8A817A;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all var(--transition-mittel);
+      z-index: 10;
+    }
+
+    .frag-mich:hover {
+      color: var(--tinte);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Dialog (Frag-mich-Zustand) */
+    #dialog-container {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .dialog-panel {
+      background: #fff;
+      border: var(--border-hairline);
+      border-radius: var(--radius-karte);
+      padding: 24px;
+      max-width: 100%;
+    }
+
+    #dialog-log {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+    }
+
+    .frage {
+      text-align: right;
+      color: #8A817A;
+      font-size: var(--text-karte);
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .antwort {
+      font-size: var(--text-karte);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--beige-soft);
+      border-radius: var(--radius-klein);
+    }
+
+    .dialog-eingabe {
+      display: flex;
+      gap: 10px;
+    }
+
+    .dialog-eingabe input {
+      flex: 1;
+      border: var(--border-hairline);
+      padding: 10px 16px;
+      font-size: var(--text-karte);
+      font-family: var(--font-sans);
+      background: #fff;
+      border-radius: var(--radius-pille);
+      outline: none;
+    }
+
+    .dialog-eingabe input:focus {
+      border-color: var(--salbei);
+    }
+
+    .dialog-eingabe button {
+      flex-shrink: 0;
+    }
+
+    /* Fall-Ansicht */
+    #fall-ansicht-container {
+      display: none;
+    }
+
+    /* Seitenbrett */
+    #seitenbrett-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 28px;
+      background: #fff;
+      border: var(--border-hairline);
+      border-radius: var(--radius-pille);
+      padding: 12px 22px;
+      cursor: pointer;
+      font-size: var(--text-karte);
+      color: #8A817A;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all var(--transition-mittel);
+      z-index: 10;
+    }
+
+    #seitenbrett-toggle:hover {
+      color: var(--tinte);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    #seitenbrett-panel {
+      position: fixed;
+      left: 28px;
+      bottom: 80px;
+      width: 280px;
+      max-height: 400px;
+      background: #fff;
+      border: var(--border-hairline);
+      border-radius: var(--radius-karte);
+      padding: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+      display: none;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    /* Beweis-Overlay */
+    #beweis-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.3);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--tinte);
+      color: #fff;
+      font-size: 13px;
+      padding: 10px 22px;
+      border-radius: var(--radius-pille);
+      opacity: 0;
+      transition: opacity var(--transition-mittel);
+      pointer-events: none;
+      z-index: 1100;
+    }
+
+    .toast.sichtbar {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Leiste -->
+  <header>
+    <div class="siegel" title="Du — Identität, Autonomie, Recovery">Du</div>
+    <div class="zustand">
+      <span id="zustand-text">heute · lädt…</span>
+    </div>
+  </header>
+
+  <!-- Bühne -->
+  <main>
+    <div class="gruss serif" id="gruss">Guten Morgen.</div>
+    <div class="gruss-klein" id="gruss-klein">Zieh ein Dokument hierher, dann fangen wir an.</div>
+
+    <!-- Zustand: ruhig -->
+    <div class="alles-ruhig serif" id="alles-ruhig" style="display: none;">
+      Alles ruhig.
+    </div>
+
+    <!-- Zustand: fragend (Karten) -->
+    <div id="karten-container"></div>
+
+    <!-- Zustand: antwortend (Dialog) -->
+    <div id="dialog-container">
+      <div class="dialog-panel">
+        <div id="dialog-log">
+          <div class="antwort">
+            <p style="color: #8A817A;">Frag mich alles — ich antworte mit Beweis.</p>
+          </div>
+        </div>
+        <div class="dialog-eingabe">
+          <input
+            type="text"
+            id="frag-mich-eingabe"
+            placeholder="z. B. Was habe ich mit Weber vereinbart?"
+            autocomplete="off">
+          <button class="pill-salbei" id="frag-mich-senden" style="padding: 0 18px" aria-label="Fragen">↑</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zustand: fall-ansicht (Erzählung) -->
+    <div id="fall-ansicht-container"></div>
+  </main>
+
+  <!-- Beweis-Overlay -->
+  <div id="beweis-overlay"></div>
+
+  <!-- Seitenbrett-Toggle -->
+  <div id="seitenbrett-toggle">Fälle</div>
+
+  <!-- Seitenbrett-Panel -->
+  <div id="seitenbrett-panel">
+    <div id="seitenbrett-liste"></div>
+  </div>
+
+  <!-- Frag-mich-Toggle -->
+  <div class="frag-mich" id="frag-mich-toggle">Frag mich</div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>

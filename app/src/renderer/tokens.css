@@ -1,0 +1,308 @@
+/**
+ * Design-Tokens — VERBINDLICH nach docs/design-canvas/os-tokens.css
+ * Stand: 30.08.2026, Bausteine-Blatt
+ */
+
+:root {
+  /* Farben — vier, nicht mehr */
+  --os-grund:    #FAF7F2;  /* Warmweiß — der Grund */
+  --os-salbei:   #8FA98F;  /* Handlung, Zustimmung, gelesen */
+  --os-rose:     #D9A6A0;  /* Markierung, Beenden — nie Alarm */
+  --os-olivgold: #B8A369;  /* Siegel, Hinweis, Referenz */
+  --os-tinte:    #2A2520;  /* Text */
+  --os-sub:      rgba(42,37,32,.55);
+
+  /* Alias für Etappe-1-Kompatibilität */
+  --canvas: var(--os-grund);
+  --tinte: var(--os-tinte);
+  --salbei: var(--os-salbei);
+  --rose: var(--os-rose);
+  --olivgold: var(--os-olivgold);
+  --beige: #E8DFD3; /* bleibt für Hairline */
+  --beige-soft: rgba(232,223,211,.45); /* stiller Grund für Antworten */
+  --hairline: #E8DFD3;
+
+  /* Schrift: Playfair Display 400, nie fett */
+  --os-serif: 'Playfair Display', Georgia, 'Times New Roman', serif; /* 34/30/28/22/21 */
+  --os-sans:  -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; /* 17/15/13/11 */
+  --os-mono:  'SF Mono', Menlo, Monaco, monospace; /* 11 — nur die Quellzeile */
+
+  /* Alias für Etappe-1-Kompatibilität */
+  --font-serif: var(--os-serif);
+  --font-sans: var(--os-sans);
+  --font-mono: var(--os-mono);
+  --text-basis: 15px;
+  --text-headline: 34px;
+  --text-karte: 13px;
+  --text-quelle: 11px;
+
+  /* Radien */
+  --os-radius-karte: 16px;
+  --os-radius-innen: 12px;
+  --os-radius-blatt: 8px;
+  --os-radius-rund:  999px;
+
+  /* Alias für Etappe-1-Kompatibilität */
+  --radius-karte: var(--os-radius-karte);
+  --radius-klein: var(--os-radius-innen);
+  --radius-pille: var(--os-radius-rund);
+  --border-hairline: 1px solid var(--hairline);
+
+  /* Bewegung: max 300ms, eine Bedeutung je Animation */
+  --os-motion-max: 300ms;
+  --transition-schnell: 150ms ease-out;
+  --transition-mittel: 250ms ease-out;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--os-sans);
+  font-size: 15px;
+  background: var(--os-grund);
+  color: var(--os-tinte);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typo-Klassen */
+.serif {
+  font-family: var(--os-serif);
+  font-weight: 400; /* nie fett */
+}
+
+.quelle {
+  font-family: var(--os-mono);
+  font-size: 11px;
+  color: rgba(42,37,32,.6);
+}
+
+/* ============================================================
+   BAUSTEINE — die Komponentenschicht zum Bausteine-Blatt.
+   Jede Klasse hier existiert auf dem Blatt mit denselben Werten.
+   ============================================================ */
+
+/* Textgrößen — 17/15/13/11, mehr gibt es nicht */
+.t17 { font-size: 17px; }
+.t15 { font-size: 15px; }
+.t13 { font-size: 13px; }
+.t11 { font-size: 11px; }
+.sub { color: var(--os-sub); }
+
+.etikett {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(42,37,32,.42);
+}
+
+/* Karten-Komponente — der Vorschlag */
+.karte {
+  background: #fff;
+  border: 1px solid rgba(184,163,105,.22);
+  border-radius: var(--os-radius-karte);
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+  transition: box-shadow var(--transition-mittel);
+}
+
+/* Zweifel/Hinweis — KEIN Left-Border-Akzent (verbotener Trope):
+   die ganze Karte färbt sich leise. */
+.karte.warn {
+  border-color: rgba(217,166,160,.55);
+  background: rgba(217,166,160,.06);
+}
+.karte.info {
+  border-color: rgba(184,163,105,.5);
+  background: rgba(184,163,105,.05);
+}
+
+/* Listenzeile — still = erledigt (max. 3 je Screen) */
+.listenzeile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(184,163,105,.22);
+  border-radius: var(--os-radius-karte);
+  padding: 14px 16px;
+  box-shadow: none;
+}
+
+/* Pillen — 15/600 · Höhe 44–52 · Schatten nur auf der Farbpille */
+.pill-salbei,
+.pill-still,
+.pill-rose,
+button.pill-salbei,
+button.pill-still,
+button.pill-rose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 24px;
+  border-radius: var(--os-radius-rund);
+  border: none;
+  cursor: pointer;
+  font-family: var(--os-sans);
+  font-size: 15px;
+  transition: transform var(--transition-schnell), opacity var(--transition-mittel);
+}
+.pill-salbei {
+  background: var(--os-salbei);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+}
+.pill-still {
+  background: rgba(143,169,143,.14);
+  color: #5c705c;
+  font-weight: 500;
+}
+.pill-rose { /* beenden, nie Alarm */
+  background: var(--os-rose);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 8px 22px -10px rgba(190,130,120,.7);
+}
+.pill-salbei:hover, .pill-rose:hover { opacity: .92; }
+.pill-still:hover { background: rgba(143,169,143,.22); }
+.pill-salbei:active, .pill-still:active, .pill-rose:active { transform: scale(.97); }
+
+/* Siegel — rund, Radialverlauf, Serife */
+.siegel {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--os-radius-rund);
+  flex: none;
+  background: radial-gradient(circle at 34% 30%, #c9b57e, var(--os-olivgold) 58%, #96824c);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--os-serif);
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+}
+
+/* Quellzeile — Mono 11, nur hier */
+.quelle,
+.quellzeile {
+  font-family: var(--os-mono);
+  font-size: 11px;
+  color: rgba(42,37,32,.6);
+}
+.quellzeile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.quellzeile b { color: var(--os-tinte); }
+
+/* Zug — die Plakette */
+.zug {
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: var(--os-radius-rund);
+  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.zug-ok   { color: #5c705c; background: rgba(143,169,143,.16); }
+.zug-fall { color: #96824c; background: rgba(184,163,105,.14); }
+.zug-rose { color: #9c6a63; background: rgba(217,166,160,.16); }
+
+/* Blatt-Markierungen — für DOM-Rechtecke außerhalb von beweis.ts */
+.mark-beweis {
+  border: 2px solid var(--os-rose);
+  background: rgba(217,166,160,.08);
+  border-radius: 6px;
+}
+.mark-lese {
+  border: 1.5px solid rgba(143,169,143,.5);
+  background: rgba(143,169,143,.13);
+  border-radius: 5px;
+}
+
+/* Fragefeld */
+.frag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  background: #fff;
+  border: 1px solid rgba(184,163,105,.3);
+  border-radius: var(--os-radius-rund);
+  padding: 0 8px 0 18px;
+  box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+}
+
+/* Trenner mit Etikett — „freigegeben", „als Beschluss festgehalten" */
+.trenner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #5c705c;
+}
+.trenner::before,
+.trenner::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: rgba(143,169,143,.4);
+}
+
+/* Alt-Klassen aus Etappe 1 — auf die Bausteine gemappt, damit nichts bricht */
+button {
+  font-family: var(--os-sans);
+  border: none;
+  cursor: pointer;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: var(--os-radius-rund);
+  background: var(--os-salbei);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+}
+.btn-primary:hover { opacity: .92; }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: var(--os-radius-rund);
+  background: rgba(143,169,143,.14);
+  color: #5c705c;
+  font-size: 15px;
+  font-weight: 500;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--os-sub);
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 13px;
+}

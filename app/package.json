@@ -1,0 +1,20 @@
+{
+  "name": "mmc-os",
+  "version": "0.1.0",
+  "description": "Der ruhige Raum — gitchain OS Desktop-App",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.renderer.json",
+    "build": "tsc && tsc -p tsconfig.renderer.json && cp src/renderer/index.html dist/renderer/ && cp src/renderer/tokens.css dist/renderer/",
+    "start": "npm run build && electron .",
+    "test": "rm -rf dist/test && tsc -p test/tsconfig.json && node --test 'dist/test/test/*.test.js'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "electron": "^32.0.0",
+    "typescript": "^5.5.0"
+  }
+}

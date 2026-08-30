@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369
+       Schrift: Serife 34/22 (400, nie fett) · Sans 15/13/11 · Radius 16/8/999 */
+    body { margin: 0; }
+    a { color: #6e6550; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .karte {
+      background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+    }
+    .pill-salbei {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 44px; padding: 0 26px; border-radius: 999px;
+      background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+    }
+    .pill-still {
+      display: flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 22px; border-radius: 999px;
+      background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500;
+    }
+    .siegel {
+      width: 44px; height: 44px; border-radius: 999px; flex: none;
+      background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+      font-size: 14px;
+    }
+    .quellzeile {
+      font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .frag {
+      display: flex; align-items: center; gap: 10px; height: 44px;
+      background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px;
+      padding: 0 8px 0 18px; box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 12px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <span style="flex: 1"></span>
+      <div class="t11 sub">Buderus-Kataloge · Original unverändert · nur du</div>
+      <div class="siegel serif">Du</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 4px 80px 0">
+
+      <div class="t13 sub">Du fragst: „Für welchen Einbau ist der Flügelradzähler PTFB0003 vorgesehen?"</div>
+      <div class="serif" style="font-size: 30px; margin-top: -10px">Vertikaler Einbau in Falleitungen.</div>
+
+      <!-- Der Katalog-Ausschnitt: die Stelle selbst -->
+      <div style="width: 560px; background: #fff; border-radius: 8px; box-shadow: 0 18px 50px -18px rgba(70,58,38,.4); padding: 32px 40px; display: flex; flex-direction: column; gap: 11px">
+        <div style="font-size: 12px; font-weight: 600; color: rgba(42,37,32,.65); letter-spacing: .02em">FLÜGELRADZÄHLER PTFB0003</div>
+        <div class="t11 sub" style="font-family:'SF Mono',Menlo,monospace">7738302734</div>
+        <div style="height: 8px"></div>
+        <div style="position: relative; display: flex; gap: 16px; font-size: 13px; padding: 4px 8px; margin: 0 -8px">
+          <span style="position: absolute; inset: 0; border: 2px solid #D9A6A0; border-radius: 6px; background: rgba(217,166,160,.08)"></span>
+          <span class="sub" style="width: 110px; flex: none">Einbau</span><span style="font-weight: 600">vertikal in Falleitung</span>
+        </div>
+        <div style="display: flex; gap: 16px; font-size: 13px; padding: 0 0"><span class="sub" style="width: 110px; flex: none">Anschluss</span><span>G 1 für R 3/4</span></div>
+        <div style="display: flex; gap: 16px; font-size: 13px"><span class="sub" style="width: 110px; flex: none">Qp</span><span>1,5</span></div>
+      </div>
+
+      <div class="quellzeile">
+        <span>Fall <b style="color:#2a2520">buderus-kataloge</b></span><span>·</span>
+        <span>Systemzubehör-Installationssysteme.pdf</span><span>·</span>
+        <span>Seite 12</span><span>·</span>
+        <span>Commit 41994a0</span><span>·</span>
+        <span style="display: inline-flex; align-items: center; gap: 4px; color: #5c705c">Signatur
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 10px">
+        <div class="pill-salbei">Stimmt</div>
+        <div class="pill-still">Original öffnen</div>
+        <div class="pill-still" style="background: rgba(217,166,160,.16); color: #9c6a63">Falsch zugeordnet</div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: flex-end; padding: 0 28px 24px">
+      <div class="frag" style="width: 320px">
+        <span style="flex: 1; color: rgba(42,37,32,.4)">Weiter fragen …</span>
+        <span style="width: 32px; height: 32px; border-radius: 999px; background: #8FA98F; display: flex; align-items: center; justify-content: center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
