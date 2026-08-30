@@ -128,3 +128,63 @@ history -c löscht nur die Session; die Datei ~/.bash_history (oder zsh-Äquival
 Zeile weiter. Konkret: Passwort JETZT ändern (das ist der einzig sichere Weg), dann optional
 die History-Zeile entfernen (sed -i '/<fragment>/d' ~/.bash_history in einer NEUEN Shell).
 Priorität über allem Kleinkram — Credentials in History sind Angriffsfläche Nr. 1.
+
+
+---
+
+## ✅ FINALE: SCHARFSCHALTUNG KOMPLETT — von beiden Seiten live gemessen (30.08., ~16:24 UTC)
+
+**Die Diagnose-Kette ist geschlossen. Am Ende des Bogens:**
+
+| Messpunkt | Box (dein Wächter) | Live-API (meine Sonde) |
+|---|---|---|
+| Erster Tick | — | `letzterTick: 2026-08-30T16:24:35Z` |
+| Erster Batch verankert | **Wallet-Nonce 14 → 15** (echte Mainnet-Tx) | `verarbeiteteBatches: 1`, `confirmed: 1/8 pending` |
+| Gas | 0,00279103 → 0,00279016 ETH (≈0,00000087 ETH/Batch) | — |
+| Fehlversuche | 0 | 0 — der Backoff wurde nie gebraucht |
+
+**Die vollständige Kette dieses Befundes (alle im Baum dokumentiert):**
+
+1. Live-Sonde: „Verankerung INAKTIV" (connected:false, 0/9) → Diagnose
+2. Team: Code-Analyse — kein Batcher, falsche Key-Annahme (ANCHOR_WALLET_KEY vs DEPLOYER_PRIVATE_KEY)
+3. Ops: Wallet-Inventur — Mainnet-Wallet vs Sepolia-Config
+4. Live-Messung: `eth_getCode` — **Contract lebt auf MAINNET, Sepolia hatte 0x** (Netz-Decision zur Faktenlage)
+5. Bau-Auftrag → Patch 0001 (Scheduler+mode+Wächter) + 0002 (Auth)
+6. k3s-Migration + Rollout anchor2-20260830
+7. **Scharfschaltung:** mode:"anchoring" · wallet:0xD78E… · base-mainnet · submit 401-geschützt
+8. **Erstes on-chain-Siegel von gitchain-Content — verifiziert durch Nonce-Anstieg UND API-Zähler**
+
+**Rest-Drain:** 8 Batches × 15 Min ≈ 2 h (Gaskosten gesamt ~0,000007 ETH — das Guthaben
+trägt das um Größenordnungen). Beschleunigung möglich: reiner Values-Flip
+(ANCHOR_SCHEDULER_INTERVAL_MS), kein Code — Ops-Entscheidung.
+
+**Was bleibt (menschlich, nicht technisch):** P0 Passwort (Wechsel VOR History-Säuberung),
+Test-PAT chain:submit für externe Batch-Pflege, Phase-3-Inspektor-Ablösung.
+
+*Damit gilt ab jetzt auf der Website zu Recht: „sealed truth, signed, on-chain" — selbstlaufend,
+sichtbar ehrlich (mode), geschützt (401), und für ~Bruchteil eines Cents pro Beweis.*
+
+
+---
+
+## 🎉 DRAIN KOMPLETT — 9/9 CONFIRMED (30.08., ~16:50 UTC, live verifiziert)
+
+```
+confirmed: 9/9 · pending: 0 · fehlversuche: 0 · fehlerhafte: 0
+mode: "anchoring" · base-mainnet · wallet 0xD78E… (Nonce 14 → 23: 9 echte Tx)
+```
+
+**Alle 10 Manifeste / 9 Batches der Registry sind auf Base-Mainnet verankert.**
+Der Wächter wurde gestoppt (Aufgabe erfüllt). Der Scheduler läuft weiter und
+verankert künftige Batches automatisch (15-Min-Tick, ~0,00000087 ETH pro Batch).
+
+**Die vollständige Erfolgskette des Tages:** Diagnose „Verankerung INAKTIV" →
+Code-Analyse (falscher Key-Name) → Wallet-Inventur (Mainnet vs Sepolia) →
+eth_getCode-Messung (Contract = MAINNET) → Auftrag → Patch 0001+0002 →
+k3s-Migration → Scharfschaltung (mode:anchoring, 401-Auth) → **9/9 verankert.**
+
+Von „connected: false, 0/9, niemand weiß warum" bis „selbstlaufend, geschützt,
+für einen Bruchteil eines Cents pro Beweis" — an einem Nachmittag.
+
+*Der Wahrheitsgehalt der Website ist hergestellt: „sealed truth, signed, on-chain —
+verifiable by anyone, anytime."*
