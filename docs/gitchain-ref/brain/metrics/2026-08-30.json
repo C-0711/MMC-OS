@@ -1,0 +1,17 @@
+{
+  "datum": "2026-08-30T09:17:30.483Z",
+  "faelle": {
+    "ctax-projekt": {
+      "commits": 9
+    },
+    "steuern": {
+      "commits": 11
+    },
+    "test-steuern": {
+      "commits": 2
+    },
+    "weber-beziehung": {
+      "commits": 13
+    }
+  }
+}

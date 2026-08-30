@@ -1,0 +1,86 @@
+{
+  "version": 6,
+  "regeln": [
+    {
+      "wenn": {
+        "absenderEnthaelt": "weber"
+      },
+      "dann": {
+        "fall": "weber-beziehung",
+        "begruendung": "Partner-Bezug"
+      }
+    },
+    {
+      "wenn": {
+        "absenderEnthaelt": "finanzamt"
+      },
+      "dann": {
+        "fall": "steuern",
+        "begruendung": "Steuersache"
+      }
+    },
+    {
+      "wenn": {
+        "inhaltEnthaelt": [
+          "rechnung",
+          "betrag",
+          "€"
+        ]
+      },
+      "dann": {
+        "fall": "belege",
+        "begruendung": "Belegart"
+      }
+    },
+    {
+      "wenn": {
+        "absenderEnthaelt": "gerd"
+      },
+      "dann": {
+        "fall": "ctax-projekt",
+        "begruendung": "gelernt aus 3 Korrekturen"
+      },
+      "gelernt": true
+    },
+    {
+      "wenn": {
+        "absenderEnthaelt": "gerd"
+      },
+      "dann": {
+        "fall": "ctax-projekt",
+        "begruendung": "gelernt aus 3 Korrekturen"
+      },
+      "gelernt": true
+    },
+    {
+      "wenn": {
+        "absenderEnthaelt": "gerd"
+      },
+      "dann": {
+        "fall": "ctax-projekt",
+        "begruendung": "gelernt aus 3 Korrekturen"
+      },
+      "gelernt": true
+    },
+    {
+      "wenn": {
+        "absenderEnthaelt": "gerd"
+      },
+      "dann": {
+        "fall": "ctax-projekt",
+        "begruendung": "gelernt aus 3 Korrekturen"
+      },
+      "gelernt": true
+    },
+    {
+      "wenn": {
+        "absenderEnthaelt": "gerd"
+      },
+      "dann": {
+        "fall": "ctax-projekt",
+        "begruendung": "gelernt aus 3 Korrekturen"
+      },
+      "gelernt": true
+    }
+  ]
+}
