@@ -328,6 +328,45 @@ export async function listVorschlaege(fallId: string): Promise<Vorschlag[]> {
   return vorschlaege;
 }
 
+/**
+ * Gemergtes Wissen: alle atoms/*.json auf main (bestätigte Deutungen).
+ * Das ist die Quelle für Frag-mich — offene Vorschläge sind nur Kandidaten.
+ */
+export async function listAtomsMain(
+  fallId: string
+): Promise<Array<{ titel: string; atoms: Atom[] }>> {
+  const vaultRoot = getVaultRoot();
+  const fallPfad = path.join(vaultRoot, fallId);
+
+  if (!(await isGitRepo(fallPfad))) {
+    throw new Error(`Fall ${fallId} existiert nicht`);
+  }
+
+  let treeOutput: string;
+  try {
+    treeOutput = await gitExec(fallPfad, ['ls-tree', '--name-only', 'main', 'atoms/']);
+  } catch {
+    return [];
+  }
+  if (!treeOutput) return [];
+
+  const ergebnis: Array<{ titel: string; atoms: Atom[] }> = [];
+  for (const datei of treeOutput.split('\n')) {
+    const pfad = datei.trim();
+    if (!pfad.endsWith('.json')) continue;
+    try {
+      const content = await gitExec(fallPfad, ['show', `main:${pfad}`]);
+      const data = JSON.parse(content);
+      if (Array.isArray(data.atoms)) {
+        ergebnis.push({ titel: data.kartentext?.titel ?? pfad, atoms: data.atoms });
+      }
+    } catch {
+      continue;
+    }
+  }
+  return ergebnis;
+}
+
 export async function mergeVorschlag(fallId: string, proposalId: string): Promise<{ sha: string }> {
   const vaultRoot = getVaultRoot();
   const fallPfad = path.join(vaultRoot, fallId);

@@ -150,7 +150,7 @@ describe('services', () => {
       // Prüfe Payload
       assert.equal(capturedPayload.model, 'gemma4-mm');
       assert.equal(capturedPayload.temperature, 0);
-      assert.equal(capturedPayload.max_tokens, 400);
+      assert.equal(capturedPayload.max_tokens, 900);
       assert.equal(capturedPayload.messages.length, 2);
       assert.equal(capturedPayload.messages[0].role, 'system');
       assert.match(capturedPayload.messages[0].content, /ruhige Gesprächspartner/);

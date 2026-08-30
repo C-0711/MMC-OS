@@ -92,6 +92,7 @@ export interface MMCVaultAPI {
     kartentext: { titel: string; frage: string }
   ): Promise<{ branch: string; sha: string }>;
   listVorschlaege(fallId: string): Promise<Vorschlag[]>;
+  listAtomsMain(fallId: string): Promise<Array<{ titel: string; atoms: Atom[] }>>;
   mergeVorschlag(fallId: string, proposalId: string): Promise<{ sha: string }>;
   rejectVorschlag(fallId: string, proposalId: string, grund?: string): Promise<void>;
   fallErzaehlung(fallId: string): Promise<ErzaehlSatz[]>;
@@ -173,6 +174,7 @@ const api: MMCAPI = {
     proposeDeutung: (fallId: string, proposalId: string, atoms: Atom[], kartentext: { titel: string; frage: string }) =>
       ipcRenderer.invoke('vault:proposeDeutung', fallId, proposalId, atoms, kartentext),
     listVorschlaege: (fallId: string) => ipcRenderer.invoke('vault:listVorschlaege', fallId),
+    listAtomsMain: (fallId: string) => ipcRenderer.invoke('vault:listAtomsMain', fallId),
     mergeVorschlag: (fallId: string, proposalId: string) => ipcRenderer.invoke('vault:mergeVorschlag', fallId, proposalId),
     rejectVorschlag: (fallId: string, proposalId: string, grund?: string) =>
       ipcRenderer.invoke('vault:rejectVorschlag', fallId, proposalId, grund),

@@ -414,19 +414,39 @@ class App {
     log.scrollTop = log.scrollHeight;
 
     try {
-      // Kontext: Atoms aus allen Fällen (v0.1 einfach: nur offene Vorschläge)
+      // Kontext: bestätigtes Wissen (gemergte Atoms auf main) ZUERST,
+      // danach offene Vorschläge — als unbestätigt markiert. Dedupe per Schlüssel.
       const faelle = await window.mmc.vault.listFaelle();
       const kontexte: Array<{ fall: string; doc: string; seite: number; text: string }> = [];
+      const gesehen = new Set<string>();
 
       for (const fall of faelle) {
-        const vorschlaege = await window.mmc.vault.listVorschlaege(fall.id);
-        for (const v of vorschlaege) {
-          for (const atom of v.atoms) {
+        const gemergt = await window.mmc.vault.listAtomsMain(fall.id).catch(() => []);
+        for (const eintrag of gemergt) {
+          for (const atom of eintrag.atoms) {
+            const key = `${fall.id}|${atom.fundstelle.doc}|${atom.feld}|${atom.wert}`;
+            if (gesehen.has(key)) continue;
+            gesehen.add(key);
             kontexte.push({
               fall: fall.id,
               doc: atom.fundstelle.doc,
               seite: atom.fundstelle.seite,
-              text: `${atom.feld}: ${atom.wert}`
+              text: `${eintrag.titel} — ${atom.feld}: ${atom.wert} (bestätigt)`
+            });
+          }
+        }
+
+        const vorschlaege = await window.mmc.vault.listVorschlaege(fall.id);
+        for (const v of vorschlaege) {
+          for (const atom of v.atoms) {
+            const key = `${fall.id}|${atom.fundstelle.doc}|${atom.feld}|${atom.wert}`;
+            if (gesehen.has(key)) continue;
+            gesehen.add(key);
+            kontexte.push({
+              fall: fall.id,
+              doc: atom.fundstelle.doc,
+              seite: atom.fundstelle.seite,
+              text: `${v.kartentext.titel} — ${atom.feld}: ${atom.wert} (unbestätigter Vorschlag)`
             });
           }
         }
