@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { ladeKorrekturen, korrekturLernen, policyVorschlagErzeugen, policyAnwenden, SCHWELLE } = require('./lernen.js');
+const auth = require('./auth.js');
 const execFileAsync = promisify(execFile);
 
 const PORT = process.env.GITCHAIN_REF_PORT || 3361;
@@ -182,6 +183,13 @@ const server = http.createServer(async (req, res) => {
       if (teile[0] === 'api' && teile[1] === 'brain' && teile[2] === 'policy' && teile[3] === 'annehmen') {
         return json(200, policyAnwenden(daten.vorschlagTs));
       }
+      // FRONT3 A.4: AUTH — E-Mail = Zustelladresse, Container entsteht automatisch
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'auth' && teile[3] === 'anfang') {
+        return json(200, auth.authAnfang(daten.email));
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'auth' && teile[3] === 'bestaetigen') {
+        return json(200, await auth.authBestaetigen(daten.zustellId, daten.code, { createFall: (id) => createFall(id) }));
+      }
       // (der GET-/api/brain/lernen-Handler liegt oben beim anderen GET-Block)
       return json(404, { fehler: 'unbekannter Pfad', bekannt: ['/api/v2/health', '/api/brain/deploy (POST)', '/api/brain/metrics', '/api/brain/policy', '/api/brain/lernen (GET)', '/api/v2/fall/<id>/eingang', '/api/v2/fall/<id>/deutung'] });
     }
@@ -201,4 +209,5 @@ const server = http.createServer(async (req, res) => {
 
 fs.mkdirSync(VAULT, { recursive: true });
 ladePolicy();
+auth.init();
 server.listen(PORT, '127.0.0.1', () => console.log(`gitchain-ref v0.3-lernend auf :${PORT} · Auto-Deploy aktiv`));
