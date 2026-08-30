@@ -159,3 +159,26 @@ curl -sS https://api-gitchain.0711.io/api/chain/status | python3 -m json.tool
 #   scheduler: {laeuft: true, letzterTick: "<zeit>", verarbeiteteBatches: 1..9}
 #   stats: { confirmedBatches: 0 → 9, pendingBatches: 9 → 0 }
 ```
+
+---
+
+## ABNAHME — SCHARF GESCHALTET UND GEDRAINT (2026-08-30, live gemessen)
+
+Alle Kernpunkte dieses Handblatts sind erledigt und **von außen verifiziert**
+(Mac-Poller, 30-s-Raster, 15:35–16:46 UTC; Schluss-Check 17:28 UTC):
+
+| Punkt | Beleg |
+|---|---|
+| P0 Passwort | gewechselt + History gesäubert (Ops-Bestätigung) |
+| P1 Auth (Patch 0002) | externer `POST /api/chain/submit` → **401** durchgehend ab 15:40:55Z; der Scheduler-Loopback verankert trotzdem — einziger Pfad, der `verarbeiteteBatches` erhöht (Live-Beweis der Loopback+Kennung-Ausnahme) |
+| P1 Key + Netz | `walletAddress: 0xD78E…5009`, `mode: anchoring`, `network: base-mainnet`, kein `netzwerkHinweis` — die Mainnet-Auflösung oben war korrekt |
+| Drain | `conf 0→9`, `pend 9→0`, `fehlversuche 0`, keine MANUELLE_KARTE. Batch 1 um 16:24:35Z (15-min-Takt); Batches 2–9 im 60-s-Turbo 16:38:29Z–16:45:29Z — exakt 1 Batch/min, das Raten-Limit hielt |
+| Interval-Revert | `intervalMs: 900000` (17:28Z live geprüft), Ticks laufen normal weiter |
+
+Ops-Gegenmessung deckungsgleich: Wallet-Nonce 14→15 beim ersten Anchor,
+Balance 0,00279103 → 0,00279016 ETH (~0,00000087 ETH Gas/Batch).
+
+**Offen bleibt nur die P2/P3-Kleinkram-Tabelle oben.** Zusätzliche P2-Empfehlung:
+mit dem Test-PAT (Scope `chain:submit`) auch die **403/200-Pfade** von
+requireChainAuth live messen — bisher sind nur 401 (anonym) und der
+Loopback-Pfad live bewiesen, der Scope-Zweig nur per Code-Review + tsc.
