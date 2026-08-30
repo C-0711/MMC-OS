@@ -3,9 +3,10 @@
  * Vermittelt zwischen Renderer-Prozess und Main-Logik
  */
 
-import { ipcMain } from 'electron';
+import { ipcMain, shell } from 'electron';
 import * as vault from './vault';
 import * as services from './services';
+import * as gitchain from './gitchain';
 import { deutungAusOcr } from './deutung';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
@@ -125,5 +126,40 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('llm:fragMich', async (_event, frage: string, kontext: services.ZitatKontext[]) => {
     return await services.fragMich(frage, kontext);
+  });
+
+  // ============================================================================
+  // gitchain-API (0711-Backend: Device-Login, Introspection, Push, Registry)
+  // ============================================================================
+
+  ipcMain.handle('gitchain:status', async () => {
+    return await gitchain.status();
+  });
+
+  ipcMain.handle('gitchain:loginStart', async () => {
+    const start = await gitchain.deviceStart();
+    // verify_url wurde in gitchain.ts gegen die Auth-Basis validiert (Bau-Regel 5)
+    await shell.openExternal(start.verifyUrl);
+    return start;
+  });
+
+  ipcMain.handle('gitchain:loginPoll', async (_event, deviceCode: string) => {
+    return await gitchain.devicePoll(deviceCode);
+  });
+
+  ipcMain.handle('gitchain:whoami', async () => {
+    return await gitchain.whoami();
+  });
+
+  ipcMain.handle('gitchain:logout', async () => {
+    gitchain.vergissPat();
+  });
+
+  ipcMain.handle('gitchain:pushFall', async (_event, fallId: string) => {
+    return await gitchain.pushFall(fallId);
+  });
+
+  ipcMain.handle('gitchain:registry', async () => {
+    return await gitchain.registry();
   });
 }

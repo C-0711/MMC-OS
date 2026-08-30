@@ -108,10 +108,52 @@ export interface MMCLLM_API {
   fragMich(frage: string, kontext: ZitatKontext[]): Promise<{ antwort: string }>;
 }
 
+// gitchain-Anbindung (0711-Backend)
+export interface GitchainStatus {
+  apiUrl: string;
+  angemeldet: boolean;
+  user: string | null;
+}
+
+export interface GitchainDeviceStart {
+  userCode: string;
+  deviceCode: string;
+  verifyUrl: string;
+  intervalSek: number;
+  expiresInSek: number;
+}
+
+export type GitchainPollErgebnis =
+  | { status: 'ok'; user: string | null }
+  | { status: 'wartet' }
+  | { status: 'fehler'; meldung: string };
+
+export type GitchainWhoami =
+  | { ok: true; user: string; raw: Record<string, unknown> }
+  | { ok: false; meldung: string };
+
+export interface GitchainPushErgebnis {
+  ok: boolean;
+  remoteUrl: string;
+  meldung: string;
+  remoteRefs: string[];
+}
+
+export interface MMCGitchainAPI {
+  status(): Promise<GitchainStatus>;
+  loginStart(): Promise<GitchainDeviceStart>;
+  loginPoll(deviceCode: string): Promise<GitchainPollErgebnis>;
+  whoami(): Promise<GitchainWhoami>;
+  logout(): Promise<void>;
+  pushFall(fallId: string): Promise<GitchainPushErgebnis>;
+  registry(): Promise<{ version: string; count: number; ids: string[] }>;
+}
+
 export interface MMCAPI {
   vault: MMCVaultAPI;
   ocr: MMCOCR_API;
   llm: MMCLLM_API;
+  gitchain: MMCGitchainAPI;
 }
 
 // Helper: ArrayBuffer → Number-Array für IPC
@@ -150,6 +192,15 @@ const api: MMCAPI = {
   },
   llm: {
     fragMich: (frage: string, kontext: ZitatKontext[]) => ipcRenderer.invoke('llm:fragMich', frage, kontext)
+  },
+  gitchain: {
+    status: () => ipcRenderer.invoke('gitchain:status'),
+    loginStart: () => ipcRenderer.invoke('gitchain:loginStart'),
+    loginPoll: (deviceCode: string) => ipcRenderer.invoke('gitchain:loginPoll', deviceCode),
+    whoami: () => ipcRenderer.invoke('gitchain:whoami'),
+    logout: () => ipcRenderer.invoke('gitchain:logout'),
+    pushFall: (fallId: string) => ipcRenderer.invoke('gitchain:pushFall', fallId),
+    registry: () => ipcRenderer.invoke('gitchain:registry')
   }
 };
 

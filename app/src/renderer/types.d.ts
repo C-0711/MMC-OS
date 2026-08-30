@@ -113,10 +113,52 @@ interface MMCLLM_API {
   fragMich(frage: string, kontext: ZitatKontext[]): Promise<{ antwort: string }>;
 }
 
+// gitchain-Anbindung (0711-Backend)
+interface GitchainStatus {
+  apiUrl: string;
+  angemeldet: boolean;
+  user: string | null;
+}
+
+interface GitchainDeviceStart {
+  userCode: string;
+  deviceCode: string;
+  verifyUrl: string;
+  intervalSek: number;
+  expiresInSek: number;
+}
+
+type GitchainPollErgebnis =
+  | { status: 'ok'; user: string | null }
+  | { status: 'wartet' }
+  | { status: 'fehler'; meldung: string };
+
+type GitchainWhoami =
+  | { ok: true; user: string; raw: Record<string, unknown> }
+  | { ok: false; meldung: string };
+
+interface GitchainPushErgebnis {
+  ok: boolean;
+  remoteUrl: string;
+  meldung: string;
+  remoteRefs: string[];
+}
+
+interface MMCGitchainAPI {
+  status(): Promise<GitchainStatus>;
+  loginStart(): Promise<GitchainDeviceStart>;
+  loginPoll(deviceCode: string): Promise<GitchainPollErgebnis>;
+  whoami(): Promise<GitchainWhoami>;
+  logout(): Promise<void>;
+  pushFall(fallId: string): Promise<GitchainPushErgebnis>;
+  registry(): Promise<{ version: string; count: number; ids: string[] }>;
+}
+
 interface MMCAPI {
   vault: MMCVaultAPI;
   ocr: MMCOCR_API;
   llm: MMCLLM_API;
+  gitchain: MMCGitchainAPI;
 }
 
 declare global {

@@ -812,6 +812,66 @@ class App {
     } catch (err) {
       console.error('Fehler beim Rendern des Seitenbretts:', err);
     }
+
+    await this.renderGitchainZeile(liste);
+  }
+
+  /**
+   * GitChain-Verbindungszeile am Fuß des Seitenbretts.
+   * Nicht verbunden → Klick startet Device-Login (Browser öffnet sich, Code wird
+   * angezeigt, wir pollen). Verbunden → zeigt den Nutzer, Klick pusht den Fall.
+   */
+  private async renderGitchainZeile(liste: HTMLElement): Promise<void> {
+    const zeile = document.createElement('div');
+    zeile.id = 'gitchain-status';
+    zeile.className = 't11 sub';
+    zeile.style.cssText = 'margin-top:16px;padding:10px 12px;border-top:1px solid rgba(0,0,0,.06);cursor:pointer;';
+    zeile.textContent = 'GitChain: prüfe …';
+    liste.appendChild(zeile);
+
+    try {
+      const s = await window.mmc.gitchain.status();
+      if (s.angemeldet) {
+        zeile.textContent = `GitChain: verbunden als ${s.user} · Klick sichert den Fall`;
+        zeile.onclick = async () => {
+          const fallId = this.aktuellerFall ?? this.karten[0]?.fallId;
+          if (!fallId) { this.showToast('Kein Fall ausgewählt.'); return; }
+          zeile.textContent = `GitChain: sichere ${fallId} …`;
+          const erg = await window.mmc.gitchain.pushFall(fallId);
+          zeile.textContent = erg.ok
+            ? `GitChain: ${fallId} gesichert (${erg.remoteRefs.length} Refs)`
+            : `GitChain: Sicherung fehlgeschlagen`;
+          if (!erg.ok) this.showToast(erg.meldung);
+        };
+      } else {
+        zeile.textContent = 'GitChain: nicht verbunden · Klick zum Anmelden';
+        zeile.onclick = async () => {
+          zeile.onclick = null;
+          try {
+            const start = await window.mmc.gitchain.loginStart();
+            zeile.textContent = `GitChain: Code ${start.userCode} — im Browser bestätigen …`;
+            const bisMs = Date.now() + start.expiresInSek * 1000;
+            const poll = async (): Promise<void> => {
+              if (Date.now() > bisMs) { zeile.textContent = 'GitChain: Anmeldung abgelaufen.'; return; }
+              const p = await window.mmc.gitchain.loginPoll(start.deviceCode);
+              if (p.status === 'ok') {
+                zeile.textContent = `GitChain: verbunden${p.user ? ` als ${p.user}` : ''}`;
+                return;
+              }
+              if (p.status === 'fehler') { zeile.textContent = `GitChain: ${p.meldung}`; return; }
+              setTimeout(poll, start.intervalSek * 1000);
+            };
+            setTimeout(poll, start.intervalSek * 1000);
+          } catch (e) {
+            zeile.textContent = 'GitChain: Anmeldung nicht erreichbar.';
+            console.error('gitchain loginStart:', e);
+          }
+        };
+      }
+    } catch (e) {
+      zeile.textContent = 'GitChain: nicht erreichbar.';
+      console.error('gitchain status:', e);
+    }
   }
 
   private async zeigeFallAnsicht(fallId: string): Promise<void> {
