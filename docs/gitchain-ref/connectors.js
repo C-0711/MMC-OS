@@ -122,10 +122,14 @@ function widerspruchPruefung(systemA, systemB, objekt) {
     const wertA = a.attribute[attr].wert;
     const wertB = b.attribute[attr]?.wert;
     if (wertB !== undefined && wertA !== wertB) {
+      const fsA = connectorFundstelle(systemA, objekt, `${objekt}.${attr}`);
+      const fsB = connectorFundstelle(systemB, objekt, `${objekt}.${attr}`);
+      const artA = fundstelleAlsArtefakt(fsA);
+      const artB = fundstelleAlsArtefakt(fsB);
       widersprueche.push({
         attribut: attr,
-        wertA: { wert: wertA, fundstelle: connectorFundstelle(systemA, objekt, `${objekt}.${attr}`) },
-        wertB: { wert: wertB, fundstelle: connectorFundstelle(systemB, objekt, `${objekt}.${attr}`) },
+        wertA: { wert: wertA, fundstelle: fsA, artefaktHash: artA.hash },
+        wertB: { wert: wertB, fundstelle: fsB, artefaktHash: artB.hash },
         karte: {
           titel: `Widerspruch: ${attr} ${objekt}`,
           frage: `${systemA} (${a.attribute[attr].geaendert.slice(0, 10)}, ${a.attribute[attr].von}) sagt "${wertA}", ${systemB} (${b.attribute[attr].geaendert.slice(0, 10)}, ${b.attribute[attr].von}) sagt "${wertB}" — welche gilt?`,
@@ -136,4 +140,54 @@ function widerspruchPruefung(systemA, systemB, objekt) {
   return { objekt, geprueft: Object.keys(a.attribute).length, widersprueche };
 }
 
-module.exports = { MOCKS, connectorPull, widerspruchPruefung, connectorFundstelle };
+// ── OsConnectorBeweis: Fundstelle als zitierbares Artefakt (hash-adressiert) ──
+const ARTEFAKTE = new Map(); // hash → fundstelle (auch auf Platte für Persistenz)
+function fundstelleAlsArtefakt(f) {
+  const kanon = JSON.stringify(f); // deterministisch: gleiche Fundstelle ⇒ gleicher Hash
+  const hash = crypto.createHash('sha256').update(kanon).digest('hex').slice(0, 16);
+  if (!ARTEFAKTE.has(hash)) ARTEFAKTE.set(hash, { ...f, hash, erstellt: new Date().toISOString() });
+  return ARTEFAKTE.get(hash);
+}
+function artefatzHolen(hash) { return ARTEFAKTE.get(hash) || null; }
+
+// ── OsDivergenz: Auflösung → SIGNIERTE FASSUNG (welche gilt künftig) ──
+const GUELTIGKEIT = new Map(); // "objekt.attr" → {fall, attr, wertQuelle: 'teamcenter'|'pim'|..., fundstelleHash, signiertVon, seit}
+function divergenzAufloesen({ objekt, attribut, giltSystem, fundstelle, signiertVon }) {
+  if (!['teamcenter', 'pim', 'erp'].includes(giltSystem)) throw new Error('giltSystem unbekannt');
+  if (!fundstelle || !fundstelle.system || !fundstelle.revision) throw new Error('Auflösung braucht die Fundstelle des gültigen Werts (keine Aussage ohne Beweis)');
+  const fassung = {
+    objekt, attribut,
+    gilt: { system: giltSystem, wert: fundstelle.wert, revision: fundstelle.revision, geaendert: fundstelle.geaendert },
+    signiertVon: signiertVon || 'rolle:pim-team',
+    seit: new Date().toISOString(),
+  };
+  GUELTIGKEIT.set(`${objekt}.${attribut}`, fassung);
+  return fassung;
+}
+function gueltigkeitAbfragen(objekt) {
+  const out = {};
+  for (const [k, v] of GUELTIGKEIT) if (k.startsWith(objekt + '.')) out[k.split('.')[1]] = v;
+  return out;
+}
+
+// ── OsRevision: Revisions-Historie je Objekt (was galt wann — Retrospektiv-Beweis) ──
+function revisionsHistorie(objekt) {
+  const zeilen = [];
+  for (const [system, m] of Object.entries(MOCKS)) {
+    const item = m.items[objekt];
+    if (!item) continue;
+    for (const [attr, a] of Object.entries(item.attribute)) {
+      zeilen.push({
+        system, objekt, revision: item.revision,
+        attribut: attr, wert: a.wert,
+        geaendert: a.geaendert, von: a.von,
+        gilt_seit: (GUELTIGKEIT.get(`${objekt}.${attr}`) || {}).seit || null,
+        gilt_laut: (GUELTIGKEIT.get(`${objekt}.${attr}`) || {}).gilt?.system || null,
+      });
+    }
+  }
+  zeilen.sort((x, y) => (x.geaendert < y.geaendert ? 1 : -1));
+  return { objekt, eintraege: zeilen, hinweis: 'Sortiert nach Änderungszeitpunkt; gilt_laut = signierte Divergenz-Auflösung, falls vorhanden' };
+}
+
+module.exports = { MOCKS, connectorPull, widerspruchPruefung, connectorFundstelle, fundstelleAlsArtefakt, artefatzHolen, divergenzAufloesen, gueltigkeitAbfragen, revisionsHistorie };

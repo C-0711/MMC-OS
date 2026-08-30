@@ -162,6 +162,23 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && url.pathname === '/api/v2/connectors/mocks') {
       return json(200, Object.fromEntries(Object.entries(connectors.MOCKS).map(([k, m]) => [k, { system: k, endpoint: m.endpoint, objekte: Object.keys(m.items), abgerufenDurch: m.abgerufenDurch }])));
     }
+    // OsConnectorBeweis: Fundstelle als zitierbares Artefakt (hash-adressiert)
+    if (url.pathname.startsWith('/api/v2/connectors/fundstelle/')) {
+      const hash = url.pathname.split('/').pop();
+      const a = connectors.artefatzHolen(hash);
+      if (!a) return json(404, { fehler: 'Artefakt unbekannt — erst /widerspruch oder /pull erzeugen Artefakte' });
+      return json(200, a);
+    }
+    // OsRevision: Revisions-Historie je Objekt (was galt wann)
+    if (url.pathname.startsWith('/api/v2/connectors/revisionen/')) {
+      const objekt = url.pathname.split('/').pop();
+      return json(200, connectors.revisionsHistorie(objekt));
+    }
+    // OsDivergenz: was gilt aktuell (signierte Auflösungen)?
+    if (url.pathname.startsWith('/api/v2/connectors/gueltigkeit/')) {
+      const objekt = url.pathname.split('/').pop();
+      return json(200, { objekt, gueltig: connectors.gueltigkeitAbfragen(objekt) });
+    }
     if (req.method === 'GET' && url.pathname === '/api/chain/status') return json(200, { status: 'ok', modus: 'referenz (kein chain-backend — Signatur/Anchor laut Spec: QTSP/EBSI/OTS)', signaturErzwungen: false, hinweis: 'Referenz-Instanz beweist Container-Mechanik, nicht Verankerung' });
 
     if (req.method === 'GET' && url.pathname === '/api/brain/lernen') {
@@ -216,6 +233,18 @@ const server = http.createServer(async (req, res) => {
         if (!await fallExistiert(teile[3])) return json(404, { fehler: 'fall nicht gefunden' });
         const sitzungId = 'anruf-' + Date.now().toString(36);
         return json(201, { sitzungId, fall: teile[3], gestartet: new Date().toISOString(), hinweis: 'Atoms via /deutung mit fundstelle.art=anruf committen' });
+      }
+      // OsDivergenz: Widerspruch auflösen → signierte Fassung (fail closed ohne Fundstelle)
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'aufloesen') {
+        const w = connectors.widerspruchPruefung(daten.systemA || 'teamcenter', daten.systemB || 'pim', daten.objekt || 'MNR-4711');
+        const wid = w.widersprueche.find(x => x.attribut === daten.attribut);
+        if (!wid) throw new Error('kein offener Widerspruch für dieses Attribut');
+        const quelle = daten.giltSystem === 'teamcenter' ? wid.wertA.fundstelle : wid.wertB.fundstelle;
+        const fassung = connectors.divergenzAufloesen({
+          objekt: daten.objekt || 'MNR-4711', attribut: daten.attribut,
+          giltSystem: daten.giltSystem, fundstelle: quelle, signiertVon: daten.signiertVon,
+        });
+        return json(200, { aufgeloest: true, fassung, hinweis: 'Signierte Fassung gilt ab jetzt — bis ein System sie wieder widerspricht' });
       }
       // (der GET-/api/brain/lernen-Handler liegt oben beim anderen GET-Block)
       return json(404, { fehler: 'unbekannter Pfad', bekannt: ['/api/v2/health', '/api/brain/deploy (POST)', '/api/brain/metrics', '/api/brain/policy', '/api/brain/lernen (GET)', '/api/v2/fall/<id>/eingang', '/api/v2/fall/<id>/deutung'] });
