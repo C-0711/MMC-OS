@@ -19,15 +19,25 @@ export interface FallInfo {
   letzterCommitIso: string;
 }
 
+// Fundstelle: dokument (Rechteck auf einer Seite) ODER anruf (Zeitmarke im
+// Transkript). Fehlendes `art` = dokument — bestehende Atoms bleiben gültig.
+export interface Fundstelle {
+  art?: 'dokument' | 'anruf';
+  doc: string; // dokument: Bild/PDF · anruf: Transkript-Datei (JSON)
+  // dokument-Anker
+  seite?: number;
+  bbox?: [number, number, number, number];
+  // anruf-Anker (Rechteck entfällt, die Zeitmarke ist der Beweis)
+  wav?: string; // z. B. anruf-2026-08-27.wav
+  minute?: string; // "04:12"
+  dauer?: string; // Gesamtdauer, z. B. "42:00"
+}
+
 export interface Atom {
   id: string;
   feld: string;
   wert: string;
-  fundstelle: {
-    doc: string;
-    seite: number;
-    bbox: [number, number, number, number];
-  };
+  fundstelle: Fundstelle;
   conf: number;
 }
 

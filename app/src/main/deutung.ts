@@ -119,3 +119,116 @@ export function deutungAusOcr(ocr: OcrErgebnis, docName: string): DeutungErgebni
     zweifel
   };
 }
+
+// ============================================================================
+// Anruf-Transkripte (kanal: "anruf") — Fristen/Zusagen auf Minuten fundieren
+// ============================================================================
+
+export interface TranskriptZeile {
+  zeit: string; // "04:12"
+  sprecher: string; // "Gerd"
+  text: string;
+}
+
+export interface Transkript {
+  art: 'anruf';
+  titel?: string; // "Review & Planning"
+  wav: string; // "anruf-2026-08-27.wav"
+  dauer?: string; // "42:00"
+  zeilen: TranskriptZeile[];
+}
+
+/** Erkennt, ob geparstes JSON ein Anruf-Transkript ist (Eingangs-Weiche). */
+export function istTranskript(x: unknown): x is Transkript {
+  if (typeof x !== 'object' || x === null) return false;
+  const t = x as Record<string, unknown>;
+  return (
+    t.art === 'anruf' &&
+    typeof t.wav === 'string' &&
+    Array.isArray(t.zeilen) &&
+    t.zeilen.every(
+      (z: unknown) =>
+        typeof z === 'object' && z !== null &&
+        typeof (z as TranskriptZeile).zeit === 'string' &&
+        typeof (z as TranskriptZeile).text === 'string'
+    )
+  );
+}
+
+// Zusagen: Sätze, in denen jemand etwas verbindlich macht
+const ZUSAGE_REGEX = /\b(einverstanden|zugesagt|vereinbart|versprochen|machen wir|frieren wir .* ein|sage ich zu|geht klar|steht im protokoll)\b/i;
+// Fristen: Datum (28.07. / 28.07.2026) oder „bis <Wort>"-Formulierungen
+const FRIST_REGEX = /\b(\d{1,2}\.\d{1,2}\.(?:\d{2,4})?|bis (?:zum |zur |Ende |nächsten |kommenden )?\p{L}+)\b/iu;
+
+/**
+ * Deutung eines Anruf-Transkripts: Zusagen, Fristen und Beträge werden zu
+ * Atoms — jede Fundstelle trägt {art:'anruf', wav, minute}. Kein Rechteck:
+ * die Zeitmarke ist der Beweis (OsAnrufBeweis).
+ */
+export function deutungAusTranskript(t: Transkript, docName: string): DeutungErgebnis {
+  const atoms: Atom[] = [];
+
+  const pushAtom = (feld: string, wert: string, zeile: TranskriptZeile): void => {
+    const atomId = crypto
+      .createHash('sha256')
+      .update(`${docName}:${zeile.zeit}:${feld}:${wert}`)
+      .digest('hex')
+      .substring(0, 12);
+    atoms.push({
+      id: atomId,
+      feld,
+      wert,
+      fundstelle: {
+        art: 'anruf',
+        doc: docName,
+        wav: t.wav,
+        minute: zeile.zeit,
+        dauer: t.dauer
+      },
+      conf: 1.0 // Transkript ist Text — keine OCR-Unsicherheit
+    });
+  };
+
+  for (const zeile of t.zeilen) {
+    const sprecher = zeile.sprecher ? `${zeile.sprecher}: ` : '';
+
+    // Beträge zuerst (präzisester Wert)
+    const betraege = zeile.text.match(GELDBETRAG_REGEX);
+    if (betraege) {
+      for (const betrag of betraege) pushAtom(`Betrag (${zeile.sprecher || 'Anruf'})`, betrag, zeile);
+    }
+
+    // Zusage: der ganze Satz ist der Wert (die Formulierung zählt)
+    if (ZUSAGE_REGEX.test(zeile.text)) {
+      pushAtom('Zusage', `${sprecher}${zeile.text}`, zeile);
+      continue; // eine Zeile ist entweder Zusage ODER Frist-Kandidat, nicht doppelt
+    }
+
+    // Frist: Datum oder „bis …"
+    const frist = zeile.text.match(FRIST_REGEX);
+    if (frist) {
+      pushAtom('Frist', `${sprecher}${zeile.text}`, zeile);
+    }
+  }
+
+  let titel: string;
+  let frage: string;
+  const anrufName = t.titel ? `„${t.titel}"` : 'Anruf';
+  if (atoms.length === 0) {
+    titel = `${anrufName}: nichts Verbindliches erkannt`;
+    frage = 'Ich finde keine Zusagen oder Fristen — magst du selbst hören?';
+  } else if (atoms.length === 1) {
+    titel = `${anrufName}: ${atoms[0].feld} bei Minute ${atoms[0].fundstelle.minute}`;
+    frage = 'Stimmt das so?';
+  } else {
+    titel = `${anrufName}: ${atoms.length} Stellen erkannt`;
+    const minuten = atoms.slice(0, 3).map(a => a.fundstelle.minute).join(' · ');
+    frage = `Bei Minute ${minuten}${atoms.length > 3 ? ' …' : ''} — stimmt das so?`;
+  }
+
+  return {
+    atoms,
+    kartentext: { titel, frage },
+    zweifel: atoms.length === 0
+  };
+}

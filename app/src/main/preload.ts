@@ -12,15 +12,22 @@ export interface FallInfo {
   letzterCommitIso: string;
 }
 
+// Fundstelle: dokument (Rechteck) ODER anruf (Zeitmarke). Fehlendes art = dokument.
+export interface Fundstelle {
+  art?: 'dokument' | 'anruf';
+  doc: string;
+  seite?: number;
+  bbox?: [number, number, number, number];
+  wav?: string;
+  minute?: string; // "04:12"
+  dauer?: string;
+}
+
 export interface Atom {
   id: string;
   feld: string;
   wert: string;
-  fundstelle: {
-    doc: string;
-    seite: number;
-    bbox: [number, number, number, number];
-  };
+  fundstelle: Fundstelle;
   conf: number;
 }
 
@@ -99,10 +106,26 @@ export interface MMCVaultAPI {
   readDocAsDataUrl(fallId: string, docRelPath: string): Promise<string>;
 }
 
+// Anruf-Transkript (kanal: "anruf") — Deutung fundiert auf Minuten
+export interface TranskriptZeile {
+  zeit: string; // "04:12"
+  sprecher: string;
+  text: string;
+}
+
+export interface Transkript {
+  art: 'anruf';
+  titel?: string;
+  wav: string;
+  dauer?: string;
+  zeilen: TranskriptZeile[];
+}
+
 export interface MMCOCR_API {
   health(): Promise<boolean>;
   deuteBeleg(datei: { name: string; bytes: ArrayBuffer; mime?: string }): Promise<OcrErgebnis>;
   deutungAusOcr(ocr: OcrErgebnis, docName: string): Promise<DeutungErgebnis>;
+  deutungAusTranskript(transkript: Transkript, docName: string): Promise<DeutungErgebnis>;
 }
 
 export interface MMCLLM_API {
@@ -190,7 +213,9 @@ const api: MMCAPI = {
         mime: datei.mime
       }),
     deutungAusOcr: (ocr: OcrErgebnis, docName: string) =>
-      ipcRenderer.invoke('deutung:ausOcr', ocr, docName)
+      ipcRenderer.invoke('deutung:ausOcr', ocr, docName),
+    deutungAusTranskript: (transkript: Transkript, docName: string) =>
+      ipcRenderer.invoke('deutung:ausTranskript', transkript, docName)
   },
   llm: {
     fragMich: (frage: string, kontext: ZitatKontext[]) => ipcRenderer.invoke('llm:fragMich', frage, kontext)
