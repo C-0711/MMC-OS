@@ -55,7 +55,49 @@
 
 ## 3. Die Etappen (Wiederbelebung)
 
-**Etappe W1 — Sichern (Tag 1):** Secrets sanieren (§2 Safety-Checkliste), saubere Commit-Historie des Working Tree, Remote auf internes GitLab, Docker-Stack zum Laufen bringen gegen k3s-Fabric (`:11435`), Port 10400/10401 wieder lebendig. *Beweis: Chat mit einer PDF läuft lokal.*
+### Etappe W1a — DER ERSTE EINGANG: Live-Ingest mit dynamischem Bericht (Kernstück)
+
+*Das Wichtigste zuerst: der Moment, in dem Sand zum ersten Mal fließt. Der User darf nicht warten — er muss ZUSEHEN können, wie sein Material verstanden wird, und schon währenddessen losfragen können.*
+
+**Die Architektur des ersten Einlesens (streaming-first):**
+
+```
+DROP/BEGIN EINGANG
+     │
+     ├─► WORKER (async, NICHT blockierend)         ┌────────────────┐
+     │   pro Dokument:                             │  LIVE-BERICHT  │
+     │   1. commit als Eingang (docs/ byte-id.)   │  (dynamisch,   │
+     │   2. OCR/Reader (reader-schema je Typ)      │   wächst mit   │
+     │   3. Atome extrahieren (Feld + Fundstelle)  │   jedem Doc)   │
+     │   4. embedden (k3s-Fabric :11435)           └────────▲───────┘
+     │   5. SSE-Event pushen ──────────────────────────────┘
+     │      {typ:"dokument_fertig", name, atome, fundstellen, …}
+     │
+     └─► GEMMA 4 31B (lokal auf der Fabric, :11435): FRAGEN WÄHREND DES INGEST
+```
+
+**Regeln (hart):**
+
+1. **Streaming darf NIE das Tempo aufhalten.** Der Ingest-Worker pusht SSE-Events; die Berichts-UI ist reiner Konsument. Wenn die UI hängt, stockt der Sand nicht — und umgekehrt: Der Worker wartet nie auf die UI (Queue entkoppelt, Events dürfen coalescen).
+2. **Der Bericht ist dynamisch, nicht final.** Er entsteht Dokument für Dokument:
+   - *Nach Dokument 1:* „**Eingegangen:** ‚Versicherungsvertrag_Hausrat_2019.pdf' — ich lese gerade …"
+   - *Nach Dokument 3:* „**3 Dokumente verstanden** — darunter: ‚Rechnung Stadtwerke 08/2026' (89 €), ‚Mietvertrag' (Parteien: …). **Erste Fragen, die ich dir stellen kann:**"
+   - Der Bericht NENNT Namen AUS den Dokumenten („Stadtwerke", „Hausrat 2019", „Mietvertrag") — nicht Dateinamen-Metadaten, sondern Gelesenes. Das ist der Beweis-Moment: der User sieht, dass verstanden wurde, nicht nur gezählt.
+3. **Fragen-Hilfe fürs erste Gemma-Gespräch (31B):** der Bericht generiert aus den ersten gelesenen Atomenen **3 vorgeschlagene Fragen** als klickbare Karten:
+   - *„Was steht in meinem Mietvertrag zur Kaution?"* (aus dem Atom: Mietvertrag + Kaution vorhanden)
+   - *„Wann läuft meine Hausrat-Versicherung aus?"* (aus dem Atom: Vertragslaufzeit-Feld)
+   - *„Welche Rechnungen sind noch offen?"* (aus Rechnungs-Atomen mit Betrag + Fälligkeit)
+   - Klick → Frage geht sofort an Gemma 4 31B, die Antwort mit Beweis-Rechteck auf die gerade-ingestete Seite. **Der User muss nie selbst die erste Frage formulieren** — die Dokumente formulieren sie.
+4. **Fragen während des Ingest sind erlaubt und beantwortbar:** Gemma 4 31B antwortet aus dem, was BEREITS committet+embedded ist; ist der relevante Teil noch nicht durch, sagt die Antwort es ehrlich (*„die letzten 2 Dokumente lese ich noch — sobald sie fertig sind, frage ich dich nicht mehr"*). Die Ehrlichkeitszeile (meister-seite) gilt hier schon.
+5. **Reihenfolge = Lesen, nicht Alphabet:** der Worker priorisiert (a) was der User zuletzt/zuletzt geöffnet hat, (b) kleine Dokumente zuerst (frühe erste Fragen!), (c) dann die Masse. Der erste Bericht mit Namen kommt nach **Sekunden**, nicht nach dem ganzen Stapel.
+
+**DoD W1a:**
+- [ ] 50 Dokumente werfen → Bericht zeigt nach < 10 s den ersten NAMEN aus Dokument-Inhalt.
+- [ ] Nach ~30 s stehen 3 klickbare Fragen; eine beantwortet Gemma mit Fundstelle, während Dokument 20+ noch liest.
+- [ ] UI-Tab schließen/öffnen während des Ingest: Worker läuft unbeeindruckt weiter (Beweis: SSE-Wiederverbindung + Zustandsabholung).
+- [ ] Kein einziges Dokument wird committet, bevor der Scan-Report genickt wurde (Welle-1-Regel gilt weiter).
+
+**Etappe W1b — Sichern (Tag 1–2):** Secrets sanieren (§2 Safety-Checkliste), saubere Commit-Historie des Working Tree, Remote auf internes GitLab, Docker-Stack zum Laufen bringen gegen k3s-Fabric (`:11435`), Port 10400/10401 wieder lebendig. *Beweis: Chat mit einer PDF läuft lokal.*
 
 **Etappe W2 — Anschließen (Woche 1–2):** NotebookAI als **Studio-Agenten-Engine** an die gitchain-Welt: Quellen nicht nur per Upload, sondern aus dem Container (`/api/v1/inject`-Muster — NotebookAI fragt Container statt Dateien); O711I-SSO; per-Agent LLM-Auswahl ausbauen (Ollama/Fabric-Modelle + bewusste Cloud-Ausnahmen mit Gateway-Logging). *Beweis: eine Frage über einen Bosch-Container mit denselben Zitations-Popups, Modell pro Agent wählbar.*
 
