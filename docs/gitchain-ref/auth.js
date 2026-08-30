@@ -17,6 +17,8 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { zustellerErstellen } = require('./zustaeller.js');
+const zusteller = zustellerErstellen();
 
 const ROOT = '/opt/data/gitchain-ref';
 const AUTH_DIR = path.join(ROOT, 'auth');
@@ -28,7 +30,7 @@ function zuordnungen() { return JSON.parse(fs.readFileSync(ZUORDNUNGEN, 'utf8'))
 function speichereZuordnung(h, eintrag) { const z = zuordnungen(); z[h] = eintrag; fs.writeFileSync(ZUORDNUNGEN, JSON.stringify(z, null, 2)); }
 
 // ── Schritt 1: Anmeldung anfangen ─────────────────────────
-function authAnfang(email) {
+async function authAnfang(email) {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email || '')) throw new Error('keine gültige E-Mail-Adresse');
   const emailHash = crypto.createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
   const zustellId = crypto.randomBytes(12).toString('hex');
@@ -39,7 +41,10 @@ function authAnfang(email) {
     codeHash: crypto.createHash('sha256').update(code).digest('hex'),
     expires: Date.now() + 10 * 60 * 1000,
   });
-  return { zustellId, code, mock: true }; // mock: Code zurück (später: SMTP-Versand, Code dann NUR in Konsole)
+  // Zustellung über das Interface (austauschbar, nie Code-Change):
+  const erg = await zusteller.sendeCode(email, code);
+  // Mock gibt den Code zurück (für Tests/CI); SMTP/QR würden ihn NUR zustellen:
+  return { zustellId, kanal: erg.kanal, ...(erg.kanal === 'mock' ? { code, mock: true } : {}) };
 }
 
 // ── Schritt 2: Bestätigen → Container entsteht automatisch ──
