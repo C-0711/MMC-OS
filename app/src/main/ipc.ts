@@ -7,7 +7,7 @@ import { ipcMain, shell } from 'electron';
 import * as vault from './vault';
 import * as services from './services';
 import * as gitchain from './gitchain';
-import { deutungAusOcr } from './deutung';
+import { deutungAusOcr, deutungAusTranskript, type Transkript } from './deutung';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
@@ -122,6 +122,10 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('deutung:ausOcr', async (_event, ocr: services.OcrErgebnis, docName: string) => {
     return deutungAusOcr(ocr, docName);
+  });
+
+  ipcMain.handle('deutung:ausTranskript', async (_event, transkript: Transkript, docName: string) => {
+    return deutungAusTranskript(transkript, docName);
   });
 
   // ============================================================================

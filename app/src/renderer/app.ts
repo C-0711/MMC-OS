@@ -5,7 +5,23 @@
  * Sechs Flächen: Heute, Karte, Beweis, Frag-mich-Dialog, Fall-Ansicht, Seitenbrett
  */
 
-import { renderBeweis, type BeweisOptions } from './beweis.js';
+import {
+  renderBeweis,
+  renderAnrufBeweis,
+  type BeweisOptions,
+  type TranskriptAnzeigeZeile
+} from './beweis.js';
+import {
+  renderVereinbarung,
+  renderTisch,
+  renderGruppe,
+  renderEinladen,
+  renderRueckruf,
+  renderObSiegel,
+  renderObRettung,
+  renderObErfolg,
+  type VereinbarungPosition
+} from './screens.js';
 
 type AppZustand = 'ruhig' | 'fragend' | 'antwortend' | 'fall-ansicht';
 
@@ -37,6 +53,11 @@ class App {
     this.setupFragMich();
     this.setupDropZone();
     this.setupSeitenbrett();
+
+    // Null-Fragen-Onboarding (Etappe 4 C): nur beim ersten Start.
+    if (localStorage.getItem('mmc-onboarding') !== 'done') {
+      this.zeigeOnboarding(1);
+    }
   }
 
   // ============================================================================
@@ -62,6 +83,7 @@ class App {
   private async ladeVorschlaege(): Promise<void> {
     try {
       const faelle = await window.mmc.vault.listFaelle();
+      this.renderFussleiste(faelle);
 
       this.karten = [];
       let maxKarten = 3;
@@ -79,9 +101,11 @@ class App {
           const beweisDoc = erstesAtom?.fundstelle.doc;
           const beweisSeite = erstesAtom?.fundstelle.seite;
 
-          // Fussnote: (fall · doc · seite · commit · sig ✓)
+          // Fussnote: dokument → Seite, anruf → wav + Minute
           const commitKurz = v.branch.substring(0, 8);
-          const fussnote = `fall: ${fall.id} · ${beweisDoc || '?'} · Seite ${beweisSeite || '?'} · ${commitKurz} · sig ✓`;
+          const fussnote = erstesAtom?.fundstelle.art === 'anruf'
+            ? `fall: ${fall.id} · ${erstesAtom.fundstelle.wav ?? beweisDoc} · Minute ${erstesAtom.fundstelle.minute ?? '?'} · ${commitKurz} · sig ✓`
+            : `fall: ${fall.id} · ${beweisDoc || '?'} · Seite ${beweisSeite || '?'} · ${commitKurz} · sig ✓`;
 
           // Zweifel: prüfen, ob niedrige Konfidenz
           const minConf = v.atoms.length > 0 ? Math.min(...v.atoms.map(a => a.conf)) : 1.0;
@@ -107,6 +131,35 @@ class App {
     } catch (err) {
       console.error('Fehler beim Laden der Vorschläge:', err);
     }
+  }
+
+  // ============================================================================
+  // Fußzeile (Etappe 4 D): Schlüssel-Zeile aus echten Fall-Daten
+  // ============================================================================
+
+  private renderFussleiste(faelle: FallInfo[]): void {
+    const schluesselEl = document.getElementById('fuss-schluessel');
+    if (!schluesselEl) return;
+
+    const anzahl = faelle.length;
+    let text = `Dein Schlüssel liegt hier · ${anzahl} ${anzahl === 1 ? 'Fall' : 'Fälle'} versiegelt`;
+
+    // Letzter Anker: jüngster Commit über alle Fälle (ISO sortiert lexikographisch korrekt)
+    const letzterIso = faelle
+      .map(f => f.letzterCommitIso)
+      .filter(iso => !!iso)
+      .sort()
+      .pop();
+    if (letzterIso) {
+      const d = new Date(letzterIso);
+      if (!Number.isNaN(d.getTime())) {
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        text += ` · zuletzt geankert ${dd}.${mm}.${d.getFullYear()}`;
+      }
+    }
+
+    schluesselEl.textContent = text;
   }
 
   // ============================================================================
@@ -246,6 +299,13 @@ class App {
     details.appendChild(p);
     div.appendChild(details);
 
+    // Zeugen-Zeile (Etappe 4 D): unter jedem gelesenen Atom
+    const zeuge = document.createElement('div');
+    zeuge.className = 'zeugen-zeile';
+    zeuge.style.cssText = 'margin-top: 8px; font-size: 11px; color: rgba(42,37,32,.45);';
+    zeuge.textContent = 'gelesen auf diesem Gerät · bezeugt';
+    div.appendChild(zeuge);
+
     return div;
   }
 
@@ -304,33 +364,40 @@ class App {
     if (!karte.beweisDoc) return;
 
     try {
-      // Vorschlag holen (für Atoms/bbox)
+      // Vorschlag holen (für Atoms/bbox bzw. Minuten)
       const vorschlaege = await window.mmc.vault.listVorschlaege(karte.fallId);
       const vorschlag = vorschlaege.find(v => v.id === karte.vorschlagId);
       if (!vorschlag) return;
 
-      // Bild laden
-      const docRelPath = `docs/${karte.beweisDoc}`;
-      const bildUrl = await window.mmc.vault.readDocAsDataUrl(karte.fallId, docRelPath);
-
-      // Rechtecke aus Atoms
-      const rechtecke = vorschlag.atoms
-        .filter(a => a.fundstelle.seite === karte.beweisSeite)
-        .map(a => ({
-          bbox: a.fundstelle.bbox,
-          art: 'beweis' as const
-        }));
-
-      // Quellzeile
-      const commitKurz = vorschlag.branch.substring(0, 8);
-      const quellzeile = `Fall ${karte.fallId} · ${karte.beweisDoc} · Seite ${karte.beweisSeite} · ${commitKurz} · sig ✓`;
-
-      // Beweis-Container anzeigen
       const container = document.getElementById('beweis-overlay');
       if (!container) return;
 
       container.innerHTML = '';
       container.style.display = 'flex';
+
+      const commitKurz = vorschlag.branch.substring(0, 8);
+
+      // Weiche: Anruf-Beweis (Zeitmarke im Transkript) oder Dokument (Rechteck)
+      const erstesAtom = vorschlag.atoms[0];
+      if (erstesAtom?.fundstelle.art === 'anruf') {
+        await this.zeigeAnrufBeweis(karte, vorschlag, container, commitKurz);
+        return;
+      }
+
+      // Bild laden
+      const docRelPath = `docs/${karte.beweisDoc}`;
+      const bildUrl = await window.mmc.vault.readDocAsDataUrl(karte.fallId, docRelPath);
+
+      // Rechtecke aus Atoms (nur solche mit bbox — Anruf-Atoms tragen keins)
+      const rechtecke = vorschlag.atoms
+        .filter(a => a.fundstelle.seite === karte.beweisSeite && a.fundstelle.bbox)
+        .map(a => ({
+          bbox: a.fundstelle.bbox as [number, number, number, number],
+          art: 'beweis' as const
+        }));
+
+      // Quellzeile (Muster OsBeweis.dc.html)
+      const quellzeile = `Fall ${karte.fallId} · ${karte.beweisDoc} · Seite ${karte.beweisSeite} · Commit ${commitKurz} · Signatur ✓`;
 
       const opts: BeweisOptions = {
         bildUrl,
@@ -340,16 +407,16 @@ class App {
         },
         rechtecke,
         quellzeile,
-        onPasst: () => {
+        onStimmt: () => {
           container.style.display = 'none';
           this.handleJa(karte);
         },
-        onAnders: () => {
+        onOriginal: () => {
+          container.style.display = 'none';
+        },
+        onFalsch: () => {
           container.style.display = 'none';
           this.handleNein(karte);
-        },
-        onQuelle: () => {
-          container.style.display = 'none';
         }
       };
 
@@ -358,6 +425,77 @@ class App {
       console.error('Fehler beim Laden des Beweises:', err);
       this.showToast('Beweis konnte nicht geladen werden.');
     }
+  }
+
+  /**
+   * Anruf-Beweis (OsAnrufBeweis): Transkript laden, Fundstellen-Minuten
+   * markieren, Timeline statt Rechteck. Die Zeitmarke ist der Beweis.
+   */
+  private async zeigeAnrufBeweis(
+    karte: Karte,
+    vorschlag: Vorschlag,
+    container: HTMLElement,
+    commitKurz: string
+  ): Promise<void> {
+    // Transkript (JSON) aus dem Vault laden und dekodieren
+    const dataUrl = await window.mmc.vault.readDocAsDataUrl(karte.fallId, `docs/${karte.beweisDoc}`);
+    const base64 = dataUrl.split(',')[1] ?? '';
+    const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+    const transkript = JSON.parse(new TextDecoder('utf-8').decode(bytes)) as Transkript;
+
+    // Fundstellen-Minuten aus den Vorschlags-Atoms
+    const minuten = new Set(
+      vorschlag.atoms.map(a => a.fundstelle.minute).filter((m): m is string => !!m)
+    );
+
+    const zeilen: TranskriptAnzeigeZeile[] = transkript.zeilen.map(z => ({
+      zeit: z.zeit,
+      sprecher: z.sprecher,
+      text: z.text,
+      markiert: minuten.has(z.zeit)
+    }));
+
+    const wav = vorschlag.atoms[0]?.fundstelle.wav ?? transkript.wav;
+    const minute = vorschlag.atoms[0]?.fundstelle.minute ?? '00:00';
+    const dauer = vorschlag.atoms[0]?.fundstelle.dauer ?? transkript.dauer;
+
+    // Header: ANRUF · <TITEL> · <42 MIN>
+    const headerTeile = ['ANRUF'];
+    if (transkript.titel) headerTeile.push(transkript.titel.toUpperCase());
+    if (dauer) headerTeile.push(`${parseInt(dauer, 10)} MIN`);
+    const header = headerTeile.join(' · ');
+
+    const quellzeile = `Fall ${karte.fallId} · ${wav} · Minute ${minute} · Commit ${commitKurz} · Signatur ✓`;
+
+    container.appendChild(
+      renderAnrufBeweis({
+        header,
+        zeilen,
+        minute,
+        quellzeile,
+        onStimmt: () => {
+          container.style.display = 'none';
+          this.handleJa(karte);
+        },
+        onAnhoeren: async () => {
+          // Audio ab Fundstellen-Minute — wenn die WAV im Fall verwahrt ist
+          try {
+            const audioUrl = await window.mmc.vault.readDocAsDataUrl(karte.fallId, `docs/${wav}`);
+            const audio = new Audio(audioUrl);
+            const [mm, ss] = minute.split(':').map(n => parseInt(n, 10) || 0);
+            audio.currentTime = mm * 60 + ss;
+            await audio.play();
+            this.showToast(`Spielt ab Minute ${minute}.`);
+          } catch {
+            this.showToast(`Aufnahme nicht verfügbar — Minute ${minute}.`);
+          }
+        },
+        onFalsch: () => {
+          container.style.display = 'none';
+          this.handleNein(karte);
+        }
+      })
+    );
   }
 
   // ============================================================================
@@ -430,7 +568,7 @@ class App {
             kontexte.push({
               fall: fall.id,
               doc: atom.fundstelle.doc,
-              seite: atom.fundstelle.seite,
+              seite: atom.fundstelle.seite ?? 1,
               text: `${eintrag.titel} — ${atom.feld}: ${atom.wert} (bestätigt)`
             });
           }
@@ -445,7 +583,7 @@ class App {
             kontexte.push({
               fall: fall.id,
               doc: atom.fundstelle.doc,
-              seite: atom.fundstelle.seite,
+              seite: atom.fundstelle.seite ?? 1,
               text: `${v.kartentext.titel} — ${atom.feld}: ${atom.wert} (unbestätigter Vorschlag)`
             });
           }
@@ -471,25 +609,84 @@ class App {
         zitatBox.style.cssText = 'margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;';
 
         // Bis zu 5 Quellen als Kacheln
+        // Treffer-Karten nach OsSuche.dc.html: 15px 18px, 65 % Weiß, kein
+        // Schatten, Fall-Chip in Olivgold, Häkchen rechts (Salbei, 2.4)
+        zitatBox.style.cssText = 'margin-top: 12px; display: flex; flex-direction: column; gap: 10px;';
+
         kontexte.slice(0, 5).forEach(k => {
-          const kachel = document.createElement('div');
-          kachel.className = 't11';
-          kachel.style.cssText = `
-            padding: 6px 10px;
-            border-radius: 6px;
-            background: rgba(143,169,143,.14);
-            color: #5c705c;
+          const treffer = document.createElement('div');
+          treffer.style.cssText = `
+            padding: 15px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255,255,255,.65);
+            border: 1px solid rgba(184,163,105,.22);
+            border-radius: 16px;
             cursor: pointer;
           `;
-          kachel.textContent = `${k.doc} S. ${k.seite}`;
-          kachel.title = k.text;
-          kachel.onclick = () => {
+
+          const chip = document.createElement('span');
+          chip.className = 't11';
+          chip.style.cssText = `
+            flex: none;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(184,163,105,.14);
+            color: #96824c;
+          `;
+          chip.textContent = k.fall;
+          treffer.appendChild(chip);
+
+          const mitte = document.createElement('div');
+          mitte.style.cssText = 'flex: 1; min-width: 0;';
+
+          const zeile1 = document.createElement('div');
+          zeile1.className = 't13';
+          zeile1.textContent = k.text;
+          mitte.appendChild(zeile1);
+
+          const zeile2 = document.createElement('div');
+          zeile2.className = 't11 sub';
+          zeile2.style.marginTop = '2px';
+          zeile2.textContent = `${k.doc} · S. ${k.seite} — im Fall geprüft`;
+          mitte.appendChild(zeile2);
+
+          treffer.appendChild(mitte);
+
+          const haken = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          haken.setAttribute('width', '14');
+          haken.setAttribute('height', '14');
+          haken.setAttribute('viewBox', '0 0 24 24');
+          haken.setAttribute('fill', 'none');
+          haken.setAttribute('stroke', '#8FA98F');
+          haken.setAttribute('stroke-width', '2.4');
+          haken.setAttribute('stroke-linecap', 'round');
+          haken.setAttribute('stroke-linejoin', 'round');
+          haken.style.flexShrink = '0';
+          const pfad = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          pfad.setAttribute('d', 'M20 6 9 17l-5-5');
+          haken.appendChild(pfad);
+          treffer.appendChild(haken);
+
+          treffer.onclick = () => {
             this.showToast(`Quelle: ${k.fall} · ${k.doc} · Seite ${k.seite}`);
           };
-          zitatBox.appendChild(kachel);
+          zitatBox.appendChild(treffer);
         });
 
         antwortEl.appendChild(zitatBox);
+
+        // Quellzeile nach OsSuche.dc.html: Fälle · Treffer · nichts hat das Haus verlassen ✓
+        const faelleGezaehlt = new Set(kontexte.map(k => k.fall)).size;
+        const suchQuelle = document.createElement('div');
+        suchQuelle.className = 'quelle';
+        suchQuelle.style.cssText = 'margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;';
+        suchQuelle.textContent =
+          `${faelleGezaehlt} ${faelleGezaehlt === 1 ? 'Fall' : 'Fälle'} durchsucht · ` +
+          `${kontexte.length} ${kontexte.length === 1 ? 'Treffer' : 'Treffer'}, jeder im eigenen Fall geprüft · ` +
+          'nichts hat das Haus verlassen ✓';
+        antwortEl.appendChild(suchQuelle);
       }
 
       log.appendChild(antwortEl);
@@ -555,7 +752,7 @@ class App {
     // Zweiter Eingangsweg: Klick auf die Einladung öffnet die Dateiauswahl
     const dateiInput = document.createElement('input');
     dateiInput.type = 'file';
-    dateiInput.accept = '.jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf';
+    dateiInput.accept = '.jpg,.jpeg,.png,.pdf,.json,image/jpeg,image/png,application/pdf,application/json';
     dateiInput.style.display = 'none';
     document.body.appendChild(dateiInput);
 
@@ -605,29 +802,50 @@ class App {
 
       // 1. Commit vor Deutung
       const bytes = await file.arrayBuffer();
+
+      // Transkript-Weiche: .json mit {art:'anruf', wav, zeilen} ist eine
+      // Anruf-Mitschrift → kanal 'anruf', keine OCR (Etappe 4, Arbeit A)
+      let transkript: Transkript | null = null;
+      if (file.name.toLowerCase().endsWith('.json')) {
+        try {
+          const t = JSON.parse(new TextDecoder('utf-8').decode(bytes)) as Transkript;
+          if (t && t.art === 'anruf' && typeof t.wav === 'string' && Array.isArray(t.zeilen)) {
+            transkript = t;
+          }
+        } catch {
+          // kein gültiges JSON — normaler Dokumentweg
+        }
+      }
+
       const { sha, docPfad } = await window.mmc.vault.commitEingang(
         fallId,
-        { absender: 'Datei-Drop', kanal: 'app' },
+        transkript
+          ? { absender: 'Anruf-Mitschrift', kanal: 'anruf' }
+          : { absender: 'Datei-Drop', kanal: 'app' },
         { name: file.name, bytes }
       );
 
       console.log(`Eingang committed: ${sha}`);
 
-      // 2. OCR
-      const ocr = await window.mmc.ocr.deuteBeleg({
-        name: file.name,
-        bytes,
-        mime: file.type
-      });
-
-      console.log(`OCR: ${ocr.pages.length} Seiten, ${ocr.totalMs}ms`);
-
-      // 3. Deutung aus OCR — läuft im Main-Prozess (deutung.ts, eine Quelle der Wahrheit)
       // Fundstelle.doc muss auf die VERWAHRTE Datei zeigen (zeitgestempelter
       // Name im Vault, aus docPfad), nicht auf den Originalnamen — sonst
-      // findet der Beweis (readDocAsDataUrl auf docs/<doc>) das Bild nicht.
+      // findet der Beweis (readDocAsDataUrl auf docs/<doc>) die Datei nicht.
       const verwahrterName = docPfad.split('/').pop() ?? file.name;
-      const deutung = await window.mmc.ocr.deutungAusOcr(ocr, verwahrterName);
+
+      // 2.+3. Deutung — Anruf: direkt aus dem Transkript (Minuten statt bbox);
+      // Dokument: OCR, dann Heuristik. Beides im Main-Prozess (eine Quelle der Wahrheit).
+      let deutung: DeutungErgebnis;
+      if (transkript) {
+        deutung = await window.mmc.ocr.deutungAusTranskript(transkript, verwahrterName);
+      } else {
+        const ocr = await window.mmc.ocr.deuteBeleg({
+          name: file.name,
+          bytes,
+          mime: file.type
+        });
+        console.log(`OCR: ${ocr.pages.length} Seiten, ${ocr.totalMs}ms`);
+        deutung = await window.mmc.ocr.deutungAusOcr(ocr, verwahrterName);
+      }
 
       // 4. Vorschlag erstellen
       const proposalId = `deutung-${Date.now()}`;
@@ -639,9 +857,13 @@ class App {
       this.renderZustand();
 
       this.showToast(
-        deutung.zweifel && deutung.atoms.length === 0
-          ? 'Eingang verwahrt — ich finde keine Beträge.'
-          : `Eingang verarbeitet: ${deutung.atoms.length} Beträge erkannt.`
+        deutung.atoms.length === 0
+          ? (transkript
+              ? 'Anruf verwahrt — nichts Verbindliches erkannt.'
+              : 'Eingang verwahrt — ich finde keine Beträge.')
+          : (transkript
+              ? `Anruf verarbeitet: ${deutung.atoms.length} Stellen erkannt.`
+              : `Eingang verarbeitet: ${deutung.atoms.length} Beträge erkannt.`)
       );
     } catch (err) {
       console.error('Fehler beim Verarbeiten des Eingangs:', err);
@@ -833,7 +1055,160 @@ class App {
       console.error('Fehler beim Rendern des Seitenbretts:', err);
     }
 
+    this.renderFlaechenNavigation(liste);
     await this.renderGitchainZeile(liste);
+  }
+
+  /**
+   * Flächen der OS-Sprache (Etappe 4 B5–B7) — jeder Artboard ist erreichbar.
+   */
+  private renderFlaechenNavigation(liste: HTMLElement): void {
+    const label = document.createElement('div');
+    label.className = 't11';
+    label.style.cssText =
+      'margin-top: 14px; padding: 0 12px 6px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(42,37,32,.42);';
+    label.textContent = 'Flächen';
+    liste.appendChild(label);
+
+    const eintraege: Array<[string, () => void]> = [
+      ['Tisch — Nebeneinander', () => this.zeigeTisch()],
+      ['Gruppe — vier Klone, ein Baum', () => this.zeigeGruppe()],
+      ['Einladen — eine Erlaubnis, nie der Besitz', () => this.zeigeEinladen()],
+      ['Rückruf — Erlaubnis entziehen', () => this.zeigeRueckruf()],
+      ['Onboarding — Siegel prägen', () => this.zeigeOnboarding(1)]
+    ];
+
+    for (const [text, aktion] of eintraege) {
+      const item = document.createElement('div');
+      item.className = 't13';
+      item.style.cssText = 'padding: 10px 12px; border-radius: 8px; cursor: pointer;';
+      item.textContent = text;
+      item.onmouseenter = () => { item.style.background = 'rgba(143,169,143,.08)'; };
+      item.onmouseleave = () => { item.style.background = ''; };
+      item.onclick = () => {
+        const panel = document.getElementById('seitenbrett-panel');
+        if (panel) panel.style.display = 'none';
+        aktion();
+      };
+      liste.appendChild(item);
+    }
+  }
+
+  /** OsTisch.dc.html — Vollfenster-Szene im Overlay. */
+  private zeigeTisch(): void {
+    const overlay = document.getElementById('beweis-overlay');
+    if (!overlay) return;
+    overlay.innerHTML = '';
+    overlay.style.display = 'flex';
+    overlay.appendChild(
+      renderTisch(() => {
+        overlay.style.display = 'none';
+        overlay.innerHTML = '';
+      })
+    );
+  }
+
+  /** OsGruppe.dc.html — Mobil-Blatt (390px) auf der Bühne. */
+  private zeigeGruppe(): void {
+    this.zustand = 'fall-ansicht';
+    this.renderZustand();
+
+    const container = document.getElementById('fall-ansicht-container');
+    if (!container) return;
+    container.innerHTML = '';
+    container.appendChild(renderGruppe());
+
+    const btnZurueck = document.createElement('button');
+    btnZurueck.textContent = 'Zurück';
+    btnZurueck.className = 'pill-still';
+    btnZurueck.style.cssText = 'margin: 24px auto 0; display: block;';
+    btnZurueck.onclick = () => {
+      this.zustand = this.karten.length > 0 ? 'fragend' : 'ruhig';
+      this.renderZustand();
+    };
+    container.appendChild(btnZurueck);
+  }
+
+  /** OsEinladen.dc.html — Capability-Flow (Scope, Dauer, kein Konto) auf der Bühne. */
+  private zeigeEinladen(): void {
+    this.zustand = 'fall-ansicht';
+    this.renderZustand();
+
+    const container = document.getElementById('fall-ansicht-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const zurueck = (): void => {
+      this.zustand = this.karten.length > 0 ? 'fragend' : 'ruhig';
+      this.renderZustand();
+    };
+
+    container.appendChild(
+      renderEinladen({
+        onEinladen: () => {
+          this.showToast('Einladen braucht einen zweiten Klon — auf diesem Gerät noch nicht verbunden.');
+        },
+        onAbbrechen: zurueck
+      })
+    );
+  }
+
+  /** OsRueckruf.dc.html — Anruf/Rückruf einer Erlaubnis (Mobil-Blatt auf der Bühne). */
+  private zeigeRueckruf(): void {
+    this.zustand = 'fall-ansicht';
+    this.renderZustand();
+
+    const container = document.getElementById('fall-ansicht-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const zurueck = (): void => {
+      this.zustand = this.karten.length > 0 ? 'fragend' : 'ruhig';
+      this.renderZustand();
+    };
+
+    container.appendChild(
+      renderRueckruf({
+        onEntziehen: () => {
+          this.showToast('Rückruf braucht einen zweiten Klon — auf diesem Gerät noch nicht verbunden.');
+        },
+        onBehalten: zurueck
+      })
+    );
+  }
+
+  /**
+   * Null-Fragen-Onboarding (Etappe 4 C): ObSiegel → ObRettung → ObErfolg.
+   * Drei Vollflächen im Overlay; ObNull ist Referenzblatt, ObWohnort/ObAutonomie*
+   * sind Archiv und werden nicht gebaut.
+   */
+  private zeigeOnboarding(schritt: 1 | 2 | 3): void {
+    const overlay = document.getElementById('beweis-overlay');
+    if (!overlay) return;
+    overlay.innerHTML = '';
+    overlay.style.display = 'flex';
+
+    const fertig = (): void => {
+      overlay.style.display = 'none';
+      overlay.innerHTML = '';
+      localStorage.setItem('mmc-onboarding', 'done');
+    };
+
+    let flaeche: HTMLElement;
+    if (schritt === 1) {
+      flaeche = renderObSiegel(() => this.zeigeOnboarding(2));
+    } else if (schritt === 2) {
+      flaeche = renderObRettung({
+        onJetzt: () => {
+          this.showToast('Zweiter Träger folgt — auf diesem Gerät noch nicht verbunden.');
+          this.zeigeOnboarding(3);
+        },
+        onSpaeter: () => this.zeigeOnboarding(3)
+      });
+    } else {
+      flaeche = renderObErfolg(fertig);
+    }
+    overlay.appendChild(flaeche);
   }
 
   /**
@@ -906,57 +1281,125 @@ class App {
 
     try {
       const erzaehlung = await window.mmc.vault.fallErzaehlung(fallId);
+      const vorschlaege = await window.mmc.vault.listVorschlaege(fallId).catch(() => []);
+
+      // Titel nach OsFall.dc.html: Serif 34, zentriert, line-height 1.3
+      const titelEl = document.createElement('div');
+      titelEl.className = 'serif';
+      titelEl.style.cssText = 'font-size: 34px; line-height: 1.3; text-align: center; margin-bottom: 34px;';
+      const offen = vorschlaege.length;
+      titelEl.textContent =
+        offen === 0
+          ? `${fallId.toUpperCase()}. Alles ruhig.`
+          : offen === 1
+            ? `${fallId.toUpperCase()}. Ein Ding wartet.`
+            : `${fallId.toUpperCase()}. ${offen} Dinge warten.`;
+      container.appendChild(titelEl);
 
       if (erzaehlung.length === 0) {
         const hinweis = document.createElement('div');
         hinweis.className = 't13 sub';
+        hinweis.style.textAlign = 'center';
         hinweis.textContent = 'Noch keine Einträge in diesem Fall.';
         container.appendChild(hinweis);
-        return;
+      } else {
+        // "Still passiert"-Liste nach OsFall.dc.html
+        const label = document.createElement('div');
+        label.className = 't11';
+        label.style.cssText =
+          'font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(42,37,32,.42); margin-bottom: 9px;';
+        label.textContent = 'Still passiert';
+        container.appendChild(label);
+
+        const liste = document.createElement('div');
+        liste.style.cssText = 'display: flex; flex-direction: column; gap: 9px;';
+
+        for (const satz of erzaehlung) {
+          // Karte: 13px 16px, kein Schatten, 65 % Weiß, Häkchen Salbei
+          const karte = document.createElement('div');
+          karte.style.cssText = `
+            padding: 13px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(255,255,255,.65);
+            border: 1px solid rgba(184,163,105,.22);
+            border-radius: 16px;
+          `;
+
+          const zeile = document.createElement('div');
+          zeile.style.cssText = 'display: flex; align-items: center; gap: 12px;';
+
+          const haken = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          haken.setAttribute('width', '15');
+          haken.setAttribute('height', '15');
+          haken.setAttribute('viewBox', '0 0 24 24');
+          haken.setAttribute('fill', 'none');
+          haken.setAttribute('stroke', '#8FA98F');
+          haken.setAttribute('stroke-width', '2.4');
+          haken.setAttribute('stroke-linecap', 'round');
+          haken.setAttribute('stroke-linejoin', 'round');
+          haken.style.flexShrink = '0';
+          const pfad = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          pfad.setAttribute('d', 'M20 6 9 17l-5-5');
+          haken.appendChild(pfad);
+          zeile.appendChild(haken);
+
+          const text = document.createElement('span');
+          text.className = 't13';
+          text.style.flex = '1';
+          text.textContent = satz.satz;
+          zeile.appendChild(text);
+
+          const tag = document.createElement('span');
+          tag.className = 't11 sub';
+          tag.textContent = this.wochentagKurz(satz.datumIso);
+          zeile.appendChild(tag);
+
+          karte.appendChild(zeile);
+
+          // Aufklappbare Commit-Zeile — der Beweis bleibt erreichbar
+          const details = document.createElement('details');
+          const summary = document.createElement('summary');
+          summary.className = 'quelle';
+          summary.style.cssText = 'cursor: pointer; user-select: none;';
+          summary.textContent = '▸ Commit-Zeile';
+          details.appendChild(summary);
+
+          const quellzeile = document.createElement('div');
+          quellzeile.className = 'quelle';
+          quellzeile.style.cssText = 'margin-top: 6px; padding-left: 12px;';
+          quellzeile.textContent = satz.commitZeile;
+          details.appendChild(quellzeile);
+          karte.appendChild(details);
+
+          liste.appendChild(karte);
+        }
+
+        container.appendChild(liste);
       }
 
-      // Erzählung als Sätze
-      for (const satz of erzaehlung) {
-        const item = document.createElement('div');
-        item.style.cssText = 'margin-bottom: 20px;';
+      // Button-Zeile: Vereinbarung (OsVereinbarung) + Zurück
+      const btnRow = document.createElement('div');
+      btnRow.style.cssText = 'display: flex; gap: 10px; margin-top: 24px;';
 
-        const satzEl = document.createElement('div');
-        satzEl.className = 'serif';
-        satzEl.style.fontSize = '17px';
-        satzEl.style.lineHeight = '1.6';
-        satzEl.textContent = satz.satz;
-        item.appendChild(satzEl);
-
-        // Aufklappbare Quellzeile
-        const details = document.createElement('details');
-        details.style.marginTop = '6px';
-
-        const summary = document.createElement('summary');
-        summary.className = 'quelle';
-        summary.style.cssText = 'cursor: pointer; user-select: none;';
-        summary.textContent = '▸ Commit-Zeile';
-        details.appendChild(summary);
-
-        const quellzeile = document.createElement('div');
-        quellzeile.className = 'quelle';
-        quellzeile.style.cssText = 'margin-top: 6px; padding-left: 12px;';
-        quellzeile.textContent = satz.commitZeile;
-        details.appendChild(quellzeile);
-
-        item.appendChild(details);
-        container.appendChild(item);
+      if (erzaehlung.length > 0) {
+        const btnVereinbarung = document.createElement('button');
+        btnVereinbarung.textContent = 'Vereinbarung';
+        btnVereinbarung.className = 'pill-still';
+        btnVereinbarung.onclick = () => void this.zeigeVereinbarung(fallId, erzaehlung);
+        btnRow.appendChild(btnVereinbarung);
       }
 
-      // Zurück-Button
       const btnZurueck = document.createElement('button');
       btnZurueck.textContent = 'Zurück';
       btnZurueck.className = 'pill-still';
-      btnZurueck.style.marginTop = '24px';
       btnZurueck.onclick = () => {
         this.zustand = this.karten.length > 0 ? 'fragend' : 'ruhig';
         this.renderZustand();
       };
-      container.appendChild(btnZurueck);
+      btnRow.appendChild(btnZurueck);
+      container.appendChild(btnRow);
     } catch (err) {
       console.error('Fehler beim Laden der Erzählung:', err);
       const fehlerEl = document.createElement('div');
@@ -965,6 +1408,74 @@ class App {
       fehlerEl.textContent = `Fehler: ${(err as Error).message || err}`;
       container.appendChild(fehlerEl);
     }
+  }
+
+  /**
+   * OsVereinbarung.dc.html — die Fassung aus dem Verlauf, jede Zeile zeigt
+   * auf ihre Stelle. Positionen kommen aus den echten gemergten Atoms des
+   * Falls; die Gegenseite ist v0.1-Statik im Artboard-Duktus (kein
+   * Signatur-Backend). Signieren bleibt hinter Face ID — hier nur der Hinweis.
+   */
+  private async zeigeVereinbarung(fallId: string, erzaehlung: ErzaehlSatz[]): Promise<void> {
+    const container = document.getElementById('fall-ansicht-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    try {
+      const gruppen = await window.mmc.vault.listAtomsMain(fallId);
+      const atoms = gruppen.flatMap(g => g.atoms);
+
+      const positionen: VereinbarungPosition[] = atoms.slice(0, 6).map(a => ({
+        feld: a.feld,
+        wert: a.wert,
+        fundstelle:
+          a.fundstelle.art === 'anruf'
+            ? `aus dem Anruf · Minute ${a.fundstelle.minute ?? '—'}`
+            : `aus ${a.fundstelle.doc} · S. ${a.fundstelle.seite ?? 1}`
+      }));
+
+      const letzterSha = erzaehlung.length > 0 ? erzaehlung[erzaehlung.length - 1].sha : '—';
+
+      const screen = renderVereinbarung({
+        fallId,
+        fassung: Math.max(1, erzaehlung.length),
+        commitSha: letzterSha.slice(0, 7),
+        positionen,
+        parteien: [
+          { name: 'Gerd', signiert: true, hinweis: 'signiert · heute' },
+          { name: 'Du', signiert: false, hinweis: 'deine Signatur fehlt noch' }
+        ],
+        onSignieren: () => {
+          this.showToast('Signieren braucht Face ID — auf diesem Gerät noch nicht verbunden.');
+        },
+        onAendern: () => {
+          this.showToast('Fassung ändern: Zieh ein Dokument auf den Fall, der Rest passiert still.');
+        }
+      });
+      container.appendChild(screen);
+
+      // Zurück zur Fall-Ansicht
+      const btnZurueck = document.createElement('button');
+      btnZurueck.textContent = 'Zurück';
+      btnZurueck.className = 'pill-still';
+      btnZurueck.style.cssText = 'margin: 24px auto 0; display: block;';
+      btnZurueck.onclick = () => void this.zeigeFallAnsicht(fallId);
+      container.appendChild(btnZurueck);
+    } catch (err) {
+      console.error('Fehler beim Laden der Vereinbarung:', err);
+      const fehlerEl = document.createElement('div');
+      fehlerEl.className = 't13';
+      fehlerEl.style.color = '#9c6a63';
+      fehlerEl.textContent = `Fehler: ${(err as Error).message || err}`;
+      container.appendChild(fehlerEl);
+    }
+  }
+
+  /** Wochentag-Kürzel wie im OsFall-Artboard ("Do", "Di") */
+  private wochentagKurz(iso: string): string {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    return ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][d.getDay()];
   }
 
   // ============================================================================

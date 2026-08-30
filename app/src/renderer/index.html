@@ -248,6 +248,24 @@
       z-index: 1000;
     }
 
+    /* Fußzeile (Etappe 4): geteilte Fälle links-zentriert + Schlüssel-Zeile.
+       Maße aus OsHeute.dc.html: t11, rgba(42,37,32,.55), padding 0 28px 24px */
+    .fussleiste {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: rgba(42, 37, 32, .55);
+      pointer-events: none;
+      z-index: 5;
+      text-align: center;
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -329,6 +347,12 @@
 
   <!-- Frag-mich-Toggle -->
   <div class="frag-mich" id="frag-mich-toggle">Frag mich</div>
+
+  <!-- Fußzeile: geteilte Fälle (Etappe 4 B) + Schlüssel-Zeile (Etappe 4 D) -->
+  <div class="fussleiste" id="fussleiste">
+    <span id="fuss-teilhaber">Gerd · Stefan extern · 7 weitere</span>
+    <span id="fuss-schluessel">Dein Schlüssel liegt hier</span>
+  </div>
 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
