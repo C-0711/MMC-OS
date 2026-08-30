@@ -30,6 +30,22 @@ Anruf-Endpunkt auf der registry deployed? Und falls der Schreibpfad dort
 Anmeldung verlangt: Device-Login ist der einzige Auth-Pfad der App
 (Secrets werden nie übertragen).
 
+**Nachtrag (Statuscode-Messung, 2026-08-30):** Das Backend-Team bestätigt
+die Adresse (öffentlich api-gitchain.0711.io, LAN 192.168.145.10:3361,
+Cluster `gitchain-service.gitchain.svc.cluster.local:3361`) — es ist also
+die eine GitChain-API, kein Proxy-Irrtum. Unterscheidung Auth-Gate vs.
+fehlende Route:
+
+    POST /api/v2/fall/x/anruf          → 401   } beide 401 → globale Auth-
+    POST /api/v2/fall/x/gibt-es-nicht  → 401   } Middleware, nicht entscheidbar
+    GET  /api/v2/fall/x/anruf/y/transkript → 404   } GETs sind nicht auth-
+    GET  /api/v2/fall/x/docs               → 404   } gegated (Health geht ja)
+                                                     → Routen FEHLEN sicher
+
+Die Lese-Endpunkte aus §3 (Transkript, wav, Doc-Liste) fehlen also
+definitiv. Ob der Anruf-POST hinter der Auth existiert, klärt erst ein
+Device-Login.
+
 ## 2. Lokaler Betrieb der Ref scheitert an hartkodiertem Vault-Pfad
 
 `docs/gitchain-ref/server.js:299` macht `mkdirSync('/opt/data/gitchain-ref/vault')`
