@@ -1,695 +1,791 @@
 {
-  "artboards": [
-    {
-      "file": "StartGalerie.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 1280,
-      "h": 1300,
-      "title": "Start-Galerie · /einfach",
-      "page": "page-1"
-    },
-    {
-      "file": "Main.dc.html",
-      "x": 1400,
-      "y": 0,
-      "w": 1280,
-      "h": 960,
-      "title": "Geteiltes Git · /einfach/geteilt/:id",
-      "page": "page-1"
-    },
-    {
-      "file": "GitAnsicht.dc.html",
-      "x": 0,
-      "y": 1440,
-      "w": 1280,
-      "h": 960,
-      "title": "Git-Ansicht · /einfach/g/:slug",
-      "page": "page-1"
-    },
-    {
-      "file": "Eingang.dc.html",
-      "x": 1400,
-      "y": 1440,
-      "w": 1280,
-      "h": 880,
-      "title": "Eingang · /einfach/eingang",
-      "page": "page-1"
-    },
-    {
-      "file": "NavA.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 1280,
-      "h": 880,
-      "page": "page-2",
-      "title": "A · Ansicht × Fall"
-    },
-    {
-      "file": "NavB.dc.html",
-      "x": 1400,
-      "y": 0,
-      "w": 1280,
-      "h": 880,
-      "page": "page-2",
-      "title": "B · Fall zuerst, Ansichten als Register"
-    },
-    {
-      "file": "NavC.dc.html",
-      "x": 2800,
-      "y": 0,
-      "w": 1280,
-      "h": 880,
-      "page": "page-2",
-      "title": "C · Der Weg"
-    },
-    {
-      "file": "MacFall.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "page": "page-3",
-      "title": "Fall · Seitenleiste, Werkzeugleiste, Inspektor"
-    },
-    {
-      "file": "MacGeteilt.dc.html",
-      "x": 1480,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "page": "page-3",
-      "title": "Geteilter Fall · mit Anwesenheit"
-    },
-    {
-      "file": "CtaxFall.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "page": "page-4",
-      "title": "CTAX als ein Fall"
-    },
-    {
-      "file": "OhneOrdner.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "page": "page-5",
-      "title": "Buderus-Kataloge — Inhalt statt Verzeichnis"
-    },
-    {
-      "file": "IosEingang.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "page": "page-6",
-      "title": "1 · Eingang — hier startet das Telefon"
-    },
-    {
-      "file": "IosTeilen.dc.html",
-      "x": 490,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "page": "page-6",
-      "title": "2 · Teilen-Erweiterung — der Hebel"
-    },
-    {
-      "file": "IosFrage.dc.html",
-      "x": 980,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "page": "page-6",
-      "title": "3 · Fragen — Antwort mit Beleg"
-    },
-    {
-      "file": "IosDabei.dc.html",
-      "x": 1470,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "page": "page-6",
-      "title": "4 · Dabei sein — der Fall am Unfallort"
-    },
-    {
-      "file": "OsHeute.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Heute — die Karte (Desktop)"
-    },
-    {
-      "file": "OsBeweis.dc.html",
-      "x": 1480,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Beweis — wichtigster Screen"
-    },
-    {
-      "file": "OsPhone.dc.html",
-      "x": 2960,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Karte + Liste — Phone als Tresor & Zeuge"
-    },
-    {
-      "file": "OsFall.dc.html",
-      "x": 0,
-      "y": 1060,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "CTAX als Fall — statt Teams, in der Form"
-    },
-    {
-      "file": "OsAnrufBeweis.dc.html",
-      "x": 1480,
-      "y": 1060,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Beweis für einen Anruf — die Minute"
-    },
-    {
-      "file": "OsKatalog.dc.html",
-      "x": 2960,
-      "y": 1060,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Katalog ohne Ordner — Beweis-Form"
-    },
-    {
-      "file": "OsUebernahme.dc.html",
-      "x": 0,
-      "y": 2260,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Übernahme — der Einwilligungs-Moment"
-    },
-    {
-      "file": "OsUebergang.dc.html",
-      "x": 520,
-      "y": 2260,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Übergang — Brücke nach draußen, geschwärzt"
-    },
-    {
-      "file": "OsVereinbarung.dc.html",
-      "x": 2000,
-      "y": 2260,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Die Vereinbarung — signierte Fassung + Anker"
-    },
-    {
-      "file": "OsAnrufKommt.dc.html",
-      "x": 0,
-      "y": 3400,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Der Anruf kommt — Klon zu Klon"
-    },
-    {
-      "file": "OsAnrufLaeuft.dc.html",
-      "x": 520,
-      "y": 3400,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Anruf läuft — Mitschrift + Beschluss-Karte"
-    },
-    {
-      "file": "OsText.dc.html",
-      "x": 2000,
-      "y": 3400,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Der Text — Nachricht = Commit, Zitat = Referenz"
-    },
-    {
-      "file": "ObWohnort.dc.html",
-      "x": 0,
-      "y": 1180,
-      "w": 1360,
-      "h": 900,
-      "page": "page-8",
-      "title": "Verworfen · Frage 1 als Vorab-Dialog"
-    },
-    {
-      "file": "ObAutonomie.dc.html",
-      "x": 1480,
-      "y": 1180,
-      "w": 1360,
-      "h": 900,
-      "page": "page-8",
-      "title": "Verworfen · Frage 2 als Vorab-Dialog"
-    },
-    {
-      "file": "ObSiegel.dc.html",
-      "x": 2960,
-      "y": 1180,
-      "w": 1360,
-      "h": 900,
-      "page": "page-8",
-      "title": "Verworfen · Frage 3 als Vorab-Dialog"
-    },
-    {
-      "file": "ObErfolg.dc.html",
-      "x": 1480,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "page": "page-8",
-      "title": "2 · Der erste Erfolg — das ganze Onboarding"
-    },
-    {
-      "file": "ObRettung.dc.html",
-      "x": 3470,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "page": "page-8",
-      "title": "Tag 2 — die Rettungs-Karte"
-    },
-    {
-      "file": "ObEingeladen.dc.html",
-      "x": 2960,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "page": "page-8",
-      "title": "Eingeladen — ein Bildschirm"
-    },
-    {
-      "file": "ObNull.dc.html",
-      "page": "page-8",
-      "x": 0,
-      "y": 0,
-      "w": 1360,
-      "h": 900,
-      "title": "1 · Erster Start — keine einzige Frage"
-    },
-    {
-      "file": "ObAutonomieKarte.dc.html",
-      "page": "page-8",
-      "x": 3980,
-      "y": 0,
-      "w": 390,
-      "h": 844,
-      "title": "Tag 3 — Autonomie als Karte"
-    },
-    {
-      "file": "OsFreund.dc.html",
-      "x": 0,
-      "y": 4540,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Der Freund — ein Baum, zwei Klone"
-    },
-    {
-      "file": "OsAusgruendung.dc.html",
-      "x": 520,
-      "y": 4540,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Ausgründung — die Kapsel wächst nie von allein"
-    },
-    {
-      "file": "OsGruppe.dc.html",
-      "x": 1040,
-      "y": 4540,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Die Gruppe — vier Klone, ein Baum"
-    },
-    {
-      "file": "OsLeseplatz.dc.html",
-      "x": 0,
-      "y": 5680,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Leseplatz — ein Original, die Lesung als Folie"
-    },
-    {
-      "file": "OsTisch.dc.html",
-      "x": 1480,
-      "y": 5680,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Tisch — zwei Originale, die Gegenprobe"
-    },
-    {
-      "file": "OsEinladen.dc.html",
-      "x": 3480,
-      "y": 2260,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Einladen — Erlaubnis statt Besitz"
-    },
-    {
-      "file": "OsSuche.dc.html",
-      "x": 0,
-      "y": 6720,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Frag alles — der Brain als Bildschirm"
-    },
-    {
-      "file": "OsRueckruf.dc.html",
-      "x": 1480,
-      "y": 6720,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Der Rückruf — Erlaubnis beenden, ehrlich"
-    },
-    {
-      "file": "Bausteine.dc.html",
-      "x": 0,
-      "y": 0,
-      "w": 1560,
-      "h": 1220,
-      "page": "page-9",
-      "title": "Die Bausteine — OS-Sprache als System"
-    },
-    {
-      "file": "OsStapel.dc.html",
-      "x": 0,
-      "y": 7760,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Stapel — der Ingester sortiert allein"
-    },
-    {
-      "file": "OsNeuesThema.dc.html",
-      "x": 1480,
-      "y": 7760,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Das neue Thema — der Ingester legt Fälle an"
-    },
-    {
-      "file": "OsMeet.dc.html",
-      "x": 0,
-      "y": 8800,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Meet — der Tisch in Echtzeit, Multi-eyes live"
-    },
-    {
-      "file": "OsDivergenz.dc.html",
-      "x": 1480,
-      "y": 8800,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Die Divergenz — zwei Zeugen, ein Moment"
-    },
-    {
-      "file": "OsAufzeichnung.dc.html",
-      "x": 2960,
-      "y": 8800,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Aufzeichnen — Zustimmung wird committet"
-    },
-    {
-      "file": "OsWiderspruch.dc.html",
-      "x": 0,
-      "y": 9840,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Widerspruch — zwei Systeme, ein Attribut"
-    },
-    {
-      "file": "OsConnectorBeweis.dc.html",
-      "x": 1480,
-      "y": 9840,
-      "w": 1360,
-      "h": 900,
-      "page": "page-7",
-      "title": "Der Connector-Beweis — die Systemzelle"
-    },
-    {
-      "file": "OsRevision.dc.html",
-      "x": 2960,
-      "y": 9840,
-      "w": 390,
-      "h": 844,
-      "page": "page-7",
-      "title": "Die neue Revision — stiller Pull, eine Karte"
-    },
-    {
-      "file": "ObAnmeldung.dc.html",
-      "x": 0,
-      "y": 2320,
-      "w": 1360,
-      "h": 900,
-      "page": "page-8",
-      "title": "AUTH · Anmeldung — ein Feld, ein Knopf"
-    },
-    {
-      "file": "ObCode.dc.html",
-      "x": 1480,
-      "y": 2320,
-      "w": 1360,
-      "h": 900,
-      "page": "page-8",
-      "title": "AUTH · Der Code — zehn Minuten, einmal"
-    },
-    {
-      "file": "ObZwoelfWorte.dc.html",
-      "x": 2960,
-      "y": 2320,
-      "w": 1360,
-      "h": 900,
-      "page": "page-8",
-      "title": "AUTH · Zwölf Worte — der Notar-Moment"
-    }
-  ],
-  "annotations": [
-    {
-      "id": "quelle",
-      "x": 0,
-      "y": -190,
-      "w": 900,
-      "text": "GitChain — einfache Oberfläche (Consumer), Ist-Stand.\nGezeichnet aus src/renderer/src/consumer/ auf Branch claude/git-ansicht-eckdaten (f866d7e).\nWerte 1:1 aus consumer.css: Glas rgba(248,250,253,.78) + blur(30px), Radius 18, iOS-Blau #0a84ff, Systemschrift.\nEigene Design-Sprache — getrennt von den Neo-Tokens der Experten-UI.",
-      "page": "page-1"
-    },
-    {
-      "id": "nav-frage",
-      "x": 0,
-      "y": -250,
-      "w": 1100,
-      "page": "page-2",
-      "text": "Zwei Achsen, nicht eine: welcher FALL (ein Stapel = ein Fall = ein Container) und welche ANSICHT (Explorer, Post, Bilder, Anrufe, Termine, Räume).\nDie heutige Oberfläche kennt nur eine halbe erste Achse — vier Gits in einer Pille — und die zweite gar nicht. Deshalb wirkt jedes Fenster einzeln.\n\nZugehörigkeit = derselbe Container. Die Kapsel entscheidet, wer hineinsieht: nur du · mit der Familie · mit Fremden.\nBeleg NICHT überall: er hängt an einer Aussage (Betrag, Frist, Antwort), nicht an jeder Datei. Keine Commits, keine OCR-Namen in der Ansicht."
-    },
-    {
-      "id": "mac-regeln",
-      "x": 0,
-      "y": -290,
-      "w": 1200,
-      "page": "page-3",
-      "text": "Plattformkonventionen, keine Apple-Programme nachgebaut; Symbole selbst gezeichnet, keine SF Symbols.\n\nWas sich gegenüber heute ändert: Seitenleiste mit Vibrancy statt schwebender Glaskarten · vereinheitlichte Werkzeugleiste oben statt Pille unten · opaker Inhaltsbereich, der Verlauf liegt auf dem Schreibtisch HINTER dem Fenster · 13px statt 16px · Zeilenhöhe 26px · dezente Knöpfe statt großer blauer Pillen · Statuszeile unten.\n\nMaße aus ContainerMock übernommen: 13px Grundschrift, .cl-sub 11.5px, Primärknopf 12.5px/500/999px, Glas #f8fafdc7. Anwesenheit (Online-Punkt, „wartet\", gedimmt) ebenfalls von dort — die heutige gelbe Plakette „noch nicht verbunden\" ist dafür der Platzhalter.\n\nV77 (heute 15:50) war der Stand VOR der Galerie. Um 18:52 sind die Ordner-Pillen bewusst durch Inhalts-Vorschauen ersetzt worden, um 19:07 kam thumb:// dazu. Der Fall zeigt deshalb Symbolansicht mit Blattvorschau, nicht Liste — „ein Git sieht aus wie sein Inhalt\" bleibt, die macOS-Struktur kommt drumherum. Die Blätter hier sind gezeichnete Platzhalter; im Programm sind es echte erste Seiten."
-    },
-    {
-      "id": "teams-befund",
-      "x": 0,
-      "y": -330,
-      "w": 1250,
-      "page": "page-4",
-      "text": "BEFUND AUS DEN VIER TEAMS-BILDERN\nWhiteboard: leeres Punktraster. Q&A: „not available for this event\". Shared: drei nackte URLs, keine gelesen. Anrufe: 20+ Gespräche, nur Namen und Dauer — 3m 12s, 8m 50s, 2m 44s — kein Satz davon geblieben.\nSeitenleiste: CTAX Daily, CTAX Weekly, CTAX Review & Planning, CTAX Dev, „CTAX-197 und Context-Fenster\", „Gerd Flender, +2\" — ein Vorhaben in sechs Behältern, die nichts voneinander wissen.\n\nDIE ANTWORT\nEin Fall statt sechs Behälter; Daily/Weekly/Review sind Termine darin, keine eigenen Kanäle.\nDer Anruf hinterlässt Beschlüsse und Aufgaben — mit der MINUTE als Beleg (04:12, 27:50). Das ist die Stelle, an der Teams nur „42 min\" hat.\nGeteiltes wird beim Ankommen gelesen, nicht nur verlinkt: aus seafile.buhl.de/f/5a9b… wird ein Dokument mit Namen, Seiten und erkannten Fristen.\nExtern ist an jeder Zeile markiert, nicht nur oben am Raum.\nArbeit und Privat liegen in derselben Seitenleiste — Teams kann deine Kfz-Police nicht halten.\n\nPLATZHALTER: Beschlusstexte, Aufgaben, Zeitmarken und der Dokumentname sind erfunden. Echt sind nur Namen, Termine und Adressen aus deinen Bildern."
-    },
-    {
-      "id": "ohne-ordner",
-      "x": 0,
-      "y": -330,
-      "w": 1250,
-      "page": "page-5",
-      "text": "DIE UMKEHRUNG\nHeute: Hauptbereich = Verzeichnis (.0711, .git, .plugins, docs, index, atoms.json — Spalte ART: Ordner). Inhalt = Seitenspalte.\nHier: Hauptbereich = Inhalt — worum es geht, die Frage, die Antwort, der Beweis-Ausschnitt. Kein einziger Ordner sichtbar. .git und .plugins gehen den Menschen nichts an.\n\nAus Dateien werden Sätze: docs/ → „das Original, unverändert seit der Aufnahme\" · atoms.json → „5.296 Textstellen, aus der Textebene geholt, nicht abfotografiert\" · index/ → „787 Merkmale, damit der Katalog antworten kann\" · 59 Stände → „seit der Aufnahme unverändert\".\n\nFÜR DAS ABLÖSEN VON TEAMS, WHATSAPP, MAIL, FACETIME\nIn all diesen Systemen ist das GESPRÄCH der Behälter und die Datei der Anhang. Ein Chat-Verlauf ist auch nur ein Ordner, ein chronologischer. Wer Teams durch eine Liste von Unterhaltungen ersetzt, hat Ordner durch Ordner ersetzt.\nUmgekehrt: der FALL ist der Behälter, das Gespräch ist eine seiner Lesungen — wie das PDF eine ist und der Anruf eine wird. Der Raum vergisst, der Fall nicht.\n\nAlle Zahlen und Texte hier sind echt, aus Buderus_Kataloge auf diesem Mac. Nur die Seitenzahl S. 12 ist gesetzt."
-    },
-    {
-      "id": "ios-haltung",
-      "x": 0,
-      "y": -300,
-      "w": 1300,
-      "page": "page-6",
-      "text": "DAS TELEFON IST NICHT DER KLEINE MAC\nMac: lesen und entscheiden. Telefon: Unterlagen kommen an, und man fragt unterwegs. Eine Containerliste mit 90 snr-Einträgen hat hier nichts verloren — der Eingang ist der Startbildschirm, nicht die Galerie.\n\nDREI VERBEN, DREI REITER: hinlegen · fragen · dabei sein.\n\nDIE TEILEN-ERWEITERUNG IST DER EIGENTLICHE HEBEL. Sie ist kein Bildschirm der App, sondern ein Ziel im System: aus jeder Nachrichten- oder Mail-App teilen → hier gelesen → Gemma schlägt das Git vor → abgelegt. So löst man WhatsApp und Mail als Dokumententransport ab, ohne dass jemand die App wechselt. Das ist der Einstieg, den die Übergabe verlangt: „dort, wo der Kunde ohnehin allein ist\".\n\nDER DENK-ORT MUSS SICHTBAR SEIN. Gemma 4 31B FP8 auf zwei H200 passt nicht ins Telefon. Also entweder klein und lokal oder über die eigene Leitung — und der Bildschirm sagt welches: „gedacht auf deiner H200v — nichts hat das Haus verlassen\". Ohne Leitung greift der getrennt-Zustand aus ContainerMock.\n\nDas Lesen bleibt lokal: die Neural Engine ist im iPhone. Der vision-ane-Leser, der im Versicherungen-Git schon 28 Atome gelesen hat, ist dieselbe Strecke.\n\nKein nachgezeichneter Status-Balken, keine gemalte Tastatur — die zeichnet das System selbst. Alle Tippziele mindestens 44 px."
-    },
-    {
-      "id": "os-sprache",
-      "x": 0,
-      "y": -360,
-      "w": 1300,
-      "page": "page-7",
-      "text": "DIE VERBINDLICHE SPRACHE (aus dem Design-Brief / os-manifest)\nWarmweiß #FAF7F2 · Salbei #8FA98F · Rosé #D9A6A0 · Olivgold #B8A369 · Serifen-Headline (nie fett) · Wachssiegel · „Alles ruhig.\"\nVerbote: kein Terminal-Look · kein Blau-Lila-SaaS · kein Cyberpunk. Damit ist das blaue Glas von consumer.css (#0a84ff) ausgeschlossen — die Seiten 1–6 dieses Canvas sind ab jetzt Stimmungs-Archiv, nicht Richtung. Die richtige Verwandtschaft war immer Neo v2 (#857b61 / #8ba88a / #d4a0a0 / #faf8f5).\n\nDREI SCREEN-FORMEN, NICHT MEHR: die Karte (ein Vorschlag, zwei Antworten) · die Liste (max. 3, sonst wird gesprochen) · der Beweis (Original + Rechteck + Fall/doc/Seite/Commit/Signatur). Was keine dieser Formen ist, ist falsch entworfen.\n\nDIE HARTEN REGELN, IM ENTWURF SICHTBAR: Wortgleichheit (die Karte zeigt, was die Stimme sagt) · ein Tap oder ein Wort = ein Commit · „ja\" ohne Screen zählt nicht · Stimme ist Bedienung, nicht Auth — Geld erst nach Face ID.\n\nBeweis-Screen: die drei Mängel des generierten Bildes behoben — Beträge konsistent (1.190,00 € überall, 19 % von 6.263,16), keine Hex-Artefakte, saubere Quellzeile.\nPhone = Tresor & Zeuge: „gelesen auf diesem Gerät · bezeugt\" an jeder stillen Zeile, unten die Schlüssel-Zeile („Dein Schlüssel liegt hier · 17 Fälle versiegelt · zuletzt geankert\")."
-    },
-    {
-      "id": "os-uebertrag",
-      "x": 0,
-      "y": 975,
-      "w": 1300,
-      "page": "page-7",
-      "text": "REIHE 2 — DIE STARKEN BILDSCHIRME, IN DIE FORMEN ZERLEGT statt nur umgefärbt: CTAX wird Headline + eine Karte + Liste (3) — Beschlüsse und Aufgaben tragen die MINUTE als Beleg. Der Anruf-Beweis zeigt: zweite Belegart, gleiche Kette — die Zeitmarke ist das Rechteck des Gesprächs. Der Katalog: Frage → Serifen-Antwort → Stelle selbst → Quellzeile; keine Dateiliste, kein Inspektor mehr."
-    },
-    {
-      "id": "os-kommunikation",
-      "x": 0,
-      "y": 2110,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 3 — DIE KOMMUNIKATIONS-SPEC ALS BILDSCHIRME. „Wenn ich jemanden anrufe, schicke ich einen Container — ab da führen beide denselben Baum.\" Übernahme: Capability in drei Zeilen (lesen und vorschlagen · zurückziehen jederzeit · kein Server dazwischen), das „ja\" ist ein signierter Eintrag. Übergang: die Gegenseite hat kein gitchain — die Brücke schwärzt nach Regelwerk (fail closed), der Übergang wird im Fall vermerkt. Vereinbarung: die Fassung führt jede Zeile auf ihre Stelle zurück (S. 1 · Minute 02:41), vier Augen signieren, deine Signatur zuletzt mit Face ID, danach der Zeitstempel der Bundesdruckerei — QTSP vor Kette, wie die Anker-Strategie es priorisiert.\n\nEINLADEN (die Gegenrichtung zur Übernahme): Person aus dem Beziehungs-Baum, zwei Erlaubnis-Stufen (mitsehen+vorschlagen · mitführen), die Kapselgrenze ausgesprochen („sonst nichts — keine anderen Fälle, kein Tresor\") und der ehrliche Rückruf: die Erlaubnis endet sofort, das bereits Gesehene bleibt gesehen. Ohne gitchain: Beitritts-Weg, ein Bildschirm, kein Konto."
-    },
-    {
-      "id": "os-verlauf",
-      "x": 0,
-      "y": 3250,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 4 — DIE KOMMUNIKATION SELBST. Der Anruf kommt: über den Fall, nicht über eine Nummer — drei Salbei-Zeilen sagen, was Annehmen bedeutet. Der Anruf läuft: die Mitschrift schreibt Sprecher · Minute · Text, und wenn die Deutung einen Beschluss hört, erscheint die KARTE im Anruf — wortgleich aus der Minute, ein Tap = ein Commit für beide. Der Text: die Antwort ZITIERT die Stelle (Olivgold-Balken = Referenz auf ein Atom, keine Kopie), die Sprachnotiz ist Audio als Blob + Text als Atom, und der Beschluss-Trenner ist Salbei statt Blau. Der Verlauf ist die Darstellung des Falls — wo das System selbst spricht, spricht es in Karten."
-    },
-    {
-      "id": "onboarding-e2e",
-      "x": 0,
-      "y": -380,
-      "w": 1350,
-      "page": "page-8",
-      "text": "ONBOARDING, ENDE ZU ENDE — NULL FRAGEN.\nDer Design-Sprung aus der Spec-Sitzung: wenn Gemma ohnehin alles organisiert, ist jede Onboarding-Frage eine Zumutung. Der Code macht es beim Denk-Ort schon vor — still gesetzt, ein Satz im Bild, kein Dialog. Also gilt das für alles:\n\nDER ERSTE START IST DIE DROP-FLÄCHE. Kein Konto, keine E-Mail, kein Assistent. Siegel: still geprägt. Wohnort: dieses Gerät, umziehen geht immer. Autonomie: Mittelstellung, wird aus Verhalten gelernt. Fertig ist, wer die erste Antwort mit Fundstelle gesehen hat — Messpunkt existiert im Code („Drop→lesbar: X s\").\n\nDIE FRAGEN WERDEN KARTEN, gestellt im Moment der Relevanz: Rettung am Tag 2 (die eine Sache, bei der das System hartnäckig bleibt — Recovery/Erbschafts-Spec ist der offene Kandidat) · Autonomie am Tag 3, aus gezeigtem Verhalten („sieben Dinge still einsortiert, keines zurückgeholt — weiter so?\") · Wohnort, wenn ein Mac auftaucht oder die Datenmenge wächst.\n\nZWEI EINTRITTE bleiben: selbst angefangen (Drop-Fläche) und eingeladen (ein Bildschirm nach dem Annehmen — Siegel hat das „ja\" schon signiert). Der eingeladene Pfad ist der Wachstumspfad.\n\nREIHE 2 = DER VERWORFENE WEG: die drei Vorab-Fragen, behalten als Beleg der Entscheidung. Ihre Texte leben weiter — als Karten."
-    },
-    {
-      "id": "os-freunde",
-      "x": 0,
-      "y": 4390,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 5 — DERSELBE KONTEXT MIT FREUNDEN. Nicht derselbe Assistent, sondern derselbe Baum: Beziehungs-Container, ein Klon bei jedem, jede Nachricht/Foto/Plan ein Commit. Deine Gemma liest deinen Klon, ihre liest ihren — die KIs reden nie miteinander und antworten trotzdem gleich, weil sie dasselbe lesen. Privates bleibt draußen: Kontext ist nur, was committet wurde — die Kapsel entscheidet, kein Filter. Ausgründung: wird ein Thema größer, bekommt es einen NEUEN Baum mit eigener Kapsel — wer dazukommt (Max, Lisa), sieht die Hütte, nie den Beziehungs-Baum. Die Gruppe: N Klone, ein Baum; Zusagen als Karte, Beträge mit Beleg („Max hat 240,00 € ausgelegt — 60,00 € je\"), Links werden gelesen, nicht nur geteilt. Freund ohne gitchain → Brücke (Reihe 3); Freund einladen → der Ein-Bildschirm-Pfad (Seite Onboarding)."
-    },
-    {
-      "id": "os-original",
-      "x": 0,
-      "y": 5530,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 6 — ORIGINALE ANSCHAUEN. Regel aus der Architektur: docs/ ist byte-identisch und wird nie verändert — der Viewer zeigt das ORIGINAL ZUERST, die Deutung als abschaltbare Folie darüber, nie umgekehrt. Kopfzeile immer: Fall · Datei · Seite · „unverändert seit Aufnahme ✓\". Zwei Wege hinein: von jeder Aussage („Original öffnen\") und aus dem Fall. Rechts der Rückweg des Vertrauens: „Stützt sich darauf\" — welche Antworten und Eckdaten auf diese Seite zeigen (max. 3). MEHRERE DOKUMENTE = DER TISCH: zwei Originale nebeneinander, und der Faden zwischen den markierten Stellen macht die Gegenprobe sichtbar — derselbe Betrag in Kostenvoranschlag und Freigabe. Unten der Rest des Falls als Blattreihe zum Danebenlegen. Fotos/Scans blättern im selben Muster (Filmstreifen, wie im ContainerMock angelegt)."
-    },
-    {
-      "id": "os-brain-rueckruf",
-      "x": 0,
-      "y": 6570,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 7 — FRAG ALLES + DER RÜCKRUF. Die Suche über alle Fälle macht Retrieve-then-Resolve sichtbar, ohne es zu nennen: jeder Treffer trägt seinen FALL als Plakette, jede Zahl ist „im Fall geprüft\" (resolve im Klon, nicht im Index), und ein Treffer darf ehrlich aussortiert sein („gefunden, aber nicht mitgezählt\" — die Wohngebäudeversicherung läuft über die Nebenkosten). Quellzeile: 17 Fälle durchsucht · nichts hat das Haus verlassen. Der Brain kennt Fälle nur über refs — die Kapsel bleibt, auch beim Suchen.\nDER RÜCKRUF: Rosé als Handlungsfarbe (beenden, nicht Gefahr), drei Folgen vor dem Knopf — sofortiges Ende, Vermerk im Fall für alle, und die ehrliche dritte: Gesehenes bleibt gesehen. Revocation erreicht die Klone über denselben Kanal wie alles (pull-on-push). Wortgleich sprechbar."
-    },
-    {
-      "id": "bausteine-hinweis",
-      "x": 0,
-      "y": -260,
-      "w": 1300,
-      "page": "page-9",
-      "text": "DAS ÜBERGABE-BLATT. Jeder Baustein hier ist mit genau den Werten gebaut, die daneben stehen — kein Muster-Bild, sondern dieselben Stile wie auf allen OS-Sprache-Screens (_os.part). Für den Code: die Werte lassen sich 1:1 als CSS-Tokens übernehmen (--os-grund #FAF7F2, --os-salbei #8FA98F, --os-rose #D9A6A0, --os-olivgold #B8A369, --os-tinte #2A2520; Serife Playfair 400; Sans 17/15/13/11; Radius 16/12/8/rund).\nFür Claude Design: sobald /design-login einmal in einer interaktiven Claude-Code-Sitzung auf dem Mac gelaufen ist, kann dieses Blatt komponentenweise in ein Design-System-Projekt auf claude.ai/design wandern — Karte, Pille, Siegel, Quellzeile, Zug, Blatt, Fragefeld als je eine eigene Vorlage."
-    },
-    {
-      "id": "os-ingester",
-      "x": 0,
-      "y": 7610,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 8 — DER AUTOMATISCHE INGESTER. Die Arbeitsteilung, die alles trägt: EINSORTIEREN IST STILL, ANLEGEN NIE. In bestehende Fälle sortiert der Ingester ohne zu fragen (rückholbar, mit Beleg, der Abend zeigt es); ein NEUER Fall ist ein neuer Baum mit eigener Kapsel — der braucht dein Ja und einen Namen, den du überschreiben kannst. Der Stapel: einen ganzen Ordner hinwerfen, der Bericht kommt in drei Zeilen (still · neu · unverstanden) plus Quellzeile. Ehrlichkeit gehört dazu: „2 verstehe ich nicht\" bleibt im Eingang liegen statt falsch einsortiert zu werden — fail closed auch beim Sortieren."
-    },
-    {
-      "id": "os-call-meet",
-      "x": 0,
-      "y": 8650,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 9 — CALL & MEET (Spec 18). Vier Fünftel standen schon: Anruf mit Fall-Kontext, Mitschrift + Karte, Minuten-Beweis, signierte Fassung im ruhigen Raum (R3), Gast ohne Konto. NEU: das MEETING — vier Kacheln, jede ihr eigener Zeuge („schreibt mit\"), das gemeinsame Dokument auf demselben Stand bei allen, und der Beschluss-Kandidat mit Multi-eyes live (drei Haken, dein Ja fehlt); die Unterschrift kommt danach, nie im Gespräch. Die AUFZEICHNUNG als Karte: fail closed, auch das Nein wird vermerkt — beweisbar statt einseitig geheim. Die DIVERGENZ: zwei lokale Mitschriften hören Minute 27:50 verschieden — beide Lesarten bleiben im Baum, die signierte Fassung entscheidet, nichts wird gelöscht. Nicht gezeichnet (Variante von „Der Anruf kommt\"): eingehender Festnetz-Anruf über die Brücke — gleicher Screen, Plakette „über die Telefon-Brücke · nur du hast danach den Beweis\"."
-    },
-    {
-      "id": "os-w1",
-      "x": 0,
-      "y": 9690,
-      "w": 1350,
-      "page": "page-7",
-      "text": "REIHE 10 — W1 WORKSPACE-CONNECTORS (Doppel-Auftrag, Front 1; die CALL-Front nutzt die vorhandenen Reihen 4+9 als Vorlage). Die dritte Gestalt der Fundstelle: das Rechteck des Dokuments, die Minute des Anrufs, die ZELLE DES SYSTEMS — System · Objekt · Revision · Attribut · abgerufen · durch wen. DER WIDERSPRUCH ist die Divergenz der Systeme: zwei Werte nebeneinander, jeder mit seiner Connector-Fundstelle, keiner überschrieben; die Rolle entscheidet mit Unterschrift, das unterlegene System bekommt die Korrektur als Vorschlag. DIE NEUE REVISION: der Pull ist still (Commit vor Deutung gilt auch für APIs — „byte-gleich verwahrt\"), nur der Diff mit Folgen wird die eine Karte, und sie zeigt beide Revisionen als Fundstellen. Max. 3 Karten gilt weiter."
-    },
-    {
-      "id": "auth-front3",
-      "x": 0,
-      "y": 2170,
-      "w": 1350,
-      "page": "page-8",
-      "text": "REIHE 3 — FRONT 3: AUTH (E-Mail = dein Container). Kein SSO, keine Optionen-Wand: EIN Feld, EIN Salbei-Knopf, der Passkey als kleiner souveräner Alternativweg — kein Google, kein GitHub. Die Ehrlichkeit steht unter dem Feld: die E-Mail ist nur Zustelladresse, wird zum Hash und verschwindet; die Identität ist das Siegel. Der Code: sechs Felder, Serifen-Ziffern, „gilt zehn Minuten, ein einziges Mal\", Adresse maskiert. Die ZWÖLF WORTE im Notar-Ton (Boot-Spec: ernst, wörtlich, nicht verspielt): „Wir zeigen sie dir nie wieder, und niemand kann sie ersetzen — auch wir nicht\", danach die Zwei-Wörter-Rückfrage. Ersetzt für Erst-Anmeldung per E-Mail den stillen Siegel-Weg von Reihe 1 nicht — der Drop-Start bleibt der Standard; AUTH ist der Weg, wenn ein Server-Konto (gitchain.de) dazukommt."
-    }
-  ],
-  "launch": {
-    "view": "canvas",
-    "page": "page-8"
+ "artboards": [
+  {
+   "file": "StartGalerie.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 1300,
+   "title": "Start-Galerie · /einfach",
+   "page": "page-1"
   },
-  "pages": [
-    {
-      "id": "page-1",
-      "name": "Ist-Stand"
-    },
-    {
-      "id": "page-2",
-      "name": "Navigation"
-    },
-    {
-      "id": "page-3",
-      "name": "macOS"
-    },
-    {
-      "id": "page-4",
-      "name": "Teams ablösen"
-    },
-    {
-      "id": "page-5",
-      "name": "Ohne Ordner"
-    },
-    {
-      "id": "page-6",
-      "name": "iOS"
-    },
-    {
-      "id": "page-7",
-      "name": "OS-Sprache"
-    },
-    {
-      "id": "page-8",
-      "name": "Onboarding"
-    },
-    {
-      "id": "page-9",
-      "name": "Bausteine"
-    }
-  ]
+  {
+   "file": "Main.dc.html",
+   "x": 1400,
+   "y": 0,
+   "w": 1280,
+   "h": 960,
+   "title": "Geteiltes Git · /einfach/geteilt/:id",
+   "page": "page-1"
+  },
+  {
+   "file": "GitAnsicht.dc.html",
+   "x": 0,
+   "y": 1440,
+   "w": 1280,
+   "h": 960,
+   "title": "Git-Ansicht · /einfach/g/:slug",
+   "page": "page-1"
+  },
+  {
+   "file": "Eingang.dc.html",
+   "x": 1400,
+   "y": 1440,
+   "w": 1280,
+   "h": 880,
+   "title": "Eingang · /einfach/eingang",
+   "page": "page-1"
+  },
+  {
+   "file": "NavA.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 880,
+   "page": "page-2",
+   "title": "A · Ansicht × Fall"
+  },
+  {
+   "file": "NavB.dc.html",
+   "x": 1400,
+   "y": 0,
+   "w": 1280,
+   "h": 880,
+   "page": "page-2",
+   "title": "B · Fall zuerst, Ansichten als Register"
+  },
+  {
+   "file": "NavC.dc.html",
+   "x": 2800,
+   "y": 0,
+   "w": 1280,
+   "h": 880,
+   "page": "page-2",
+   "title": "C · Der Weg"
+  },
+  {
+   "file": "MacFall.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-3",
+   "title": "Fall · Seitenleiste, Werkzeugleiste, Inspektor"
+  },
+  {
+   "file": "MacGeteilt.dc.html",
+   "x": 1480,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-3",
+   "title": "Geteilter Fall · mit Anwesenheit"
+  },
+  {
+   "file": "CtaxFall.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-4",
+   "title": "CTAX als ein Fall"
+  },
+  {
+   "file": "OhneOrdner.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-5",
+   "title": "Buderus-Kataloge — Inhalt statt Verzeichnis"
+  },
+  {
+   "file": "IosEingang.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "page": "page-6",
+   "title": "1 · Eingang — hier startet das Telefon"
+  },
+  {
+   "file": "IosTeilen.dc.html",
+   "x": 490,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "page": "page-6",
+   "title": "2 · Teilen-Erweiterung — der Hebel"
+  },
+  {
+   "file": "IosFrage.dc.html",
+   "x": 980,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "page": "page-6",
+   "title": "3 · Fragen — Antwort mit Beleg"
+  },
+  {
+   "file": "IosDabei.dc.html",
+   "x": 1470,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "page": "page-6",
+   "title": "4 · Dabei sein — der Fall am Unfallort"
+  },
+  {
+   "file": "OsHeute.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Heute — die Karte (Desktop)"
+  },
+  {
+   "file": "OsBeweis.dc.html",
+   "x": 1480,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Beweis — wichtigster Screen"
+  },
+  {
+   "file": "OsPhone.dc.html",
+   "x": 2960,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Karte + Liste — Phone als Tresor & Zeuge"
+  },
+  {
+   "file": "OsFall.dc.html",
+   "x": 0,
+   "y": 1060,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "CTAX als Fall — statt Teams, in der Form"
+  },
+  {
+   "file": "OsAnrufBeweis.dc.html",
+   "x": 1480,
+   "y": 1060,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Beweis für einen Anruf — die Minute"
+  },
+  {
+   "file": "OsKatalog.dc.html",
+   "x": 2960,
+   "y": 1060,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Katalog ohne Ordner — Beweis-Form"
+  },
+  {
+   "file": "OsUebernahme.dc.html",
+   "x": 0,
+   "y": 2260,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Übernahme — der Einwilligungs-Moment"
+  },
+  {
+   "file": "OsUebergang.dc.html",
+   "x": 520,
+   "y": 2260,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Übergang — Brücke nach draußen, geschwärzt"
+  },
+  {
+   "file": "OsVereinbarung.dc.html",
+   "x": 2000,
+   "y": 2260,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Die Vereinbarung — signierte Fassung + Anker"
+  },
+  {
+   "file": "OsAnrufKommt.dc.html",
+   "x": 0,
+   "y": 3400,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Der Anruf kommt — Klon zu Klon"
+  },
+  {
+   "file": "OsAnrufLaeuft.dc.html",
+   "x": 520,
+   "y": 3400,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Anruf läuft — Mitschrift + Beschluss-Karte"
+  },
+  {
+   "file": "OsText.dc.html",
+   "x": 2000,
+   "y": 3400,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Der Text — Nachricht = Commit, Zitat = Referenz"
+  },
+  {
+   "file": "ObWohnort.dc.html",
+   "x": 0,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Verworfen · Frage 1 als Vorab-Dialog"
+  },
+  {
+   "file": "ObAutonomie.dc.html",
+   "x": 1480,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Verworfen · Frage 2 als Vorab-Dialog"
+  },
+  {
+   "file": "ObSiegel.dc.html",
+   "x": 2960,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Verworfen · Frage 3 als Vorab-Dialog"
+  },
+  {
+   "file": "ObErfolg.dc.html",
+   "x": 1480,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "2 · Der erste Erfolg — das ganze Onboarding"
+  },
+  {
+   "file": "ObRettung.dc.html",
+   "x": 3470,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "page": "page-8",
+   "title": "Tag 2 — die Rettungs-Karte"
+  },
+  {
+   "file": "ObEingeladen.dc.html",
+   "x": 2960,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "page": "page-8",
+   "title": "Eingeladen — ein Bildschirm"
+  },
+  {
+   "file": "ObNull.dc.html",
+   "page": "page-8",
+   "x": 0,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "title": "1 · Erster Start — keine einzige Frage"
+  },
+  {
+   "file": "ObAutonomieKarte.dc.html",
+   "page": "page-8",
+   "x": 3980,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Tag 3 — Autonomie als Karte"
+  },
+  {
+   "file": "OsFreund.dc.html",
+   "x": 0,
+   "y": 4540,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Der Freund — ein Baum, zwei Klone"
+  },
+  {
+   "file": "OsAusgruendung.dc.html",
+   "x": 520,
+   "y": 4540,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Ausgründung — die Kapsel wächst nie von allein"
+  },
+  {
+   "file": "OsGruppe.dc.html",
+   "x": 1040,
+   "y": 4540,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Die Gruppe — vier Klone, ein Baum"
+  },
+  {
+   "file": "OsLeseplatz.dc.html",
+   "x": 0,
+   "y": 5680,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Leseplatz — ein Original, die Lesung als Folie"
+  },
+  {
+   "file": "OsTisch.dc.html",
+   "x": 1480,
+   "y": 5680,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Tisch — zwei Originale, die Gegenprobe"
+  },
+  {
+   "file": "OsEinladen.dc.html",
+   "x": 3480,
+   "y": 2260,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Einladen — Erlaubnis statt Besitz"
+  },
+  {
+   "file": "OsSuche.dc.html",
+   "x": 0,
+   "y": 6720,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Frag alles — der Brain als Bildschirm"
+  },
+  {
+   "file": "OsRueckruf.dc.html",
+   "x": 1480,
+   "y": 6720,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Der Rückruf — Erlaubnis beenden, ehrlich"
+  },
+  {
+   "file": "Bausteine.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1560,
+   "h": 1220,
+   "page": "page-9",
+   "title": "Die Bausteine — OS-Sprache als System"
+  },
+  {
+   "file": "OsStapel.dc.html",
+   "x": 0,
+   "y": 7760,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Stapel — der Ingester sortiert allein"
+  },
+  {
+   "file": "OsNeuesThema.dc.html",
+   "x": 1480,
+   "y": 7760,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Das neue Thema — der Ingester legt Fälle an"
+  },
+  {
+   "file": "OsMeet.dc.html",
+   "x": 0,
+   "y": 8800,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Meet — der Tisch in Echtzeit, Multi-eyes live"
+  },
+  {
+   "file": "OsDivergenz.dc.html",
+   "x": 1480,
+   "y": 8800,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Die Divergenz — zwei Zeugen, ein Moment"
+  },
+  {
+   "file": "OsAufzeichnung.dc.html",
+   "x": 2960,
+   "y": 8800,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Aufzeichnen — Zustimmung wird committet"
+  },
+  {
+   "file": "OsWiderspruch.dc.html",
+   "x": 0,
+   "y": 9840,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Widerspruch — zwei Systeme, ein Attribut"
+  },
+  {
+   "file": "OsConnectorBeweis.dc.html",
+   "x": 1480,
+   "y": 9840,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Der Connector-Beweis — die Systemzelle"
+  },
+  {
+   "file": "OsRevision.dc.html",
+   "x": 2960,
+   "y": 9840,
+   "w": 390,
+   "h": 844,
+   "page": "page-7",
+   "title": "Die neue Revision — stiller Pull, eine Karte"
+  },
+  {
+   "file": "ObAnmeldung.dc.html",
+   "x": 0,
+   "y": 2320,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "AUTH · Anmeldung — ein Feld, ein Knopf"
+  },
+  {
+   "file": "ObCode.dc.html",
+   "x": 1480,
+   "y": 2320,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "AUTH · Der Code — zehn Minuten, einmal"
+  },
+  {
+   "file": "ObZwoelfWorte.dc.html",
+   "x": 2960,
+   "y": 2320,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "AUTH · Zwölf Worte — der Notar-Moment"
+  },
+  {
+   "file": "ObSanduhr.dc.html",
+   "x": 0,
+   "y": 3460,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Sanduhr · Ingest läuft — der Hügel wächst"
+  },
+  {
+   "file": "ObSanduhrFertig.dc.html",
+   "x": 1480,
+   "y": 3460,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Sanduhr · Bereit, wenn du es bist"
+  },
+  {
+   "file": "ObSanduhrNicken.dc.html",
+   "x": 2960,
+   "y": 3460,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Sanduhr · Das Nicken — 300 ms, ein Ereignis"
+  },
+  {
+   "file": "ObScanBericht.dc.html",
+   "x": 0,
+   "y": 4600,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Scan-Bericht — „Darf ich?\" (Scan-First)"
+  },
+  {
+   "file": "ObBuergerKarte.dc.html",
+   "x": 1480,
+   "y": 4600,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Bürger-Karte — Rechnung mit Beweis, ein Wort"
+  },
+  {
+   "file": "ObAllesRuhig.dc.html",
+   "x": 2960,
+   "y": 4600,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Alles ruhig — ein Zustand mit Würde"
+  },
+  {
+   "file": "OsMeisterSeite.dc.html",
+   "x": 0,
+   "y": 10880,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Meister-Seite — die Quelle an/aus"
+  },
+  {
+   "file": "OsMixAntwort.dc.html",
+   "x": 1480,
+   "y": 10880,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Mix-Antwort — die Ehrlichkeitszeile"
+  }
+ ],
+ "annotations": [
+  {
+   "id": "quelle",
+   "x": 0,
+   "y": -190,
+   "w": 900,
+   "text": "GitChain — einfache Oberfläche (Consumer), Ist-Stand.\nGezeichnet aus src/renderer/src/consumer/ auf Branch claude/git-ansicht-eckdaten (f866d7e).\nWerte 1:1 aus consumer.css: Glas rgba(248,250,253,.78) + blur(30px), Radius 18, iOS-Blau #0a84ff, Systemschrift.\nEigene Design-Sprache — getrennt von den Neo-Tokens der Experten-UI.",
+   "page": "page-1"
+  },
+  {
+   "id": "nav-frage",
+   "x": 0,
+   "y": -250,
+   "w": 1100,
+   "page": "page-2",
+   "text": "Zwei Achsen, nicht eine: welcher FALL (ein Stapel = ein Fall = ein Container) und welche ANSICHT (Explorer, Post, Bilder, Anrufe, Termine, Räume).\nDie heutige Oberfläche kennt nur eine halbe erste Achse — vier Gits in einer Pille — und die zweite gar nicht. Deshalb wirkt jedes Fenster einzeln.\n\nZugehörigkeit = derselbe Container. Die Kapsel entscheidet, wer hineinsieht: nur du · mit der Familie · mit Fremden.\nBeleg NICHT überall: er hängt an einer Aussage (Betrag, Frist, Antwort), nicht an jeder Datei. Keine Commits, keine OCR-Namen in der Ansicht."
+  },
+  {
+   "id": "mac-regeln",
+   "x": 0,
+   "y": -290,
+   "w": 1200,
+   "page": "page-3",
+   "text": "Plattformkonventionen, keine Apple-Programme nachgebaut; Symbole selbst gezeichnet, keine SF Symbols.\n\nWas sich gegenüber heute ändert: Seitenleiste mit Vibrancy statt schwebender Glaskarten · vereinheitlichte Werkzeugleiste oben statt Pille unten · opaker Inhaltsbereich, der Verlauf liegt auf dem Schreibtisch HINTER dem Fenster · 13px statt 16px · Zeilenhöhe 26px · dezente Knöpfe statt großer blauer Pillen · Statuszeile unten.\n\nMaße aus ContainerMock übernommen: 13px Grundschrift, .cl-sub 11.5px, Primärknopf 12.5px/500/999px, Glas #f8fafdc7. Anwesenheit (Online-Punkt, „wartet\", gedimmt) ebenfalls von dort — die heutige gelbe Plakette „noch nicht verbunden\" ist dafür der Platzhalter.\n\nV77 (heute 15:50) war der Stand VOR der Galerie. Um 18:52 sind die Ordner-Pillen bewusst durch Inhalts-Vorschauen ersetzt worden, um 19:07 kam thumb:// dazu. Der Fall zeigt deshalb Symbolansicht mit Blattvorschau, nicht Liste — „ein Git sieht aus wie sein Inhalt\" bleibt, die macOS-Struktur kommt drumherum. Die Blätter hier sind gezeichnete Platzhalter; im Programm sind es echte erste Seiten."
+  },
+  {
+   "id": "teams-befund",
+   "x": 0,
+   "y": -330,
+   "w": 1250,
+   "page": "page-4",
+   "text": "BEFUND AUS DEN VIER TEAMS-BILDERN\nWhiteboard: leeres Punktraster. Q&A: „not available for this event\". Shared: drei nackte URLs, keine gelesen. Anrufe: 20+ Gespräche, nur Namen und Dauer — 3m 12s, 8m 50s, 2m 44s — kein Satz davon geblieben.\nSeitenleiste: CTAX Daily, CTAX Weekly, CTAX Review & Planning, CTAX Dev, „CTAX-197 und Context-Fenster\", „Gerd Flender, +2\" — ein Vorhaben in sechs Behältern, die nichts voneinander wissen.\n\nDIE ANTWORT\nEin Fall statt sechs Behälter; Daily/Weekly/Review sind Termine darin, keine eigenen Kanäle.\nDer Anruf hinterlässt Beschlüsse und Aufgaben — mit der MINUTE als Beleg (04:12, 27:50). Das ist die Stelle, an der Teams nur „42 min\" hat.\nGeteiltes wird beim Ankommen gelesen, nicht nur verlinkt: aus seafile.buhl.de/f/5a9b… wird ein Dokument mit Namen, Seiten und erkannten Fristen.\nExtern ist an jeder Zeile markiert, nicht nur oben am Raum.\nArbeit und Privat liegen in derselben Seitenleiste — Teams kann deine Kfz-Police nicht halten.\n\nPLATZHALTER: Beschlusstexte, Aufgaben, Zeitmarken und der Dokumentname sind erfunden. Echt sind nur Namen, Termine und Adressen aus deinen Bildern."
+  },
+  {
+   "id": "ohne-ordner",
+   "x": 0,
+   "y": -330,
+   "w": 1250,
+   "page": "page-5",
+   "text": "DIE UMKEHRUNG\nHeute: Hauptbereich = Verzeichnis (.0711, .git, .plugins, docs, index, atoms.json — Spalte ART: Ordner). Inhalt = Seitenspalte.\nHier: Hauptbereich = Inhalt — worum es geht, die Frage, die Antwort, der Beweis-Ausschnitt. Kein einziger Ordner sichtbar. .git und .plugins gehen den Menschen nichts an.\n\nAus Dateien werden Sätze: docs/ → „das Original, unverändert seit der Aufnahme\" · atoms.json → „5.296 Textstellen, aus der Textebene geholt, nicht abfotografiert\" · index/ → „787 Merkmale, damit der Katalog antworten kann\" · 59 Stände → „seit der Aufnahme unverändert\".\n\nFÜR DAS ABLÖSEN VON TEAMS, WHATSAPP, MAIL, FACETIME\nIn all diesen Systemen ist das GESPRÄCH der Behälter und die Datei der Anhang. Ein Chat-Verlauf ist auch nur ein Ordner, ein chronologischer. Wer Teams durch eine Liste von Unterhaltungen ersetzt, hat Ordner durch Ordner ersetzt.\nUmgekehrt: der FALL ist der Behälter, das Gespräch ist eine seiner Lesungen — wie das PDF eine ist und der Anruf eine wird. Der Raum vergisst, der Fall nicht.\n\nAlle Zahlen und Texte hier sind echt, aus Buderus_Kataloge auf diesem Mac. Nur die Seitenzahl S. 12 ist gesetzt."
+  },
+  {
+   "id": "ios-haltung",
+   "x": 0,
+   "y": -300,
+   "w": 1300,
+   "page": "page-6",
+   "text": "DAS TELEFON IST NICHT DER KLEINE MAC\nMac: lesen und entscheiden. Telefon: Unterlagen kommen an, und man fragt unterwegs. Eine Containerliste mit 90 snr-Einträgen hat hier nichts verloren — der Eingang ist der Startbildschirm, nicht die Galerie.\n\nDREI VERBEN, DREI REITER: hinlegen · fragen · dabei sein.\n\nDIE TEILEN-ERWEITERUNG IST DER EIGENTLICHE HEBEL. Sie ist kein Bildschirm der App, sondern ein Ziel im System: aus jeder Nachrichten- oder Mail-App teilen → hier gelesen → Gemma schlägt das Git vor → abgelegt. So löst man WhatsApp und Mail als Dokumententransport ab, ohne dass jemand die App wechselt. Das ist der Einstieg, den die Übergabe verlangt: „dort, wo der Kunde ohnehin allein ist\".\n\nDER DENK-ORT MUSS SICHTBAR SEIN. Gemma 4 31B FP8 auf zwei H200 passt nicht ins Telefon. Also entweder klein und lokal oder über die eigene Leitung — und der Bildschirm sagt welches: „gedacht auf deiner H200v — nichts hat das Haus verlassen\". Ohne Leitung greift der getrennt-Zustand aus ContainerMock.\n\nDas Lesen bleibt lokal: die Neural Engine ist im iPhone. Der vision-ane-Leser, der im Versicherungen-Git schon 28 Atome gelesen hat, ist dieselbe Strecke.\n\nKein nachgezeichneter Status-Balken, keine gemalte Tastatur — die zeichnet das System selbst. Alle Tippziele mindestens 44 px."
+  },
+  {
+   "id": "os-sprache",
+   "x": 0,
+   "y": -360,
+   "w": 1300,
+   "page": "page-7",
+   "text": "DIE VERBINDLICHE SPRACHE (aus dem Design-Brief / os-manifest)\nWarmweiß #FAF7F2 · Salbei #8FA98F · Rosé #D9A6A0 · Olivgold #B8A369 · Serifen-Headline (nie fett) · Wachssiegel · „Alles ruhig.\"\nVerbote: kein Terminal-Look · kein Blau-Lila-SaaS · kein Cyberpunk. Damit ist das blaue Glas von consumer.css (#0a84ff) ausgeschlossen — die Seiten 1–6 dieses Canvas sind ab jetzt Stimmungs-Archiv, nicht Richtung. Die richtige Verwandtschaft war immer Neo v2 (#857b61 / #8ba88a / #d4a0a0 / #faf8f5).\n\nDREI SCREEN-FORMEN, NICHT MEHR: die Karte (ein Vorschlag, zwei Antworten) · die Liste (max. 3, sonst wird gesprochen) · der Beweis (Original + Rechteck + Fall/doc/Seite/Commit/Signatur). Was keine dieser Formen ist, ist falsch entworfen.\n\nDIE HARTEN REGELN, IM ENTWURF SICHTBAR: Wortgleichheit (die Karte zeigt, was die Stimme sagt) · ein Tap oder ein Wort = ein Commit · „ja\" ohne Screen zählt nicht · Stimme ist Bedienung, nicht Auth — Geld erst nach Face ID.\n\nBeweis-Screen: die drei Mängel des generierten Bildes behoben — Beträge konsistent (1.190,00 € überall, 19 % von 6.263,16), keine Hex-Artefakte, saubere Quellzeile.\nPhone = Tresor & Zeuge: „gelesen auf diesem Gerät · bezeugt\" an jeder stillen Zeile, unten die Schlüssel-Zeile („Dein Schlüssel liegt hier · 17 Fälle versiegelt · zuletzt geankert\")."
+  },
+  {
+   "id": "os-uebertrag",
+   "x": 0,
+   "y": 975,
+   "w": 1300,
+   "page": "page-7",
+   "text": "REIHE 2 — DIE STARKEN BILDSCHIRME, IN DIE FORMEN ZERLEGT statt nur umgefärbt: CTAX wird Headline + eine Karte + Liste (3) — Beschlüsse und Aufgaben tragen die MINUTE als Beleg. Der Anruf-Beweis zeigt: zweite Belegart, gleiche Kette — die Zeitmarke ist das Rechteck des Gesprächs. Der Katalog: Frage → Serifen-Antwort → Stelle selbst → Quellzeile; keine Dateiliste, kein Inspektor mehr."
+  },
+  {
+   "id": "os-kommunikation",
+   "x": 0,
+   "y": 2110,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 3 — DIE KOMMUNIKATIONS-SPEC ALS BILDSCHIRME. „Wenn ich jemanden anrufe, schicke ich einen Container — ab da führen beide denselben Baum.\" Übernahme: Capability in drei Zeilen (lesen und vorschlagen · zurückziehen jederzeit · kein Server dazwischen), das „ja\" ist ein signierter Eintrag. Übergang: die Gegenseite hat kein gitchain — die Brücke schwärzt nach Regelwerk (fail closed), der Übergang wird im Fall vermerkt. Vereinbarung: die Fassung führt jede Zeile auf ihre Stelle zurück (S. 1 · Minute 02:41), vier Augen signieren, deine Signatur zuletzt mit Face ID, danach der Zeitstempel der Bundesdruckerei — QTSP vor Kette, wie die Anker-Strategie es priorisiert.\n\nEINLADEN (die Gegenrichtung zur Übernahme): Person aus dem Beziehungs-Baum, zwei Erlaubnis-Stufen (mitsehen+vorschlagen · mitführen), die Kapselgrenze ausgesprochen („sonst nichts — keine anderen Fälle, kein Tresor\") und der ehrliche Rückruf: die Erlaubnis endet sofort, das bereits Gesehene bleibt gesehen. Ohne gitchain: Beitritts-Weg, ein Bildschirm, kein Konto."
+  },
+  {
+   "id": "os-verlauf",
+   "x": 0,
+   "y": 3250,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 4 — DIE KOMMUNIKATION SELBST. Der Anruf kommt: über den Fall, nicht über eine Nummer — drei Salbei-Zeilen sagen, was Annehmen bedeutet. Der Anruf läuft: die Mitschrift schreibt Sprecher · Minute · Text, und wenn die Deutung einen Beschluss hört, erscheint die KARTE im Anruf — wortgleich aus der Minute, ein Tap = ein Commit für beide. Der Text: die Antwort ZITIERT die Stelle (Olivgold-Balken = Referenz auf ein Atom, keine Kopie), die Sprachnotiz ist Audio als Blob + Text als Atom, und der Beschluss-Trenner ist Salbei statt Blau. Der Verlauf ist die Darstellung des Falls — wo das System selbst spricht, spricht es in Karten."
+  },
+  {
+   "id": "onboarding-e2e",
+   "x": 0,
+   "y": -380,
+   "w": 1350,
+   "page": "page-8",
+   "text": "ONBOARDING, ENDE ZU ENDE — NULL FRAGEN.\nDer Design-Sprung aus der Spec-Sitzung: wenn Gemma ohnehin alles organisiert, ist jede Onboarding-Frage eine Zumutung. Der Code macht es beim Denk-Ort schon vor — still gesetzt, ein Satz im Bild, kein Dialog. Also gilt das für alles:\n\nDER ERSTE START IST DIE DROP-FLÄCHE. Kein Konto, keine E-Mail, kein Assistent. Siegel: still geprägt. Wohnort: dieses Gerät, umziehen geht immer. Autonomie: Mittelstellung, wird aus Verhalten gelernt. Fertig ist, wer die erste Antwort mit Fundstelle gesehen hat — Messpunkt existiert im Code („Drop→lesbar: X s\").\n\nDIE FRAGEN WERDEN KARTEN, gestellt im Moment der Relevanz: Rettung am Tag 2 (die eine Sache, bei der das System hartnäckig bleibt — Recovery/Erbschafts-Spec ist der offene Kandidat) · Autonomie am Tag 3, aus gezeigtem Verhalten („sieben Dinge still einsortiert, keines zurückgeholt — weiter so?\") · Wohnort, wenn ein Mac auftaucht oder die Datenmenge wächst.\n\nZWEI EINTRITTE bleiben: selbst angefangen (Drop-Fläche) und eingeladen (ein Bildschirm nach dem Annehmen — Siegel hat das „ja\" schon signiert). Der eingeladene Pfad ist der Wachstumspfad.\n\nREIHE 2 = DER VERWORFENE WEG: die drei Vorab-Fragen, behalten als Beleg der Entscheidung. Ihre Texte leben weiter — als Karten."
+  },
+  {
+   "id": "os-freunde",
+   "x": 0,
+   "y": 4390,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 5 — DERSELBE KONTEXT MIT FREUNDEN. Nicht derselbe Assistent, sondern derselbe Baum: Beziehungs-Container, ein Klon bei jedem, jede Nachricht/Foto/Plan ein Commit. Deine Gemma liest deinen Klon, ihre liest ihren — die KIs reden nie miteinander und antworten trotzdem gleich, weil sie dasselbe lesen. Privates bleibt draußen: Kontext ist nur, was committet wurde — die Kapsel entscheidet, kein Filter. Ausgründung: wird ein Thema größer, bekommt es einen NEUEN Baum mit eigener Kapsel — wer dazukommt (Max, Lisa), sieht die Hütte, nie den Beziehungs-Baum. Die Gruppe: N Klone, ein Baum; Zusagen als Karte, Beträge mit Beleg („Max hat 240,00 € ausgelegt — 60,00 € je\"), Links werden gelesen, nicht nur geteilt. Freund ohne gitchain → Brücke (Reihe 3); Freund einladen → der Ein-Bildschirm-Pfad (Seite Onboarding)."
+  },
+  {
+   "id": "os-original",
+   "x": 0,
+   "y": 5530,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 6 — ORIGINALE ANSCHAUEN. Regel aus der Architektur: docs/ ist byte-identisch und wird nie verändert — der Viewer zeigt das ORIGINAL ZUERST, die Deutung als abschaltbare Folie darüber, nie umgekehrt. Kopfzeile immer: Fall · Datei · Seite · „unverändert seit Aufnahme ✓\". Zwei Wege hinein: von jeder Aussage („Original öffnen\") und aus dem Fall. Rechts der Rückweg des Vertrauens: „Stützt sich darauf\" — welche Antworten und Eckdaten auf diese Seite zeigen (max. 3). MEHRERE DOKUMENTE = DER TISCH: zwei Originale nebeneinander, und der Faden zwischen den markierten Stellen macht die Gegenprobe sichtbar — derselbe Betrag in Kostenvoranschlag und Freigabe. Unten der Rest des Falls als Blattreihe zum Danebenlegen. Fotos/Scans blättern im selben Muster (Filmstreifen, wie im ContainerMock angelegt)."
+  },
+  {
+   "id": "os-brain-rueckruf",
+   "x": 0,
+   "y": 6570,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 7 — FRAG ALLES + DER RÜCKRUF. Die Suche über alle Fälle macht Retrieve-then-Resolve sichtbar, ohne es zu nennen: jeder Treffer trägt seinen FALL als Plakette, jede Zahl ist „im Fall geprüft\" (resolve im Klon, nicht im Index), und ein Treffer darf ehrlich aussortiert sein („gefunden, aber nicht mitgezählt\" — die Wohngebäudeversicherung läuft über die Nebenkosten). Quellzeile: 17 Fälle durchsucht · nichts hat das Haus verlassen. Der Brain kennt Fälle nur über refs — die Kapsel bleibt, auch beim Suchen.\nDER RÜCKRUF: Rosé als Handlungsfarbe (beenden, nicht Gefahr), drei Folgen vor dem Knopf — sofortiges Ende, Vermerk im Fall für alle, und die ehrliche dritte: Gesehenes bleibt gesehen. Revocation erreicht die Klone über denselben Kanal wie alles (pull-on-push). Wortgleich sprechbar."
+  },
+  {
+   "id": "bausteine-hinweis",
+   "x": 0,
+   "y": -260,
+   "w": 1300,
+   "page": "page-9",
+   "text": "DAS ÜBERGABE-BLATT. Jeder Baustein hier ist mit genau den Werten gebaut, die daneben stehen — kein Muster-Bild, sondern dieselben Stile wie auf allen OS-Sprache-Screens (_os.part). Für den Code: die Werte lassen sich 1:1 als CSS-Tokens übernehmen (--os-grund #FAF7F2, --os-salbei #8FA98F, --os-rose #D9A6A0, --os-olivgold #B8A369, --os-tinte #2A2520; Serife Playfair 400; Sans 17/15/13/11; Radius 16/12/8/rund).\nFür Claude Design: sobald /design-login einmal in einer interaktiven Claude-Code-Sitzung auf dem Mac gelaufen ist, kann dieses Blatt komponentenweise in ein Design-System-Projekt auf claude.ai/design wandern — Karte, Pille, Siegel, Quellzeile, Zug, Blatt, Fragefeld als je eine eigene Vorlage."
+  },
+  {
+   "id": "os-ingester",
+   "x": 0,
+   "y": 7610,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 8 — DER AUTOMATISCHE INGESTER. Die Arbeitsteilung, die alles trägt: EINSORTIEREN IST STILL, ANLEGEN NIE. In bestehende Fälle sortiert der Ingester ohne zu fragen (rückholbar, mit Beleg, der Abend zeigt es); ein NEUER Fall ist ein neuer Baum mit eigener Kapsel — der braucht dein Ja und einen Namen, den du überschreiben kannst. Der Stapel: einen ganzen Ordner hinwerfen, der Bericht kommt in drei Zeilen (still · neu · unverstanden) plus Quellzeile. Ehrlichkeit gehört dazu: „2 verstehe ich nicht\" bleibt im Eingang liegen statt falsch einsortiert zu werden — fail closed auch beim Sortieren."
+  },
+  {
+   "id": "os-call-meet",
+   "x": 0,
+   "y": 8650,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 9 — CALL & MEET (Spec 18). Vier Fünftel standen schon: Anruf mit Fall-Kontext, Mitschrift + Karte, Minuten-Beweis, signierte Fassung im ruhigen Raum (R3), Gast ohne Konto. NEU: das MEETING — vier Kacheln, jede ihr eigener Zeuge („schreibt mit\"), das gemeinsame Dokument auf demselben Stand bei allen, und der Beschluss-Kandidat mit Multi-eyes live (drei Haken, dein Ja fehlt); die Unterschrift kommt danach, nie im Gespräch. Die AUFZEICHNUNG als Karte: fail closed, auch das Nein wird vermerkt — beweisbar statt einseitig geheim. Die DIVERGENZ: zwei lokale Mitschriften hören Minute 27:50 verschieden — beide Lesarten bleiben im Baum, die signierte Fassung entscheidet, nichts wird gelöscht. Nicht gezeichnet (Variante von „Der Anruf kommt\"): eingehender Festnetz-Anruf über die Brücke — gleicher Screen, Plakette „über die Telefon-Brücke · nur du hast danach den Beweis\"."
+  },
+  {
+   "id": "os-w1",
+   "x": 0,
+   "y": 9690,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 10 — W1 WORKSPACE-CONNECTORS (Doppel-Auftrag, Front 1; die CALL-Front nutzt die vorhandenen Reihen 4+9 als Vorlage). Die dritte Gestalt der Fundstelle: das Rechteck des Dokuments, die Minute des Anrufs, die ZELLE DES SYSTEMS — System · Objekt · Revision · Attribut · abgerufen · durch wen. DER WIDERSPRUCH ist die Divergenz der Systeme: zwei Werte nebeneinander, jeder mit seiner Connector-Fundstelle, keiner überschrieben; die Rolle entscheidet mit Unterschrift, das unterlegene System bekommt die Korrektur als Vorschlag. DIE NEUE REVISION: der Pull ist still (Commit vor Deutung gilt auch für APIs — „byte-gleich verwahrt\"), nur der Diff mit Folgen wird die eine Karte, und sie zeigt beide Revisionen als Fundstellen. Max. 3 Karten gilt weiter."
+  },
+  {
+   "id": "auth-front3",
+   "x": 0,
+   "y": 2170,
+   "w": 1350,
+   "page": "page-8",
+   "text": "REIHE 3 — FRONT 3: AUTH (E-Mail = dein Container). Kein SSO, keine Optionen-Wand: EIN Feld, EIN Salbei-Knopf, der Passkey als kleiner souveräner Alternativweg — kein Google, kein GitHub. Die Ehrlichkeit steht unter dem Feld: die E-Mail ist nur Zustelladresse, wird zum Hash und verschwindet; die Identität ist das Siegel. Der Code: sechs Felder, Serifen-Ziffern, „gilt zehn Minuten, ein einziges Mal\", Adresse maskiert. Die ZWÖLF WORTE im Notar-Ton (Boot-Spec: ernst, wörtlich, nicht verspielt): „Wir zeigen sie dir nie wieder, und niemand kann sie ersetzen — auch wir nicht\", danach die Zwei-Wörter-Rückfrage. Ersetzt für Erst-Anmeldung per E-Mail den stillen Siegel-Weg von Reihe 1 nicht — der Drop-Start bleibt der Standard; AUTH ist der Weg, wenn ein Server-Konto (gitchain.de) dazukommt."
+  },
+  {
+   "id": "sanduhr",
+   "x": 0,
+   "y": 3310,
+   "w": 1350,
+   "page": "page-8",
+   "text": "REIHE 4 — DIE SANDUHR (die stille Revolution des Wartens). Winzig (24 px), Haarlinie, Tinte auf Warmweiß; Sand fällt 3–4 Körner pro Sekunde — Olivgold, 1 px, sanfter Fade. Kein Regen, kein Feuerwerk: eine Sanduhr, die Zeit hat. Unten liegt ein Hügel, und der Hügel ist der Bericht. Fertigmelden ist kein Triumph: „4.231 Dokumente · bereit, wenn du es bist.\" — Zahlen nur als Mono-Fußnoten (Fundstellen-Register), kein Dashboard, keine Heldenzahlen. Aufnehmen statt Bestätigen: schlichter Textlink in Tinte, daneben leises „später\"; wer abnickt, unterschreibt leise — beim Nicken leuchtet die Taille einmal auf (300 ms), das einzige Ereignis. Kein Euro-Zeichen im Bürger-Wohnzimmer: fürs Auge „Verstanden: 9.500 Seiten. Was davon heute wichtig ist, liegt oben auf.\" — das Bezahlen regelt außen die Capability-Ökonomie. Alle Canvas-Tokens bindend, eine Bedeutung pro Animation."
+  },
+  {
+   "id": "buerger-alltag",
+   "x": 0,
+   "y": 4450,
+   "w": 1350,
+   "page": "page-8",
+   "text": "REIHE 5 — SCAN-FIRST & BÜRGER-ALLTAG (Specs 18/19 + Ingest-Auftrag). Der Scan-Bericht zählt nur, er zeigt keine Inhalte: jede Quelle eine ruhige Karte (Serif-Name, Mono-Zahlenzeile, Mini-Sanduhr), Einstieg „Ich habe Orte gefunden, an denen dein Leben liegt. Darf ich?\" — Aufnehmen als Textlink in Tinte, leises „später\", geschützte Dateien als stille Zeile mit Schloss-Glyph (nie rot). Die Bürger-Karte danach: eine Deutung, ein Beweis-Rechteck, ein Wort — Stimmt/Anders/Frag nicht wieder. Und „Alles ruhig.\" ist ein Zustand mit Würde: keine Queue, kein Badge-Zwang, der Hügel liegt."
+  },
+  {
+   "id": "meister-seite",
+   "x": 0,
+   "y": 10730,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 11 — MEISTER-SEITE (20. Spec: die Quelle an/aus). Eine flache Liste, keine Ordner-Bäume: jede Zeile Name (Serif) · Mono-Atomzahl · Schalter (Haarlinie, Salbei an / Beige aus, kein Leuchten, 44px, 200ms). Aus ist aus — fail closed, keine Retrieval-Kontamination. Die Σ-Zeile unten in Mono wie eine Fundstellen-Fußnote. Rechts die Antwort dazu: jede Zahl mit Fundstelle, und die Ehrlichkeitszeile nennt den Quellen-Mix UND die Lücke („Aus deinen Mails weiß ich das nicht — sie sind aus\"). Der Mix ist Teil der Fassung: alte Berichte behalten ihren Stand."
+  }
+ ],
+ "launch": {
+  "view": "canvas",
+  "page": "page-8"
+ },
+ "pages": [
+  {
+   "id": "page-1",
+   "name": "Ist-Stand"
+  },
+  {
+   "id": "page-2",
+   "name": "Navigation"
+  },
+  {
+   "id": "page-3",
+   "name": "macOS"
+  },
+  {
+   "id": "page-4",
+   "name": "Teams ablösen"
+  },
+  {
+   "id": "page-5",
+   "name": "Ohne Ordner"
+  },
+  {
+   "id": "page-6",
+   "name": "iOS"
+  },
+  {
+   "id": "page-7",
+   "name": "OS-Sprache"
+  },
+  {
+   "id": "page-8",
+   "name": "Onboarding"
+  },
+  {
+   "id": "page-9",
+   "name": "Bausteine"
+  }
+ ]
 }

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 34px; padding: 0 80px">
+      <div class="serif" style="font-size: 30px">Alles ruhig.</div>
+
+      <!-- Der Hügel liegt — kein Badge, keine Queue, kein Zwang -->
+      <svg width="220" height="40" viewBox="0 0 220 40">
+        <path d="M6 38 C60 38 84 16 110 16 C136 16 160 38 214 38 Z" fill="rgba(184,163,105,.24)"/>
+        <path d="M46 38 C80 38 96 24 110 24 C124 24 140 38 174 38 Z" fill="rgba(184,163,105,.32)"/>
+      </svg>
+
+      <div class="t13 sub" style="max-width: 48ch; text-align: center; line-height: 1.8">Keine Karte wartet. Dein Assistent liest still weiter —<br>was wichtig wird, liegt dann oben auf.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 26px">
+      <div class="mono">heute 14:02 · 3 eingänge still einsortiert · alles committet · signatur ✓</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
