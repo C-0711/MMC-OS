@@ -467,6 +467,33 @@
       "h": 844,
       "page": "page-7",
       "title": "Die neue Revision — stiller Pull, eine Karte"
+    },
+    {
+      "file": "ObAnmeldung.dc.html",
+      "x": 0,
+      "y": 2320,
+      "w": 1360,
+      "h": 900,
+      "page": "page-8",
+      "title": "AUTH · Anmeldung — ein Feld, ein Knopf"
+    },
+    {
+      "file": "ObCode.dc.html",
+      "x": 1480,
+      "y": 2320,
+      "w": 1360,
+      "h": 900,
+      "page": "page-8",
+      "title": "AUTH · Der Code — zehn Minuten, einmal"
+    },
+    {
+      "file": "ObZwoelfWorte.dc.html",
+      "x": 2960,
+      "y": 2320,
+      "w": 1360,
+      "h": 900,
+      "page": "page-8",
+      "title": "AUTH · Zwölf Worte — der Notar-Moment"
     }
   ],
   "annotations": [
@@ -613,11 +640,19 @@
       "w": 1350,
       "page": "page-7",
       "text": "REIHE 10 — W1 WORKSPACE-CONNECTORS (Doppel-Auftrag, Front 1; die CALL-Front nutzt die vorhandenen Reihen 4+9 als Vorlage). Die dritte Gestalt der Fundstelle: das Rechteck des Dokuments, die Minute des Anrufs, die ZELLE DES SYSTEMS — System · Objekt · Revision · Attribut · abgerufen · durch wen. DER WIDERSPRUCH ist die Divergenz der Systeme: zwei Werte nebeneinander, jeder mit seiner Connector-Fundstelle, keiner überschrieben; die Rolle entscheidet mit Unterschrift, das unterlegene System bekommt die Korrektur als Vorschlag. DIE NEUE REVISION: der Pull ist still (Commit vor Deutung gilt auch für APIs — „byte-gleich verwahrt\"), nur der Diff mit Folgen wird die eine Karte, und sie zeigt beide Revisionen als Fundstellen. Max. 3 Karten gilt weiter."
+    },
+    {
+      "id": "auth-front3",
+      "x": 0,
+      "y": 2170,
+      "w": 1350,
+      "page": "page-8",
+      "text": "REIHE 3 — FRONT 3: AUTH (E-Mail = dein Container). Kein SSO, keine Optionen-Wand: EIN Feld, EIN Salbei-Knopf, der Passkey als kleiner souveräner Alternativweg — kein Google, kein GitHub. Die Ehrlichkeit steht unter dem Feld: die E-Mail ist nur Zustelladresse, wird zum Hash und verschwindet; die Identität ist das Siegel. Der Code: sechs Felder, Serifen-Ziffern, „gilt zehn Minuten, ein einziges Mal\", Adresse maskiert. Die ZWÖLF WORTE im Notar-Ton (Boot-Spec: ernst, wörtlich, nicht verspielt): „Wir zeigen sie dir nie wieder, und niemand kann sie ersetzen — auch wir nicht\", danach die Zwei-Wörter-Rückfrage. Ersetzt für Erst-Anmeldung per E-Mail den stillen Siegel-Weg von Reihe 1 nicht — der Drop-Start bleibt der Standard; AUTH ist der Weg, wenn ein Server-Konto (gitchain.de) dazukommt."
     }
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-7"
+    "page": "page-8"
   },
   "pages": [
     {
