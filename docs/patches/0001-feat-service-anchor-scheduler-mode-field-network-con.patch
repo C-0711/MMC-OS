@@ -1,0 +1,503 @@
+From 1fc2b4062874a5f8fdc8dad6624a782e79bff890 Mon Sep 17 00:00:00 2001
+From: Christoph Bertsch <c@camm.org>
+Date: Sun, 30 Aug 2026 16:11:04 +0200
+Subject: [PATCH] feat(service): anchor scheduler + mode field + network
+ consistency guard
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Per AUFTRAG-anchor-scheduler.md (MMC-OS docs), based on the findings in
+DIAGNOSE-turbo-anchor.md: there was no batcher/cron/timer — the 9 pending
+batches waited forever for manual POST /api/chain/submit calls.
+
+S.1 src/anchor/scheduler.ts: interval worker (ANCHOR_SCHEDULER_INTERVAL_MS,
+default 15 min, 0 = off). Submits via loopback self-call to the EXISTING
+/api/chain/submit route — no second signing/wallet code path. Read-only
+(no wallet key) is a deliberate state: log only, no error. Max 1 batch per
+tick (gas conservation). Backoff: max 3 attempts per batch, then status
+"failed" in DB + MANUELLE_KARTE log + audit entry — no silent retry loop.
+Graceful shutdown waits for an in-flight tick (K8s rollout safe).
+
+S.2 GET /api/chain/status: new mandatory field mode "anchoring"|"read-only"
+(derived from walletAddress), scheduler metrics object (laeuft, letzterTick,
+verarbeiteteBatches, fehlversuche, fehlerhafteBatches), existing fields
+unchanged for compatibility.
+
+S.3 network consistency guard: on startup and each tick, compares the
+configured network vs. where the wallet actually holds funds
+(eth_getBalance on both Base networks). On mismatch: WARN log +
+netzwerkHinweis field in chain/status — would have surfaced the current
+Sepolia-config/Mainnet-wallet conflict in seconds.
+
+chain-db: additive helpers getPendingBatchIds() + markBatchFailed().
+typecheck (tsc --noEmit) green; apps/service has no existing test suite.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+---
+ apps/service/src/anchor/scheduler.ts | 339 +++++++++++++++++++++++++++
+ apps/service/src/chain-db.ts         |  22 ++
+ apps/service/src/chain-routes.ts     |  14 +-
+ apps/service/src/simple-index.ts     |  23 ++
+ 4 files changed, 397 insertions(+), 1 deletion(-)
+ create mode 100644 apps/service/src/anchor/scheduler.ts
+
+diff --git a/apps/service/src/anchor/scheduler.ts b/apps/service/src/anchor/scheduler.ts
+new file mode 100644
+index 0000000..b97db91
+--- /dev/null
++++ b/apps/service/src/anchor/scheduler.ts
+@@ -0,0 +1,339 @@
++/**
++ * Anchor-Scheduler — automatic confirmation of pending certification batches.
++ *
++ * Built per AUFTRAG-anchor-scheduler.md (MMC-OS docs), based on the findings in
++ * DIAGNOSE-turbo-anchor.md: there was NO batcher/cron/timer — pending batches
++ * were only ever confirmed via manual `POST /api/chain/submit`
++ * (chain-routes.ts:131–174). This module adds the missing timer.
++ *
++ * Ground rules (from the Auftrag):
++ *  - NO second submit code path: every batch goes through the EXISTING HTTP
++ *    route `POST /api/chain/submit` on this very process (loopback self-call).
++ *    One source of truth for signing/wallet handling.
++ *  - Read-only (no wallet key -> walletAddress "read-only") is a deliberate
++ *    state, not an error: the tick logs one line and does nothing.
++ *  - Max 1 batch per tick (gas conservation; validate on testnet first).
++ *  - Backoff: max 3 failed attempts per batch, then the batch is marked
++ *    "failed" in the DB and a MANUELLE_KARTE log line is emitted. No silent
++ *    endless retry loop.
++ *  - Graceful shutdown: an in-flight tick (i.e. a running tx) finishes before
++ *    stop resolves (K8s rollout safe).
++ *
++ * Env:
++ *  - ANCHOR_SCHEDULER_INTERVAL_MS  tick interval, default 900000 (15 min),
++ *                                  0 = scheduler disabled.
++ */
++
++import { getBlockchainService } from "../chain-engine";
++import { getPendingBatchIds, markBatchFailed, logAudit } from "../chain-db";
++
++// ============================================
++// CONFIG
++// ============================================
++
++const DEFAULT_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
++const MAX_ATTEMPTS_PER_BATCH = 3;
++
++function configuredIntervalMs(): number {
++  const raw = process.env.ANCHOR_SCHEDULER_INTERVAL_MS;
++  if (raw === undefined || raw === "") return DEFAULT_INTERVAL_MS;
++  const n = Number(raw);
++  if (!Number.isFinite(n) || n < 0) return DEFAULT_INTERVAL_MS;
++  return Math.floor(n);
++}
++
++// ============================================
++// STATE / METRICS
++// ============================================
++
++export interface SchedulerMetrics {
++  /** true while the interval timer is armed */
++  laeuft: boolean;
++  /** configured tick interval in ms (0 = disabled) */
++  intervalMs: number;
++  /** ISO timestamp of the last completed tick, null before the first */
++  letzterTick: string | null;
++  /** batches successfully submitted (confirmed) by the scheduler */
++  verarbeiteteBatches: number;
++  /** total failed submit attempts (across all batches) */
++  fehlversuche: number;
++  /** batch IDs given up on after MAX_ATTEMPTS (need a manual look) */
++  fehlerhafteBatches: number[];
++}
++
++interface SchedulerState {
++  timer: NodeJS.Timeout | null;
++  intervalMs: number;
++  baseUrl: string;
++  tickInFlight: Promise<void> | null;
++  stopping: boolean;
++  letzterTick: string | null;
++  verarbeiteteBatches: number;
++  fehlversuche: number;
++  /** batchId -> failed attempt count (in-memory backoff budget) */
++  versuche: Map<number, number>;
++  /** batches marked failed after exhausting the budget */
++  fehlerhafteBatches: Set<number>;
++}
++
++const state: SchedulerState = {
++  timer: null,
++  intervalMs: 0,
++  baseUrl: "",
++  tickInFlight: null,
++  stopping: false,
++  letzterTick: null,
++  verarbeiteteBatches: 0,
++  fehlversuche: 0,
++  versuche: new Map(),
++  fehlerhafteBatches: new Set(),
++};
++
++export function getSchedulerMetrics(): SchedulerMetrics {
++  return {
++    laeuft: state.timer !== null,
++    intervalMs: state.intervalMs,
++    letzterTick: state.letzterTick,
++    verarbeiteteBatches: state.verarbeiteteBatches,
++    fehlversuche: state.fehlversuche,
++    fehlerhafteBatches: Array.from(state.fehlerhafteBatches).sort((a, b) => a - b),
++  };
++}
++
++// ============================================
++// S.3 — NETWORK CONSISTENCY GUARD
++// ============================================
++// Checks whether the wallet actually holds funds on the network the service is
++// configured for. The Sepolia-config / Mainnet-wallet conflict from
++// DIAGNOSE-turbo-anchor.md ("ZWEITES UPDATE") would have been visible in
++// seconds with this guard; now it is.
++
++const NETWORK_RPCS: Record<string, string> = {
++  "base-mainnet": process.env.ANCHOR_RPC_URL_MAINNET || "https://mainnet.base.org",
++  "base-sepolia": process.env.ANCHOR_RPC_URL_SEPOLIA || "https://sepolia.base.org",
++};
++
++let netzwerkHinweis: string | null = null;
++
++/** Current cross-chain mismatch hint for /api/chain/status (null = consistent). */
++export function getNetzwerkHinweis(): string | null {
++  return netzwerkHinweis;
++}
++
++async function ethGetBalance(rpcUrl: string, address: string): Promise<bigint | null> {
++  try {
++    const res = await fetch(rpcUrl, {
++      method: "POST",
++      headers: { "Content-Type": "application/json" },
++      body: JSON.stringify({
++        jsonrpc: "2.0",
++        id: 1,
++        method: "eth_getBalance",
++        params: [address, "latest"],
++      }),
++    });
++    if (!res.ok) return null;
++    const json: any = await res.json();
++    if (typeof json?.result !== "string") return null;
++    return BigInt(json.result);
++  } catch {
++    return null; // network guard must never crash the service
++  }
++}
++
++/**
++ * Compare configured network vs. where the wallet actually holds funds.
++ * Runs at startup and on every tick; failure-tolerant (RPC errors => no hint).
++ */
++export async function pruefeNetzwerkKonsistenz(): Promise<void> {
++  try {
++    const status = await getBlockchainService().getStatus();
++    if (!status.walletAddress || status.walletAddress === "read-only") {
++      // No wallet configured — nothing to compare yet.
++      netzwerkHinweis = null;
++      return;
++    }
++    const konfiguriert = status.network;
++    const gegenNetz = konfiguriert === "base-sepolia" ? "base-mainnet" : "base-sepolia";
++    const rpcKonfiguriert = NETWORK_RPCS[konfiguriert];
++    const rpcGegen = NETWORK_RPCS[gegenNetz];
++    if (!rpcKonfiguriert || !rpcGegen) return; // unknown network — no verdict
++
++    const [hier, dort] = await Promise.all([
++      ethGetBalance(rpcKonfiguriert, status.walletAddress),
++      ethGetBalance(rpcGegen, status.walletAddress),
++    ]);
++    if (hier === null || dort === null) return; // inconclusive — keep last verdict
++
++    if (hier === 0n && dort > 0n) {
++      netzwerkHinweis =
++        `Wallet ${status.walletAddress} hat Guthaben auf ${gegenNetz}, ` +
++        `Service läuft auf ${konfiguriert} — Cross-Chain-Mismatch ` +
++        `(siehe DIAGNOSE-turbo-anchor.md)`;
++      console.warn(`[anchor-scheduler] ${netzwerkHinweis}`);
++    } else {
++      netzwerkHinweis = null;
++    }
++  } catch {
++    // never let the guard take the service down
++  }
++}
++
++// ============================================
++// S.1 — TICK
++// ============================================
++
++async function submitViaRoute(batchId: number): Promise<{ ok: boolean; body: any; status: number }> {
++  // THE existing submit route — same code path as a manual submit.
++  const res = await fetch(`${state.baseUrl}/api/chain/submit`, {
++    method: "POST",
++    headers: { "Content-Type": "application/json" },
++    body: JSON.stringify({ batchId }),
++  });
++  const body: any = await res.json().catch(() => null);
++  return { ok: res.ok && body?.success === true, body, status: res.status };
++}
++
++async function tick(): Promise<void> {
++  // 1. Network guard (cheap, failure-tolerant) — startup + every tick.
++  await pruefeNetzwerkKonsistenz();
++
++  // 2. Wallet check: read-only is a deliberate state — log only, no error.
++  const status = await getBlockchainService().getStatus();
++  if (status.walletAddress === "read-only") {
++    console.log(
++      "[anchor-scheduler] read-only (kein Wallet-Key konfiguriert) — nichts zu tun, " +
++        "pending Batches bleiben liegen bis der Key gesetzt ist"
++    );
++    return;
++  }
++  if (!status.connected) {
++    console.log("[anchor-scheduler] Blockchain nicht erreichbar — Tick übersprungen");
++    return;
++  }
++
++  // 3. Pending batches (oldest first), minus the ones we gave up on.
++  let pending: number[] = [];
++  try {
++    pending = await getPendingBatchIds();
++  } catch (e: any) {
++    console.error(`[anchor-scheduler] pending-Abfrage fehlgeschlagen: ${e?.message || e}`);
++    return;
++  }
++  const kandidaten = pending.filter((id) => !state.fehlerhafteBatches.has(id));
++  if (kandidaten.length === 0) return;
++
++  // 4. Max ONE batch per tick (gas conservation).
++  const batchId = kandidaten[0];
++  try {
++    const result = await submitViaRoute(batchId);
++    if (result.ok) {
++      state.verarbeiteteBatches++;
++      state.versuche.delete(batchId);
++      console.log(
++        `[anchor-scheduler] Batch #${batchId} bestätigt — tx=${result.body?.txHash} ` +
++          `block=${result.body?.blockNumber} network=${result.body?.network} ` +
++          `(${kandidaten.length - 1} weitere pending)`
++      );
++      return;
++    }
++    // "Already confirmed" means someone beat us to it — not a failure.
++    if (result.status === 400 && /already confirmed/i.test(String(result.body?.error || ""))) {
++      state.versuche.delete(batchId);
++      console.log(`[anchor-scheduler] Batch #${batchId} war bereits bestätigt — übersprungen`);
++      return;
++    }
++    throw new Error(`submit HTTP ${result.status}: ${result.body?.error || "unbekannter Fehler"}`);
++  } catch (e: any) {
++    // 5. Backoff: count the attempt; after MAX_ATTEMPTS mark failed + MANUELLE_KARTE.
++    state.fehlversuche++;
++    const n = (state.versuche.get(batchId) || 0) + 1;
++    state.versuche.set(batchId, n);
++    console.error(
++      `[anchor-scheduler] Batch #${batchId} Fehlversuch ${n}/${MAX_ATTEMPTS_PER_BATCH}: ${e?.message || e}`
++    );
++    if (n >= MAX_ATTEMPTS_PER_BATCH) {
++      state.fehlerhafteBatches.add(batchId);
++      state.versuche.delete(batchId);
++      try {
++        await markBatchFailed(batchId);
++      } catch (dbErr: any) {
++        console.error(
++          `[anchor-scheduler] Batch #${batchId} konnte nicht als failed markiert werden: ${dbErr?.message || dbErr}`
++        );
++      }
++      try {
++        await logAudit({
++          action: "batch_anchor_failed",
++          entityType: "batch",
++          entityId: String(batchId),
++          details: { fehlversuche: n, letzterFehler: String(e?.message || e) },
++        });
++      } catch {
++        /* audit best effort */
++      }
++      console.error(
++        `[anchor-scheduler] MANUELLE_KARTE: Batch #${batchId} nach ${n} Fehlversuchen auf ` +
++          `"failed" gesetzt — manueller POST /api/chain/submit nötig, sobald die Ursache behoben ist`
++      );
++    }
++  }
++}
++
++// ============================================
++// LIFECYCLE
++// ============================================
++
++/**
++ * Start the scheduler. Returns true if the timer was armed, false if disabled
++ * (interval 0). `port` is this service's own listen port for the loopback
++ * self-call to POST /api/chain/submit.
++ */
++export function startAnchorScheduler(opts: { port: number }): boolean {
++  state.intervalMs = configuredIntervalMs();
++  state.baseUrl = `http://127.0.0.1:${opts.port}`;
++  state.stopping = false;
++
++  if (state.intervalMs === 0) {
++    console.log("[anchor-scheduler] deaktiviert (ANCHOR_SCHEDULER_INTERVAL_MS=0)");
++    return false;
++  }
++
++  const runTick = () => {
++    if (state.stopping || state.tickInFlight) return; // never overlap ticks
++    state.tickInFlight = tick()
++      .catch((e: any) => console.error(`[anchor-scheduler] Tick-Fehler: ${e?.message || e}`))
++      .finally(() => {
++        state.letzterTick = new Date().toISOString();
++        state.tickInFlight = null;
++      });
++  };
++
++  state.timer = setInterval(runTick, state.intervalMs);
++  state.timer.unref?.();
++  console.log(
++    `[anchor-scheduler] gestartet — Intervall ${state.intervalMs} ms, ` +
++      `Submit via ${state.baseUrl}/api/chain/submit (bestehende Route, kein zweiter Code-Pfad)`
++  );
++
++  // Network guard once at startup (does not wait for the first tick).
++  pruefeNetzwerkKonsistenz().catch(() => {});
++  return true;
++}
++
++/**
++ * Graceful shutdown: stop the timer, then wait for an in-flight tick (i.e. a
++ * possibly running tx) to finish before resolving.
++ */
++export async function stopAnchorScheduler(): Promise<void> {
++  state.stopping = true;
++  if (state.timer) {
++    clearInterval(state.timer);
++    state.timer = null;
++  }
++  if (state.tickInFlight) {
++    console.log("[anchor-scheduler] Shutdown — warte auf laufenden Tick");
++    await state.tickInFlight.catch(() => {});
++  }
++  console.log("[anchor-scheduler] gestoppt");
++}
+diff --git a/apps/service/src/chain-db.ts b/apps/service/src/chain-db.ts
+index 2e1ea59..ec484e0 100644
+--- a/apps/service/src/chain-db.ts
++++ b/apps/service/src/chain-db.ts
+@@ -156,6 +156,28 @@ export async function getBatch(batchId: number): Promise<BatchRecord | null> {
+   };
+ }
+ 
++/**
++ * Anchor-Scheduler support (AUFTRAG-anchor-scheduler.md): list pending batch
++ * IDs oldest-first so the scheduler can drain them one per tick.
++ */
++export async function getPendingBatchIds(): Promise<number[]> {
++  const rows = await chainQuery<{ batch_id: number }>(
++    "SELECT batch_id FROM certification_batches WHERE status = 'pending' ORDER BY batch_id ASC"
++  );
++  return rows.map((r) => Number(r.batch_id));
++}
++
++/**
++ * Anchor-Scheduler support: mark a batch as failed after the retry budget is
++ * exhausted (never downgrades a confirmed batch).
++ */
++export async function markBatchFailed(batchId: number): Promise<void> {
++  await chainQuery(
++    "UPDATE certification_batches SET status = 'failed' WHERE batch_id = $1 AND status <> 'confirmed'",
++    [batchId]
++  );
++}
++
+ // --- Proof Operations ---
+ 
+ export interface ProofRecord {
+diff --git a/apps/service/src/chain-routes.ts b/apps/service/src/chain-routes.ts
+index 43f8eb1..8203273 100644
+--- a/apps/service/src/chain-routes.ts
++++ b/apps/service/src/chain-routes.ts
+@@ -20,6 +20,7 @@ import {
+   saveBatch, getBatch, getManifest, saveProof, getProof,
+   logAudit, getChainStats,
+ } from "./chain-db";
++import { getSchedulerMetrics, getNetzwerkHinweis } from "./anchor/scheduler";
+ 
+ export function createChainRouter(): Router {
+   const router = Router();
+@@ -180,8 +181,19 @@ export function createChainRouter(): Router {
+       const status = await blockchain.getStatus();
+       let stats: any;
+       try { stats = await getChainStats(); } catch { stats = null; }
++
++      // `mode` (AUFTRAG-anchor-scheduler.md S.2): the honest one-look field.
++      // "read-only" = no wallet key configured -> nothing gets anchored, even
++      // though connected:true is correct. "anchoring" = key present, batches
++      // can flow (scheduler and/or manual submits).
++      const mode: "anchoring" | "read-only" =
++        status.walletAddress && status.walletAddress !== "read-only" ? "anchoring" : "read-only";
++
++      const netzwerkHinweis = getNetzwerkHinweis();
+       res.json({
+-        service: "GitChain Content Blockchain", ...status, stats,
++        service: "GitChain Content Blockchain", mode, ...status, stats,
++        scheduler: getSchedulerMetrics(),
++        ...(netzwerkHinweis ? { netzwerkHinweis } : {}),
+         contract: blockchain.getContractAddress(), explorer: blockchain.getContractUrl(),
+       });
+     } catch (err) { next(err); }
+diff --git a/apps/service/src/simple-index.ts b/apps/service/src/simple-index.ts
+index e400ce9..3931991 100644
+--- a/apps/service/src/simple-index.ts
++++ b/apps/service/src/simple-index.ts
+@@ -12,6 +12,7 @@ import pino from "pino";
+ import { anchorRouter } from "./anchor-routes";
+ import { createCheckoutSession, handleWebhook, checkQuota, recordUsage, TIERS } from "./billing";
+ import { createChainRouter, createVerifyRouter } from "./chain-routes";
++import { startAnchorScheduler, stopAnchorScheduler } from "./anchor/scheduler";
+ import { startAutoBatchDaemon } from "./lib/auto-batch";
+ import { startFactsheetWorker } from "./lib/factsheet-worker";
+ import { startMcpSyncScheduler } from "./lib/mcp-sync-scheduler";
+@@ -1092,8 +1093,30 @@ if (process.env.DISABLE_MCP_SYNC !== "true") {
+   logger.info("Phase 7: mcp-sync disabled (DISABLE_MCP_SYNC=true)");
+ }
+ 
++// Anchor scheduler (AUFTRAG-anchor-scheduler.md): auto-submit pending batches
++// via the existing POST /api/chain/submit route on this process. Read-only
++// (no wallet key) is a deliberate state — the tick then only logs.
++// ANCHOR_SCHEDULER_INTERVAL_MS: default 15 min, 0 = disabled.
++try {
++  const armed = startAnchorScheduler({ port: Number(port) });
++  logger.info(
++    armed
++      ? "Anchor scheduler started (submits via POST /api/chain/submit)"
++      : "Anchor scheduler disabled (ANCHOR_SCHEDULER_INTERVAL_MS=0)"
++  );
++} catch (err: any) {
++  logger.error({ err: err?.message || err }, "Anchor scheduler startup failed");
++}
++
+ async function shutdown(signal: string) {
+   logger.info({ signal }, "graceful shutdown initiated");
++  // Anchor scheduler first: waits for an in-flight tick (a possibly running
++  // tx) to finish — K8s rollout safe (AUFTRAG-anchor-scheduler.md S.1).
++  try {
++    await stopAnchorScheduler();
++  } catch {
++    /* ignore */
++  }
+   for (const stop of phase7Stoppers) {
+     try {
+       stop();
+-- 
+2.50.1 (Apple Git-155)
+

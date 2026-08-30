@@ -78,6 +78,18 @@ curl -sS --max-time 10 https://api-gitchain.0711.io/api/chain/status
 
 **Ticket-Antwort „läuft der Anchor-Worker?" 🔎 — es gibt keinen.** Im Quellcode existiert **kein Worker, kein Cron, kein Auto-Polling**: pending-Batches werden nur durch einen manuellen `POST /api/chain/submit` (chain-routes.ts:131–174) bestätigt. `connected` ist ein reiner RPC-Erreichbarkeits-Check, kein Worker-Status (Status-Shape: chain-routes.ts:177–188). `walletAddress: "read-only"` heißt: `ANCHOR_WALLET_KEY` ist im Deployment nicht gesetzt (Env-Konfiguration anchor-routes.ts:21–32 — `ANCHOR_WALLET_KEY` [ohne → read-only, Schreibrouten 503], `ANCHOR_CHAIN` [Default base-sepolia], `ANCHOR_RPC_URL`, `ANCHOR_CONTRACT_ADDRESS` [Default 0xAd31…aEc7]; Wallet-Adresse wird aus dem Key abgeleitet, anchor-routes.ts:162). **Fix:** `ANCHOR_WALLET_KEY` setzen + einmal manuell submitten — oder einen Scheduler davor bauen.
 
+**GEBAUT (2026-08-30, Commit 1fc2b40 im Service-Checkout, Patch: docs/patches/0001-feat-service-anchor-scheduler-mode-field-network-con.patch)** — der Scheduler existiert jetzt, per AUFTRAG-anchor-scheduler.md. Neue Felder in `GET /api/chain/status` (bestehende bleiben unverändert):
+
+| Feld | Typ | Bedeutung |
+|---|---|---|
+| `mode` | `"anchoring" \| "read-only"` | Pflichtfeld, der ehrliche eine Blick: `read-only` = kein Wallet-Key → es wird NICHTS verankert (auch wenn `connected: true`); `anchoring` = Key da, Batches können fließen. Abgeleitet aus `walletAddress` (chain-routes.ts, Status-Route). |
+| `scheduler` | Objekt | `{laeuft, intervalMs, letzterTick, verarbeiteteBatches, fehlversuche, fehlerhafteBatches[]}` — Metrik des Anchor-Schedulers (src/anchor/scheduler.ts). |
+| `netzwerkHinweis` | String, nur bei Mismatch | Netzwerk-Konsistenz-Wächter: konfiguriertes Netz vs. Wallet-Guthaben (eth_getBalance auf beiden Base-Netzen). Hätte den Sepolia-Config/Mainnet-Wallet-Konflikt (DIAGNOSE ZWEITES UPDATE) in Sekunden sichtbar gemacht. |
+
+Scheduler-Verhalten: `ANCHOR_SCHEDULER_INTERVAL_MS` (Default 15 Min, `0` = aus). Je Tick max. **1** Batch, Submit ausschließlich per Loopback auf die bestehende Route `POST /api/chain/submit` (kein zweiter Signier-Pfad). Read-only = bewusster Zustand: nur Log-Zeile, kein Fehler. Backoff max. 3 Versuche je Batch, dann DB-Status `failed` + `MANUELLE_KARTE`-Log + Audit-Eintrag `batch_anchor_failed`. Graceful Shutdown wartet laufende Tx ab (SIGTERM-Hook simple-index.ts).
+
+Wichtig für Ops: Die chain-routes-Verankerung signiert mit **`DEPLOYER_PRIVATE_KEY`** (@0711/chain blockchain.ts:115) — `ANCHOR_WALLET_KEY` gilt nur für die v4-Fläche (anchor-routes.ts). Damit `mode: "anchoring"` wird, muss DEPLOYER_PRIVATE_KEY im Pod ankommen; `CONTENT_CERTIFICATE_ADDRESS_MAINNET` steuert das Netz (gesetzt → base-mainnet, sonst base-sepolia).
+
 ### 2.3 `GET /api/verify/:id` — Container-/Hash-Verifikation ✅
 
 ```bash
@@ -331,7 +343,7 @@ Voll offen (`*`, alle Standard-Methoden) — browserbasierte Clients direkt mög
 ## 6. Offene Punkte / Empfehlungen
 
 1. **Turbo-Suche produktionsreif machen** — GEKLÄRT 🔎: Migrationen `database/migrations/2026-04-19-embedding_tq.sql` + `2026-04-19-visual_atoms.sql` existieren, sind in der Prod-DB nur nicht angewendet; danach `scripts/compute-turbo-embeddings.ts` laufen lassen. Route ist laut Code „staging-only until Phase 14 cutover" (§2.6).
-2. **Chain-Verankerung inaktiv** — GEKLÄRT 🔎: es gibt **keinen Anchor-Worker**; pending-Batches bestätigen sich nur per manuellem `POST /api/chain/submit`, und `ANCHOR_WALLET_KEY` ist im Deployment nicht gesetzt (read-only). Offen bleibt die Entscheidung: Key setzen + Scheduler bauen, oder Multi-Anchor-Roadmap (QTSP/EBSI/OTS) abwarten (§2.2).
+2. **Chain-Verankerung inaktiv** — GEKLÄRT 🔎: es gibt **keinen Anchor-Worker**; pending-Batches bestätigen sich nur per manuellem `POST /api/chain/submit`, und `ANCHOR_WALLET_KEY` ist im Deployment nicht gesetzt (read-only). Offen bleibt die Entscheidung: Key setzen + Scheduler bauen, oder Multi-Anchor-Roadmap (QTSP/EBSI/OTS) abwarten (§2.2). **UPDATE 2026-08-30: Scheduler ist GEBAUT** (Commit 1fc2b40, Patch `docs/patches/0001-feat-service-anchor-scheduler-mode-field-network-con.patch`, Details §2.2). Ops-seitig bleiben zwei Schritte: `DEPLOYER_PRIVATE_KEY` in den Pod bringen (nicht ANCHOR_WALLET_KEY — der gilt nur für die v4-Fläche) und die Netzwerk-Entscheidung (Mainnet-Wallet vs. Sepolia-Config, siehe DIAGNOSE).
 3. **DB-Fehler leaken** in API-Antworten (Postgres-Meldungen) — für Produktion wrappen.
 4. **Gemischte Fehler-Sprachen** (en/de) und `containerId` vs. snake_case — vereinheitlichen.
 5. **OCP v1-Fläche** — GEKLÄRT 🔎: liegt unter `/ocp/v1/*` (nicht `/api/ocp/v1`), 8 öffentliche GETs + 2 POST-Stubs (§4.3). Live-Verifikation der Sub-Routen steht noch aus.
