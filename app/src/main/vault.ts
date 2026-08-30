@@ -138,7 +138,7 @@ export async function createFall(id: string): Promise<FallInfo> {
   await fs.writeFile(path.join(fallPfad, 'atoms', '.gitkeep'), '');
 
   // Initialize git repo
-  await gitExec(fallPfad, ['init']);
+  await gitExec(fallPfad, ['init', '-b', 'main']);
 
   // Create initial fall.json
   const fallJson = {
