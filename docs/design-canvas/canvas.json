@@ -395,6 +395,51 @@
       "h": 1220,
       "page": "page-9",
       "title": "Die Bausteine — OS-Sprache als System"
+    },
+    {
+      "file": "OsStapel.dc.html",
+      "x": 0,
+      "y": 7760,
+      "w": 1360,
+      "h": 900,
+      "page": "page-7",
+      "title": "Der Stapel — der Ingester sortiert allein"
+    },
+    {
+      "file": "OsNeuesThema.dc.html",
+      "x": 1480,
+      "y": 7760,
+      "w": 390,
+      "h": 844,
+      "page": "page-7",
+      "title": "Das neue Thema — der Ingester legt Fälle an"
+    },
+    {
+      "file": "OsMeet.dc.html",
+      "x": 0,
+      "y": 8800,
+      "w": 1360,
+      "h": 900,
+      "page": "page-7",
+      "title": "Meet — der Tisch in Echtzeit, Multi-eyes live"
+    },
+    {
+      "file": "OsDivergenz.dc.html",
+      "x": 1480,
+      "y": 8800,
+      "w": 1360,
+      "h": 900,
+      "page": "page-7",
+      "title": "Die Divergenz — zwei Zeugen, ein Moment"
+    },
+    {
+      "file": "OsAufzeichnung.dc.html",
+      "x": 2960,
+      "y": 8800,
+      "w": 390,
+      "h": 844,
+      "page": "page-7",
+      "title": "Aufzeichnen — Zustimmung wird committet"
     }
   ],
   "annotations": [
@@ -517,11 +562,27 @@
       "w": 1300,
       "page": "page-9",
       "text": "DAS ÜBERGABE-BLATT. Jeder Baustein hier ist mit genau den Werten gebaut, die daneben stehen — kein Muster-Bild, sondern dieselben Stile wie auf allen OS-Sprache-Screens (_os.part). Für den Code: die Werte lassen sich 1:1 als CSS-Tokens übernehmen (--os-grund #FAF7F2, --os-salbei #8FA98F, --os-rose #D9A6A0, --os-olivgold #B8A369, --os-tinte #2A2520; Serife Playfair 400; Sans 17/15/13/11; Radius 16/12/8/rund).\nFür Claude Design: sobald /design-login einmal in einer interaktiven Claude-Code-Sitzung auf dem Mac gelaufen ist, kann dieses Blatt komponentenweise in ein Design-System-Projekt auf claude.ai/design wandern — Karte, Pille, Siegel, Quellzeile, Zug, Blatt, Fragefeld als je eine eigene Vorlage."
+    },
+    {
+      "id": "os-ingester",
+      "x": 0,
+      "y": 7610,
+      "w": 1350,
+      "page": "page-7",
+      "text": "REIHE 8 — DER AUTOMATISCHE INGESTER. Die Arbeitsteilung, die alles trägt: EINSORTIEREN IST STILL, ANLEGEN NIE. In bestehende Fälle sortiert der Ingester ohne zu fragen (rückholbar, mit Beleg, der Abend zeigt es); ein NEUER Fall ist ein neuer Baum mit eigener Kapsel — der braucht dein Ja und einen Namen, den du überschreiben kannst. Der Stapel: einen ganzen Ordner hinwerfen, der Bericht kommt in drei Zeilen (still · neu · unverstanden) plus Quellzeile. Ehrlichkeit gehört dazu: „2 verstehe ich nicht\" bleibt im Eingang liegen statt falsch einsortiert zu werden — fail closed auch beim Sortieren."
+    },
+    {
+      "id": "os-call-meet",
+      "x": 0,
+      "y": 8650,
+      "w": 1350,
+      "page": "page-7",
+      "text": "REIHE 9 — CALL & MEET (Spec 18). Vier Fünftel standen schon: Anruf mit Fall-Kontext, Mitschrift + Karte, Minuten-Beweis, signierte Fassung im ruhigen Raum (R3), Gast ohne Konto. NEU: das MEETING — vier Kacheln, jede ihr eigener Zeuge („schreibt mit\"), das gemeinsame Dokument auf demselben Stand bei allen, und der Beschluss-Kandidat mit Multi-eyes live (drei Haken, dein Ja fehlt); die Unterschrift kommt danach, nie im Gespräch. Die AUFZEICHNUNG als Karte: fail closed, auch das Nein wird vermerkt — beweisbar statt einseitig geheim. Die DIVERGENZ: zwei lokale Mitschriften hören Minute 27:50 verschieden — beide Lesarten bleiben im Baum, die signierte Fassung entscheidet, nichts wird gelöscht. Nicht gezeichnet (Variante von „Der Anruf kommt\"): eingehender Festnetz-Anruf über die Brücke — gleicher Screen, Plakette „über die Telefon-Brücke · nur du hast danach den Beweis\"."
     }
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-9"
+    "page": "page-7"
   },
   "pages": [
     {

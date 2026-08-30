@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369
+       Schrift: Serife 34/22 (400, nie fett) · Sans 15/13/11 · Radius 16/8/999 */
+    body { margin: 0; }
+    a { color: #6e6550; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .karte {
+      background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+    }
+    .pill-salbei {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 44px; padding: 0 26px; border-radius: 999px;
+      background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+    }
+    .pill-still {
+      display: flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 22px; border-radius: 999px;
+      background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500;
+    }
+    .siegel {
+      width: 44px; height: 44px; border-radius: 999px; flex: none;
+      background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+      font-size: 14px;
+    }
+    .quellzeile {
+      font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .frag {
+      display: flex; align-items: center; gap: 10px; height: 44px;
+      background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px;
+      padding: 0 8px 0 18px; box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 12px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px">
+        <span style="width: 8px; height: 8px; border-radius: 999px; background: #D9A6A0"></span>
+        <span class="t13">Meet · Badrenovierung</span>
+        <span class="t11 sub">vier Tresore, ein Fall</span>
+      </div>
+      <span style="flex: 1"></span>
+      <div class="siegel serif">Du</div>
+    </div>
+
+    <div style="flex: 1; display: flex; min-height: 0; gap: 20px; padding: 8px 28px 0">
+
+      <!-- Die Menschen: 2×2, jede Kachel ihr eigener Zeuge -->
+      <div style="flex: none; width: 380px; display: flex; flex-direction: column; gap: 12px; padding-top: 8px">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+          <div style="height: 118px; border-radius: 16px; background: linear-gradient(160deg, #e4bcb6, #c08981); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #fff; position: relative">
+            <div class="siegel serif" style="width: 40px; height: 40px; font-size: 13px; background: rgba(255,255,255,.22); box-shadow: none">We</div>
+            <span class="t13" style="font-weight: 600">Fr. Weber</span>
+            <span class="t11" style="position: absolute; bottom: 7px; right: 10px; color: rgba(255,255,255,.75)">schreibt mit</span>
+          </div>
+          <div style="height: 118px; border-radius: 16px; background: linear-gradient(160deg, #a3bba3, #7d967d); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #fff; position: relative">
+            <div class="siegel serif" style="width: 40px; height: 40px; font-size: 13px; background: rgba(255,255,255,.22); box-shadow: none">Ma</div>
+            <span class="t13" style="font-weight: 600">Max</span>
+            <span class="t11" style="position: absolute; bottom: 7px; right: 10px; color: rgba(255,255,255,.75)">schreibt mit</span>
+          </div>
+          <div style="height: 118px; border-radius: 16px; background: linear-gradient(160deg, #cbb98a, #a89463); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #fff; position: relative">
+            <div class="siegel serif" style="width: 40px; height: 40px; font-size: 13px; background: rgba(255,255,255,.22); box-shadow: none">Li</div>
+            <span class="t13" style="font-weight: 600">Lisa</span>
+            <span class="t11" style="position: absolute; bottom: 7px; right: 10px; color: rgba(255,255,255,.75)">schreibt mit</span>
+          </div>
+          <div style="height: 118px; border-radius: 16px; background: linear-gradient(160deg, #8d97a5, #6b7585); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #fff; position: relative">
+            <div class="siegel serif" style="width: 40px; height: 40px; font-size: 13px; background: rgba(255,255,255,.22); box-shadow: none">Du</div>
+            <span class="t13" style="font-weight: 600">Du</span>
+            <span class="t11" style="position: absolute; bottom: 7px; right: 10px; color: rgba(255,255,255,.75)">schreibt mit</span>
+          </div>
+        </div>
+
+        <!-- Das gemeinsame Dokument: derselbe Hash-Stand bei allen -->
+        <div style="flex: 1; background: #fff; border-radius: 16px; border: 1px solid rgba(184,163,105,.22); padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-height: 0">
+          <div class="etikett">Auf dem Tisch — bei allen derselbe Stand</div>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <div style="width: 34px; height: 44px; flex: none; border-radius: 4px; background: #FAF7F2; border: 1px solid rgba(184,163,105,.3); display: flex; align-items: center; justify-content: center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(42,37,32,.35)" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+            </div>
+            <div style="flex: 1; min-width: 0">
+              <div class="t13" style="font-weight: 600">Angebot-Dachsanierung.pdf</div>
+              <div class="t11 sub" style="margin-top: 1px">Seite 3 offen · niemand sieht eine andere Fassung</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; padding-bottom: 16px">
+          <div style="display: flex; align-items: center; justify-content: center; height: 48px; padding: 0 22px; border-radius: 999px; background: #D9A6A0; color: #fff; font-size: 15px; font-weight: 600; box-shadow: 0 8px 22px -10px rgba(190,130,120,.7)">Auflegen</div>
+        </div>
+      </div>
+
+      <!-- Rechts: der Beschluss mit vier Augenpaaren, live -->
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding-top: 8px">
+        <div class="etikett" style="display: flex; align-items: center; gap: 8px">
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #8FA98F"></span>
+          Vier Mitschriften laufen — jede lokal, jede committet in denselben Fall
+        </div>
+
+        <div style="flex: 1; background: #fff; border-radius: 16px; border: 1px solid rgba(184,163,105,.22); padding: 20px 24px; display: flex; flex-direction: column; gap: 11px; overflow: hidden">
+          <div class="t13" style="display: flex; gap: 14px; color: rgba(42,37,32,.45)">
+            <span style="font-family:'SF Mono',Menlo,monospace; font-size: 11px; flex: none; width: 42px">26:40</span>
+            <span>Weber: Mit dem Speicher zusammen kommen wir auf die 12.400.</span>
+          </div>
+          <div class="t13" style="display: flex; gap: 14px">
+            <span style="font-family:'SF Mono',Menlo,monospace; font-size: 11px; flex: none; width: 42px; font-weight: 600">27:50</span>
+            <span style="font-weight: 500">Weber: Dann halten wir fest — fertig bis 15. September, 12.400 € komplett.</span>
+          </div>
+          <span style="width: 2px; height: 15px; background: #B8A369; margin-left: 56px"></span>
+        </div>
+
+        <div class="karte" style="padding: 18px 22px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <div class="serif" style="font-size: 21px">Vereinbart: Dachfertigstellung 15.09., 12.400 €?</div>
+            <div class="t11 sub">wortgleich aus Minute 27:50 — wird ein Kandidat; die Unterschrift kommt danach, im ruhigen Raum</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px">
+            <div style="display: flex; align-items: center; gap: 6px" class="t13">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Weber
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px" class="t13">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Max
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px" class="t13">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Lisa
+            </div>
+            <span style="flex: 1"></span>
+            <div class="pill-salbei" style="height: 44px">Ja, festhalten</div>
+            <div class="pill-still" style="height: 44px">So nicht</div>
+          </div>
+        </div>
+
+        <div class="quellzeile" style="justify-content: center; padding-bottom: 14px">
+          <span>verschlüsselt von Tresor zu Tresor</span><span>·</span>
+          <span>der Vermittler sieht nur Chiffre</span><span>·</span>
+          <span>keine Cloud hört mit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

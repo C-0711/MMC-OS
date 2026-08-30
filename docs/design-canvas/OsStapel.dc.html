@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369
+       Schrift: Serife 34/22 (400, nie fett) · Sans 15/13/11 · Radius 16/8/999 */
+    body { margin: 0; }
+    a { color: #6e6550; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .karte {
+      background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+    }
+    .pill-salbei {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 44px; padding: 0 26px; border-radius: 999px;
+      background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+    }
+    .pill-still {
+      display: flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 22px; border-radius: 999px;
+      background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500;
+    }
+    .siegel {
+      width: 44px; height: 44px; border-radius: 999px; flex: none;
+      background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+      font-size: 14px;
+    }
+    .quellzeile {
+      font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .frag {
+      display: flex; align-items: center; gap: 10px; height: 44px;
+      background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px;
+      padding: 0 8px 0 18px; box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 12px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <span style="flex: 1"></span>
+      <div class="siegel serif">Du</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding: 0 80px">
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+        <div class="serif" style="font-size: 34px">Der Stapel ist durch.</div>
+        <div class="t13 sub">23 Dinge aus „Downloads" — gelesen in 41 Sekunden, hier auf dem Gerät</div>
+      </div>
+
+      <div style="width: 620px; display: flex; flex-direction: column; gap: 10px">
+        <div class="karte" style="padding: 15px 18px; display: flex; align-items: center; gap: 14px; box-shadow: none; background: rgba(255,255,255,.65)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M20 6 9 17l-5-5"></path></svg>
+          <div style="flex: 1; min-width: 0">
+            <div class="t13"><b>17 still einsortiert</b> — Steuer 9 · Auto 3 · Versicherungen 3 · Haus 2</div>
+            <div class="t11 sub" style="margin-top: 2px">jedes mit Beleg, jedes rückholbar — der Abend zeigt sie dir</div>
+          </div>
+          <span class="t11" style="color:#6e6550; text-decoration: underline; text-underline-offset: 2px">ansehen</span>
+        </div>
+
+        <div class="karte" style="padding: 15px 18px; display: flex; align-items: center; gap: 14px; border-color: rgba(143,169,143,.5)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B8A369" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"></path></svg>
+          <div style="flex: 1; min-width: 0">
+            <div class="t13"><b>4 gehören zu etwas Neuem</b> — Vorschlag: Fall „Photovoltaik"</div>
+            <div class="t11 sub" style="margin-top: 2px">Angebot, Datenblatt, zwei Mails — ein neuer Baum braucht dein Ja</div>
+          </div>
+          <div class="pill-salbei" style="height: 40px; font-size: 15px; padding: 0 18px">Anlegen</div>
+        </div>
+
+        <div class="karte" style="padding: 15px 18px; display: flex; align-items: center; gap: 14px; box-shadow: none; background: rgba(255,255,255,.65)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(42,37,32,.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.6-2.4 2.2-2.4 3.2M12 17h.01"></path></svg>
+          <div style="flex: 1; min-width: 0">
+            <div class="t13"><b>2 verstehe ich nicht</b> — ein handschriftlicher Zettel, ein Foto ohne Text</div>
+            <div class="t11 sub" style="margin-top: 2px">liegen im Eingang — sag du, wohin, oder lass sie liegen</div>
+          </div>
+          <span class="t11" style="color:#6e6550; text-decoration: underline; text-underline-offset: 2px">zeigen</span>
+        </div>
+      </div>
+
+      <div class="quellzeile">
+        <span>23 gelesen</span><span>·</span><span>17 committet</span><span>·</span><span>4 warten auf ein Ja</span><span>·</span><span>2 offen</span><span>·</span>
+        <span style="display: inline-flex; align-items: center; gap: 4px; color: #5c705c">nichts hat das Haus verlassen
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </span>
+      </div>
+    </div>
+
+    <div style="flex: none; height: 36px"></div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
