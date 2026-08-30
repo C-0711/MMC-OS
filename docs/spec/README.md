@@ -9,6 +9,7 @@
 3. **`interaction-voice-screen-v0.1.md`** — Voice + simple Screens: drei Screen-Formen (Karte/Liste max. 3/Beweis-Rechteck), Wortgleichheit Screen↔Stimme, Voice-Commit nur mit sichtbarem Anker, Stimme nie alleinige Authentifizierung.
 4. **`ingress-flow-v0.1.md`** — Der Eingang: Commit vor Deutung, dreispurige Entscheidung (auto/Vorschlag/Zweifel) nach Konfidenz × Risiko-Klasse (R0–R3), Schwellen-Policy als editierbare Preference, max. 3 offene Dinge/Tag.
 5. **`massen-ingest-v0.1.md`** — Die Masse: Millionen Seiten lesen, embedden (Matryoshka-Kaskade 768→128-d, lokal), normalisieren, in Container bringen (Unternehmen nach Produkt, Mensch nach Thema); Beweis-Basis < 1 s; Dialog-Anreicherung als Commits — aus Ordner-Bergen der mächtigste Kontext.
+6. **`buerger-assistent-v0.1.md`** — Der eigene Assistent des Durchschnittsbürgers: drei Umsetzungs-Wellen („es funktioniert / es gehört mir / es managt mich"), der Bürger immer im Loop (Eingehen-Gefragt Werden-Zustimmen), Takeout-Importer, Phone=Tresor+Zeuge, Capability-Partizipation — sein Container, sein Kontext, souverän.
 
 ## Begriffs-Glossar (die vier Worte)
 
