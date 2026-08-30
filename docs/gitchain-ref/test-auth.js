@@ -24,7 +24,7 @@ const vaultApi = {
   init();
 
   // T1: Anmeldung anfangen — Code kommt, Zustell-Id zurück
-  const a = authAnfang('test.nutzer@beispiel.de');
+  const a = await authAnfang('test.nutzer@beispiel.de');
   check('T1 Code-Erzeugung mit Zustell-Id', a.zustellId && a.code && a.code.length === 6);
 
   // T2: Bestätigen → Container + did:key + 12 Recovery-Worte
@@ -44,19 +44,19 @@ const vaultApi = {
   check('T5c Hash der E-Mail in Zuordnungen (Zustell-Logik)', /"container": "brain-/.test(zuordnungenInhalt));
 
   // T6: Falscher Code → fail closed
-  const a2 = authAnfang('falsch@beispiel.de');
+  const a2 = await authAnfang('falsch@beispiel.de');
   let fehler = '';
   try { await authBestaetigen(a2.zustellId, '000000', vaultApi); } catch (e) { fehler = e.message; }
   check('T6 Falscher Code abgelehnt (fail closed)', fehler.includes('falsch'));
 
   // T7: Wiederschen: zweite Anmeldung derselben E-Mail → wiedergefunden, kein zweiter Container
-  const a3 = authAnfang('test.nutzer@beispiel.de');
+  const a3 = await authAnfang('test.nutzer@beispiel.de');
   const b3 = await authBestaetigen(a3.zustellId, a3.code, vaultApi);
   check('T7 Wiederschen erkennt bestehenden Container', b3.status === 'wiedergefunden' && b3.container === b.container);
 
   // T8: Code-Verfall (10 Min) — simulierte abgelaufene Zustellung
   const { OFFENE } = { OFFENE: null };
-  let a4 = authAnfang('alt@beispiel.de');
+  let a4 = await authAnfang('alt@beispiel.de');
   // 10-Min-Grenze simulieren: wir testen nur, dass unbekannte ID abgelehnt wird:
   let fehler2 = '';
   try { await authBestaetigen('unbekannte-id', a4.code, vaultApi); } catch (e) { fehler2 = e.message; }

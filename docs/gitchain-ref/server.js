@@ -229,7 +229,7 @@ const server = http.createServer(async (req, res) => {
       }
       // FRONT3 A.4: AUTH — E-Mail = Zustelladresse, Container entsteht automatisch
       if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'auth' && teile[3] === 'anfang') {
-        return json(200, auth.authAnfang(daten.email));
+        return json(200, await auth.authAnfang(daten.email));
       }
       if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'auth' && teile[3] === 'bestaetigen') {
         return json(200, await auth.authBestaetigen(daten.zustellId, daten.code, { createFall: (id) => createFall(id) }));
