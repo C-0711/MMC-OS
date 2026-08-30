@@ -12,6 +12,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { ladeKorrekturen, korrekturLernen, policyVorschlagErzeugen, policyAnwenden, SCHWELLE } = require('./lernen.js');
+const auth = require('./auth.js');
+const connectors = require('./connectors.js');
+const { signalingErweiternTcp } = require('./signaling-tcp.js');
+const fassung = require('./fassung.js');
 const execFileAsync = promisify(execFile);
 
 const PORT = process.env.GITCHAIN_REF_PORT || 3361;
@@ -71,10 +75,18 @@ async function commitEingang(fallId, eingang) {
 async function proposeDeutung(fallId, deutung) {
   const { proposalId, atoms, kartentext } = deutung;
   if (!Array.isArray(atoms) || !atoms.length) throw new Error('atoms[] ist Pflicht');
-  for (const a of atoms) if (!a.fundstelle || !a.fundstelle.doc) throw new Error('jedes Atom braucht fundstelle.doc');
+  for (const a of atoms) {
+    const f = a.fundstelle;
+    const ok = f && (
+      (f.art === 'dokument' || !f.art) && f.doc                            // klassisch
+      || (f.art === 'anruf' && f.wav && f.minute)                          // C.1/C.7
+      || (f.art === 'connector' && f.system && f.objekt && f.revision)   // W1.1
+    );
+    if (!ok) throw new Error('jedes Atom braucht eine gültige Fundstelle (dokument: doc | anruf: wav+minute | connector: system+objekt+revision)');
+  }
   const fallPfad = path.join(VAULT, fallId);
   const branch = `vorschlag/${proposalId || crypto.randomBytes(4).toString('hex')}`;
-  await git(fallPfad, 'checkout', '-q', '-b', branch);
+  try { await git(fallPfad, 'checkout', '-q', '-b', branch); } catch { await git(fallPfad, 'checkout', '-q', branch); } // idempotent
   const zeilen = atoms.map((a, i) => JSON.stringify({ id: `atom-${Date.now()}-${i}`, feld: a.feld || 'deutung', wert: a.wert, fundstelle: a.fundstelle, conf: a.conf ?? null, zweifel: (a.conf ?? 1) < 0.5 }));
   fs.mkdirSync(path.join(fallPfad, 'atoms'), { recursive: true });
   fs.writeFileSync(path.join(fallPfad, 'atoms', `${proposalId || 'vorschlag'}.jsonl`), zeilen.join('\n') + '\n');
@@ -148,6 +160,39 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === 'GET' && url.pathname === '/api/brain/metrics') return json(200, (await metrikArtefakt()).metrik);
     if (req.method === 'GET' && url.pathname === '/api/brain/policy') return json(200, ladePolicy());
+    if (req.method === 'GET' && url.pathname === '/api/v2/connectors/mocks') {
+      return json(200, Object.fromEntries(Object.entries(connectors.MOCKS).map(([k, m]) => [k, { system: k, endpoint: m.endpoint, objekte: Object.keys(m.items), abgerufenDurch: m.abgerufenDurch }])));
+    }
+    // OsConnectorBeweis: Fundstelle als zitierbares Artefakt (hash-adressiert)
+    if (url.pathname.startsWith('/api/v2/connectors/fundstelle/')) {
+      const hash = url.pathname.split('/').pop();
+      const a = connectors.artefatzHolen(hash);
+      if (!a) return json(404, { fehler: 'Artefakt unbekannt — erst /widerspruch oder /pull erzeugen Artefakte' });
+      return json(200, a);
+    }
+    // OsRevision: Revisions-Historie je Objekt (was galt wann)
+    if (url.pathname.startsWith('/api/v2/connectors/revisionen/')) {
+      const objekt = url.pathname.split('/').pop();
+      return json(200, connectors.revisionsHistorie(objekt));
+    }
+    // OsVereinbarung/OsUebernahme: Fassung abrufen (Diff-Daten + Siegel-Zeilen)
+    if (url.pathname.startsWith('/api/v2/fall/') && url.pathname.endsWith('/fassung-uebersicht')) {
+      const teileF = url.pathname.split('/').filter(Boolean);
+      // [api, v2, fall, <fallId>, <fassungId>, fassung-uebersicht]
+      const f = fassung.fassungHolen(teileF[3], teileF[4]);
+      if (!f) return json(404, { fehler: 'Fassung nicht gefunden' });
+      return json(200, f);
+    }
+    // Übergaben eines Falls listen (OsUebergang: Zustandsanzeige)
+    if (url.pathname.startsWith('/api/v2/fall/') && url.pathname.endsWith('/uebergaben')) {
+      const teileF = url.pathname.split('/').filter(Boolean);
+      return json(200, { uebergaben: fassung.uebergabeListe(teileF[3]) });
+    }
+    // OsDivergenz: was gilt aktuell (signierte Auflösungen)?
+    if (url.pathname.startsWith('/api/v2/connectors/gueltigkeit/')) {
+      const objekt = url.pathname.split('/').pop();
+      return json(200, { objekt, gueltig: connectors.gueltigkeitAbfragen(objekt) });
+    }
     if (req.method === 'GET' && url.pathname === '/api/chain/status') return json(200, { status: 'ok', modus: 'referenz (kein chain-backend — Signatur/Anchor laut Spec: QTSP/EBSI/OTS)', signaturErzwungen: false, hinweis: 'Referenz-Instanz beweist Container-Mechanik, nicht Verankerung' });
 
     if (req.method === 'GET' && url.pathname === '/api/brain/lernen') {
@@ -182,6 +227,58 @@ const server = http.createServer(async (req, res) => {
       if (teile[0] === 'api' && teile[1] === 'brain' && teile[2] === 'policy' && teile[3] === 'annehmen') {
         return json(200, policyAnwenden(daten.vorschlagTs));
       }
+      // FRONT3 A.4: AUTH — E-Mail = Zustelladresse, Container entsteht automatisch
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'auth' && teile[3] === 'anfang') {
+        return json(200, auth.authAnfang(daten.email));
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'auth' && teile[3] === 'bestaetigen') {
+        return json(200, await auth.authBestaetigen(daten.zustellId, daten.code, { createFall: (id) => createFall(id) }));
+      }
+      // W1.5: Connector-Pull — System-API wird committeter Eingang mit Fundstellen
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'pull') {
+        return json(200, await connectors.connectorPull(daten, (fallId, eingang) => commitEingang(fallId, eingang)));
+      }
+      // W1.5: Widerspruchs-Engine — Karte mit ZWEI Fundstellen
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'widerspruch') {
+        return json(200, connectors.widerspruchPruefung(daten.systemA || 'teamcenter', daten.systemB || 'pim', daten.objekt || 'MNR-4711'));
+      }
+      // C.7: Anruf-Sitzung — eröffnet Live-Spur im Fall, Atoms mit Minuten-Fundstelle
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'anruf') {
+        if (!await fallExistiert(teile[3])) return json(404, { fehler: 'fall nicht gefunden' });
+        const sitzungId = 'anruf-' + Date.now().toString(36);
+        return json(201, { sitzungId, fall: teile[3], gestartet: new Date().toISOString(), hinweis: 'Atoms via /deutung mit fundstelle.art=anruf committen' });
+      }
+      // OsDivergenz: Widerspruch auflösen → signierte Fassung (fail closed ohne Fundstelle)
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'aufloesen') {
+        const w = connectors.widerspruchPruefung(daten.systemA || 'teamcenter', daten.systemB || 'pim', daten.objekt || 'MNR-4711');
+        const wid = w.widersprueche.find(x => x.attribut === daten.attribut);
+        if (!wid) throw new Error('kein offener Widerspruch für dieses Attribut');
+        const quelle = daten.giltSystem === 'teamcenter' ? wid.wertA.fundstelle : wid.wertB.fundstelle;
+        const fassung = connectors.divergenzAufloesen({
+          objekt: daten.objekt || 'MNR-4711', attribut: daten.attribut,
+          giltSystem: daten.giltSystem, fundstelle: quelle, signiertVon: daten.signiertVon,
+        });
+        return json(200, { aufgeloest: true, fassung, hinweis: 'Signierte Fassung gilt ab jetzt — bis ein System sie wieder widerspricht' });
+      }
+      // ── OsVereinbarung: Fassung erzeugen / signieren ──
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'fassung') {
+        const r = fassung.fassungErstellen(teile[3], daten);
+        return json(201, r);
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'fassung-signieren') {
+        const r = fassung.fassungSignieren(teile[3], daten.fassungId, daten.did);
+        return json(200, r);
+      }
+      // ── OsUebernahme/OsUebergang: Übergabe des Klon-Angebots ──
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'uebergabe') {
+        return json(201, fassung.uebergabeStarten(daten));
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'uebergabe-annehmen') {
+        return json(200, fassung.uebergabeAnnehmen(daten.uebergabeId, daten.did));
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'uebergabe-ablehnen') {
+        return json(200, fassung.uebergabeAblehnen(daten.uebergabeId, daten.did, daten.grund));
+      }
       // (der GET-/api/brain/lernen-Handler liegt oben beim anderen GET-Block)
       return json(404, { fehler: 'unbekannter Pfad', bekannt: ['/api/v2/health', '/api/brain/deploy (POST)', '/api/brain/metrics', '/api/brain/policy', '/api/brain/lernen (GET)', '/api/v2/fall/<id>/eingang', '/api/v2/fall/<id>/deutung'] });
     }
@@ -201,4 +298,13 @@ const server = http.createServer(async (req, res) => {
 
 fs.mkdirSync(VAULT, { recursive: true });
 ladePolicy();
+auth.init();
+
+// ── Signaling-Server (CALL C.2) — TCP-JSON auf :3362 ──
+const net = require('net');
+const SIGNALING_PORT = 3362;
+const sig = signalingErweiternTcp();
+net.createServer(sock => sig.verbinde(sock)).listen(SIGNALING_PORT, '127.0.0.1', () => {
+  console.log('Signaling (TCP-JSON) auf :' + SIGNALING_PORT + ' — sieht nie Medien');
+});
 server.listen(PORT, '127.0.0.1', () => console.log(`gitchain-ref v0.3-lernend auf :${PORT} · Auto-Deploy aktiv`));
