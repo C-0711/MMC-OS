@@ -48,3 +48,26 @@ stats: 10 Manifeste, 9 Batches, 0 confirmed, 9 pending
 
 - **(a) turbo-500:** Nutzer-sichtbar (Suche kaputt) → Migration nachziehen, P1.
 - **(b) Verankerung:** 9 Manifeste warten auf Beweiszeitpunkte → Wallet-Secret prüfen, P1 (rechtlich relevant: "verifiable forever" braucht den Anchor).
+
+---
+
+## Antwort von der Mac-Seite (Quellcode-Abgleich, gleicher Tag) — beide „zu prüfen"-Fragen geklärt
+
+Quelle: `~/Documents/0711-Gitchain/apps/service/src/` (Details mit file:line in
+`docs/gitchain-api.md` §2.2/§2.6).
+
+**Zu (a) — „Migration finden":** Gefunden. `database/migrations/2026-04-19-embedding_tq.sql:20`
+legt `embedding_tq_polar` (+ `_qjl`, `_rnorm`, `_xnorm`, bytea, seed=42, b=3) auf `neo.rag_chunks`
+an; für die Vision-Variante `2026-04-19-visual_atoms.sql:58` auf `enriched.visual_atoms`.
+Nach dem Anwenden Befüllung via `scripts/compute-turbo-embeddings.ts`. Der Mount trägt den
+Kommentar „staging-only until Phase 14 cutover" (simple-index.ts:842–844) — die Route war für
+Prod schlicht noch nicht gedacht.
+
+**Zu (b) — „läuft der Worker-Timer?":** Es gibt **keinen**. Im Code existiert kein Batcher, kein
+Cron, kein Timer — pending-Batches werden ausschließlich durch manuellen `POST /api/chain/submit`
+bestätigt (chain-routes.ts:131–174). Der Env-Name ist `ANCHOR_WALLET_KEY` (nicht
+`ANCHOR_PRIVATE_KEY`; anchor-routes.ts:21–32) — ohne ihn read-only, Schreibrouten 503, Wallet-
+Adresse würde aus dem Key abgeleitet (anchor-routes.ts:162). Frage 2 der Diagnose ist damit
+beantwortet: die 9 Batches warten nicht auf einen Tick, es gibt keinen. Der `mode`-Feld-Vorschlag
+bleibt sinnvoll — plus Entscheidung: Key setzen **und** einen Scheduler bauen, sonst bleibt es
+bei Hand-Submits.
