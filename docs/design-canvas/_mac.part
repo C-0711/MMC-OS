@@ -1,0 +1,76 @@
+  <style>
+    body { margin: 0; }
+    a { color: #0a6ed1; } a:hover { color: #084f96; }
+    .schreibtisch {
+      width: 1360px; height: 900px; overflow: hidden; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      color: #1d1d1f; -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(120% 90% at 15% 12%, #f0e4cf 0%, rgba(240, 228, 207, 0) 45%),
+        linear-gradient(150deg, #b8d3ea 0%, #7fb0dd 38%, #2f6fbe 68%, #9db8d4 100%);
+    }
+    .fenster {
+      width: 1256px; height: 812px; border-radius: 10px; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 30px 70px -20px rgba(10, 25, 50, .55), 0 0 0 .5px rgba(0,0,0,.28);
+    }
+    .fenster-koerper { flex: 1; display: flex; min-height: 0; }
+    /* Seitenleiste: Vibrancy — nimmt den Schreibtisch dahinter auf */
+    .leiste {
+      flex: none; width: 224px; display: flex; flex-direction: column;
+      background: rgba(243, 244, 247, .74);
+      backdrop-filter: blur(48px) saturate(180%); -webkit-backdrop-filter: blur(48px) saturate(180%);
+      border-right: .5px solid rgba(0,0,0,.14);
+    }
+    .inhalt { flex: 1; min-width: 0; display: flex; flex-direction: column; background: #ffffff; }
+    /* Vereinheitlichte Werkzeugleiste */
+    .werkzeug {
+      flex: none; height: 52px; display: flex; align-items: center; gap: 10px;
+      padding: 0 14px; border-bottom: .5px solid rgba(0,0,0,.11);
+    }
+    .werkzeug-leiste { background: rgba(238, 240, 244, .72); backdrop-filter: blur(48px) saturate(180%); -webkit-backdrop-filter: blur(48px) saturate(180%); }
+    .werkzeug-inhalt { background: rgba(252, 252, 253, .92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+    /* Quellenliste */
+    .abschnitt { font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42); padding: 12px 10px 3px 12px; }
+    .zeile {
+      display: flex; align-items: center; gap: 8px; height: 26px;
+      margin: 0 8px; padding: 0 6px; border-radius: 6px; font-size: 13px; color: #1d1d1f;
+    }
+    .zeile.gewaehlt { background: #0a6ed1; color: #fff; }
+    .zeile .zahl { font-size: 11px; color: rgba(0,0,0,.38); font-variant-numeric: tabular-nums; }
+    .zeile.gewaehlt .zahl { color: rgba(255,255,255,.72); }
+    /* Steuerelemente */
+    .knopf {
+      display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px;
+      font-size: 12px; border-radius: 6px; background: #fff;
+      border: .5px solid rgba(0,0,0,.16); box-shadow: 0 1px 1.5px rgba(0,0,0,.06);
+    }
+    .knopf-akzent { background: #0a6ed1; color: #fff; border-color: transparent; }
+    .segment { display: inline-flex; height: 24px; border-radius: 6px; overflow: hidden; border: .5px solid rgba(0,0,0,.16); background: #fff; box-shadow: 0 1px 1.5px rgba(0,0,0,.06); }
+    .segment span { display: inline-flex; align-items: center; padding: 0 9px; border-right: .5px solid rgba(0,0,0,.12); }
+    .segment span:last-child { border-right: none; }
+    .suche {
+      display: inline-flex; align-items: center; gap: 6px; height: 24px; width: 190px; padding: 0 9px;
+      border-radius: 6px; background: rgba(0,0,0,.05); font-size: 12px; color: rgba(0,0,0,.42);
+    }
+    /* Inhaltszeilen */
+    .liste-kopf {
+      display: flex; align-items: center; gap: 12px; height: 26px; padding: 0 16px;
+      font-size: 11px; color: rgba(0,0,0,.45); border-bottom: .5px solid rgba(0,0,0,.09);
+    }
+    .doku { display: flex; align-items: center; gap: 11px; padding: 7px 16px; border-bottom: .5px solid rgba(0,0,0,.06); font-size: 13px; }
+    .doku.gewaehlt { background: rgba(10,110,209,.09); }
+    .status {
+      flex: none; height: 26px; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: rgba(0,0,0,.45); border-top: .5px solid rgba(0,0,0,.09);
+      background: rgba(248,248,250,.9);
+    }
+    .inspektor { flex: none; width: 264px; border-left: .5px solid rgba(0,0,0,.11); background: rgba(250,250,252,.95); display: flex; flex-direction: column; }
+    .insp-titel { font-size: 11px; font-weight: 600; color: rgba(0,0,0,.42); }
+    .zug { font-size: 11px; font-weight: 500; border-radius: 4px; padding: 1.5px 6px; display: inline-flex; align-items: center; gap: 4px; }
+    .av { border-radius: 50%; flex: none; color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+    .neu { position: absolute; top: 14px; right: 18px; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; background: rgba(20,40,70,.55); backdrop-filter: blur(10px); border-radius: 999px; padding: 4px 11px; z-index: 5; }
+  </style>

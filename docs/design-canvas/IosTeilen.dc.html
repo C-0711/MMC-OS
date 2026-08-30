@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* System: Schrift 28/17/15/13/11 · Radius 20/12/999 · Raster 8/12/16/24 */
+    body { margin: 0; }
+    a { color: #0060df; }
+    .tel {
+      width: 390px; height: 844px; overflow: hidden; position: relative;
+      display: flex; flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 17px; color: #1d1d1f; -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(120% 90% at 15% 12%, #f0e4cf 0%, rgba(240, 228, 207, 0) 45%),
+        linear-gradient(150deg, #b8d3ea 0%, #7fb0dd 38%, #2f6fbe 68%, #9db8d4 100%);
+    }
+    .tel::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,0.35) 46%, rgba(255,255,255,0.06) 52%, rgba(255,255,255,0) 60%);
+    }
+    .sicher { flex: none; height: 56px; }
+    .rumpf { flex: 1; min-height: 0; overflow: hidden; position: relative; z-index: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
+    .glas {
+      background: rgba(248, 250, 253, 0.82);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 20px 46px -18px rgba(20, 40, 70, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    .h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .t15 { font-size: 15px; }
+    .t13 { font-size: 13px; }
+    .sub { color: rgba(0, 0, 0, 0.45); }
+    .etikett { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(0,0,0,.42); }
+    .prim {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 52px; font-size: 17px; font-weight: 600; color: #fff; background: #0a84ff;
+      border-radius: 999px; padding: 0 24px; box-shadow: 0 10px 26px -8px rgba(10, 132, 255, 0.7);
+    }
+    .still {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 52px; font-size: 15px; font-weight: 500; color: #0060df;
+      background: rgba(255,255,255,.6); border-radius: 999px; padding: 0 20px;
+    }
+    .blatt {
+      width: 56px; height: 72px; flex: none; border-radius: 12px; background: #fff;
+      box-shadow: 0 2px 8px rgba(20,40,70,.18);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .zug { font-size: 13px; font-weight: 500; border-radius: 999px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px; }
+    .zug-ok { color: #1c7d3e; background: rgba(52,199,89,.16); }
+    .av { border-radius: 50%; flex: none; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .leiste {
+      flex: none; z-index: 1; padding: 8px 12px 28px; display: flex; gap: 4px;
+      background: rgba(255,255,255,.5); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,255,255,.6);
+    }
+    .reiter { flex: 1; height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border-radius: 12px; font-size: 11px; color: rgba(0,0,0,.5); }
+    .reiter.an { color: #0060df; background: rgba(255,255,255,.7); font-weight: 600; }
+    .rund { border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; }
+  </style>
+</helmet>
+
+<div class="tel" style="background: #2b3138">
+  <div style="position: absolute; inset: 0; z-index: 0; padding: 70px 18px 0; display: flex; flex-direction: column; gap: 12px; filter: blur(7px); opacity: .5">
+    <div style="align-self: flex-start; width: 66%; height: 44px; border-radius: 20px; background: rgba(255,255,255,.22)"></div>
+    <div style="align-self: flex-end; width: 54%; height: 34px; border-radius: 20px; background: rgba(90,190,120,.42)"></div>
+    <div style="align-self: flex-start; width: 74%; height: 58px; border-radius: 20px; background: rgba(255,255,255,.22)"></div>
+    <div style="align-self: flex-end; width: 62%; height: 90px; border-radius: 20px; background: rgba(90,190,120,.42)"></div>
+  </div>
+  <div style="position: absolute; inset: 0; z-index: 1; background: rgba(16,26,40,.5); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px)"></div>
+
+  <div style="flex: 1"></div>
+
+  <div style="position: relative; z-index: 2; background: rgba(248,250,253,.97); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 20px 20px 0 0; padding: 12px 20px 32px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 -14px 44px -10px rgba(10,20,40,.5)">
+    <div style="width: 38px; height: 5px; border-radius: 3px; background: rgba(0,0,0,.16); align-self: center"></div>
+
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="width: 36px; height: 36px; border-radius: 12px; background: #1d1d1f; color: #f2efe9; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; flex: none; font-family: Georgia, 'Times New Roman', serif">G</div>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-weight: 700; letter-spacing: -0.3px">In ein Git legen</div>
+        <div class="t13 sub">GitChain · auf diesem iPhone</div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 12px; align-items: center; background: rgba(0,0,0,.035); border-radius: 12px; padding: 12px">
+      <div class="blatt"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.32)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg></div>
+      <div style="flex: 1; min-width: 0">
+        <div class="t15" style="font-weight: 600">Versicherungsschein_2026.pdf</div>
+        <div class="t13 sub" style="margin-top: 2px">Hausrat, Beitragsjahr 2026 · 4 Seiten</div>
+        <div style="margin-top: 8px"><span class="zug zug-ok">hier gelesen · 0,6 s</span></div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div class="etikett">Gemma schlägt vor</div>
+      <div style="display: flex; align-items: center; gap: 12px; background: rgba(10,132,255,.10); border: 1.5px solid #0a84ff; border-radius: 12px; padding: 12px 16px; min-height: 52px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <div style="flex: 1; min-width: 0">
+          <div style="font-weight: 600">Versicherungen</div>
+          <div class="t13 sub">10 Unterlagen · dieselbe Gesellschaft</div>
+        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M20 6 9 17l-5-5"></path></svg>
+      </div>
+      <div class="still" style="background: rgba(0,0,0,.045); color: rgba(0,0,0,.6)">anderes Git wählen …</div>
+    </div>
+
+    <div class="t13" style="display: flex; align-items: flex-start; gap: 8px; background: rgba(255,244,222,.75); border-radius: 12px; padding: 12px 16px; line-height: 1.45; color: #6b4a08">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8a5a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      Gelesen wurde auf diesem iPhone. Die Datei wird in deinen Tresor kopiert — die Nachricht bleibt, wo sie ist.
+    </div>
+
+    <div style="display: flex; gap: 8px">
+      <div class="still" style="background: rgba(0,0,0,.05); color: rgba(0,0,0,.55)">Abbrechen</div>
+      <div class="prim" style="flex: 1">Ablegen</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

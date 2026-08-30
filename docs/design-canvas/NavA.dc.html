@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    a { color: #0060df; } a:hover { color: #0a2c55; }
+    .cs-root {
+      width: 1280px; height: 880px; overflow: hidden; position: relative;
+      display: flex; flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 16px; color: #1d1d1f; -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(120% 90% at 15% 12%, #f0e4cf 0%, rgba(240, 228, 207, 0) 45%),
+        linear-gradient(150deg, #b8d3ea 0%, #7fb0dd 38%, #2f6fbe 68%, #9db8d4 100%);
+    }
+    .cs-root::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,0.35) 46%, rgba(255,255,255,0.06) 52%, rgba(255,255,255,0) 60%);
+    }
+    .cs-drag { flex: none; height: 34px; position: relative; z-index: 1; }
+    .cs-glass {
+      background: rgba(248, 250, 253, 0.78);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 24px 60px -18px rgba(20, 40, 70, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    .cs-sub { font-size: 14px; color: rgba(0, 0, 0, 0.45); }
+    .cs-btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 16px; font-weight: 600; color: #ffffff; background: #0a84ff;
+      border: none; border-radius: 999px; padding: 12px 26px; cursor: pointer;
+      box-shadow: 0 10px 26px -8px rgba(10, 132, 255, 0.7);
+    }
+    .ampel { display: flex; gap: 8px; position: absolute; top: 13px; left: 14px; z-index: 3; }
+    .ampel span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+    .av { border-radius: 50%; flex: none; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .blase { padding: 11px 16px; font-size: 15px; line-height: 1.55; }
+    .beleg { font-size: 12.5px; font-weight: 500; color: #0060df; background: rgba(232,241,253,.95); border: none; border-radius: 999px; padding: 4px 11px; display: inline-flex; gap: 5px; align-items: center; }
+    .eckblock-titel { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: rgba(0,0,0,.4); text-transform: uppercase; }
+    .neu { position: absolute; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #fff; background: #ff375f; border-radius: 999px; padding: 3px 9px; box-shadow: 0 4px 12px -3px rgba(255,55,95,.6); z-index: 4; }
+    .zug { font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 2px 8px; display: inline-flex; align-items: center; gap: 4px; }
+  </style>
+</helmet>
+
+<div class="cs-root">
+  <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+  <div class="neu" style="top: 12px; right: 16px">Richtung A · Ansicht × Fall</div>
+  <div class="cs-drag"></div>
+
+  <div style="flex: 1 1 auto; display: flex; padding: 0 18px 18px; min-height: 0; position: relative; z-index: 1; gap: 14px">
+
+    <!-- Achse 1: die Ansichten. Dünn, austauschbar, ohne eigenen Verstand. -->
+    <div class="cs-glass" style="flex: none; width: 68px; padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 3px">
+      <div style="width: 48px; padding: 9px 0; border-radius: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px; background: rgba(255,255,255,.9); box-shadow: 0 2px 8px -4px rgba(20,40,70,.35)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+        <span style="font-size: 9.5px; font-weight: 600">Explorer</span>
+      </div>
+      <div style="width: 48px; padding: 9px 0; border-radius: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"></rect><path d="m2.5 6.5 9.5 6.5 9.5-6.5"></path></svg>
+        <span style="font-size: 9.5px; color: rgba(0,0,0,.5)">Post</span>
+        <span style="position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; border-radius: 50%; background: #ff375f"></span>
+      </div>
+      <div style="width: 48px; padding: 9px 0; border-radius: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"></rect><circle cx="8.5" cy="9.5" r="1.8"></circle><path d="m3.5 17 5-5 4.5 4.5L17 13l3.5 3.5"></path></svg>
+        <span style="font-size: 9.5px; color: rgba(0,0,0,.5)">Bilder</span>
+      </div>
+      <div style="width: 48px; padding: 9px 0; border-radius: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"></path></svg>
+        <span style="font-size: 9.5px; color: rgba(0,0,0,.5)">Anrufe</span>
+      </div>
+      <div style="width: 48px; padding: 9px 0; border-radius: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>
+        <span style="font-size: 9.5px; color: rgba(0,0,0,.5)">Termine</span>
+      </div>
+      <div style="width: 48px; padding: 9px 0; border-radius: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg>
+        <span style="font-size: 9.5px; color: rgba(0,0,0,.5)">Räume</span>
+      </div>
+    </div>
+
+    <!-- Achse 2: die Fälle. Gruppiert nach WER hineinsehen darf — das ist die Kapsel. -->
+    <div class="cs-glass" style="flex: none; width: 232px; padding: 13px 11px; display: flex; flex-direction: column; gap: 2px">
+      <div style="display: flex; align-items: center; gap: 9px; padding: 9px 10px; border-radius: 11px; background: rgba(10,132,255,.10)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+        <span style="flex: 1; font-size: 13.5px; font-weight: 600">Eingang</span>
+        <span style="min-width: 19px; height: 19px; padding: 0 6px; border-radius: 999px; background: #0a84ff; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">3</span>
+      </div>
+
+      <div class="eckblock-titel" style="padding: 14px 10px 5px">Nur du</div>
+      <div style="display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 11px; background: rgba(255,255,255,.88); box-shadow: 0 2px 8px -4px rgba(20,40,70,.3)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M5 17h14l-1.5-5.5a2 2 0 0 0-2-1.5h-7a2 2 0 0 0-2 1.5z"></path><circle cx="7.5" cy="17" r="1.6"></circle><circle cx="16.5" cy="17" r="1.6"></circle></svg>
+        <span style="flex: 1; font-size: 13.5px; font-weight: 600">Auto</span><span class="cs-sub" style="font-size: 11.5px">7</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 11px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ff375f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 1 1 7.5-6.6 5 5 0 1 1 7.5 6.6z"></path></svg>
+        <span style="flex: 1; font-size: 13.5px">Gesundheit</span><span class="cs-sub" style="font-size: 11.5px">9</span>
+      </div>
+
+      <div class="eckblock-titel" style="padding: 14px 10px 5px">Mit der Familie</div>
+      <div style="display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 11px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <span style="flex: 1; font-size: 13.5px">Versicherungen</span>
+        <span class="av" style="width:17px;height:17px;font-size:7.14px;background:#0a84ff;border:1.5px solid rgba(248,250,253,.95)">MB</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 11px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#30b0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9"></path></svg>
+        <span style="flex: 1; font-size: 13.5px">Haus &amp; Wohnen</span>
+        <span class="av" style="width:17px;height:17px;font-size:7.14px;background:#0a84ff;border:1.5px solid rgba(248,250,253,.95)">MB</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 11px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#5e5ce6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M9 16l2 2 4-5"></path></svg>
+        <span style="flex: 1; font-size: 13.5px">Steuer 2025</span>
+        <span class="av" style="width:17px;height:17px;font-size:7.14px;background:#0a84ff;border:1.5px solid rgba(248,250,253,.95)">MB</span>
+      </div>
+
+      <div class="eckblock-titel" style="padding: 14px 10px 5px">Mit Fremden</div>
+      <div style="display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 11px">
+        <span class="av" style="width:22px;height:22px;font-size:8px;background:#5e5ce6">UP</span>
+        <span style="flex: 1; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Unfall Passat</span>
+        <span style="display: flex">
+          <span class="av" style="width:17px;height:17px;font-size:7.14px;background:#34c759;margin-left:-4px;border:1.5px solid rgba(248,250,253,.95)">LW</span>
+          <span class="av" style="width:17px;height:17px;font-size:7.14px;background:#ff9f0a;margin-left:-4px;border:1.5px solid rgba(248,250,253,.95)">A</span>
+        </span>
+      </div>
+
+      <div style="margin-top: auto; display: flex; align-items: center; gap: 9px; padding: 9px 10px; border-radius: 11px; border: 1px dashed rgba(0,0,0,.14)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        <span style="font-size: 13px; font-weight: 600; color: #0060df">Neuer Fall</span>
+      </div>
+    </div>
+
+    <!-- Der Inhalt: immer „dieser Fall, durch diese Ansicht" -->
+    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 13px">
+      <div style="display: flex; align-items: baseline; gap: 10px; padding-top: 2px">
+        <div style="font-size: 22px; font-weight: 700; letter-spacing: -0.4px">Auto</div>
+        <span class="cs-sub" style="font-size: 15px">durch den Explorer</span>
+        <span style="flex: 1"></span>
+      </div>
+
+      <div class="cs-glass" style="flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 11px; min-height: 0">
+        <div class="eckblock-titel">Was in diesem Fall liegt</div>
+
+        <div style="display: flex; align-items: flex-start; gap: 11px; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.6)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex:none;margin-top:2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+          <div style="flex: 1; min-width: 0">
+            <div style="font-size: 14px; font-weight: 600">Kfz-Police.pdf</div>
+            <div style="display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap">
+              <span class="zug" style="color:#5e5ce6;background:rgba(94,92,230,.12)">auch in Unfall Passat</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 11px; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.6)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex:none;margin-top:2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+          <div style="flex: 1; min-width: 0">
+            <div style="font-size: 14px; font-weight: 600">Beitragsrechnung 2026.pdf</div>
+            <div style="display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap">
+              <span class="zug" style="color:#0060df;background:rgba(10,132,255,.10)">aus dem Eingang · 27.8.</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 11px; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.6)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex:none;margin-top:2px"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"></path></svg>
+          <div style="flex: 1; min-width: 0">
+            <div style="font-size: 14px; font-weight: 600">Anruf mit Lena Weber · 00:27</div>
+            <div style="display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap">
+              <span class="zug" style="color:#1c7d3e;background:rgba(52,199,89,.14)">Mitschrift · 4 Zeilen</span>
+              <span class="zug" style="color:#5e5ce6;background:rgba(94,92,230,.12)">aus Unfall Passat</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 11px; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.6)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex:none;margin-top:2px"><rect x="3" y="4.5" width="18" height="17" rx="2.5"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>
+          <div style="flex: 1; min-width: 0">
+            <div style="font-size: 14px; font-weight: 600">Werkstatttermin · 6.3.</div>
+            <div style="display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap">
+              <span class="zug" style="color:#0060df;background:rgba(10,132,255,.10)">Frist aus Kostenvoranschlag.pdf · S. 1</span>
+            </div>
+          </div>
+        </div>
+
+        <span class="cs-sub" style="font-size: 12.5px; padding-left: 10px">+ 4 weitere</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":880}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

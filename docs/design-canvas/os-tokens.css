@@ -1,0 +1,25 @@
+/* gitchain OS-Sprache — Design-Tokens
+   Quelle: Design-Brief (bbb) + Bausteine-Blatt des Canvas, Stand 30.08.2026.
+   Vier Farben, zwei Schriften, drei Formen. */
+:root {
+  --os-grund:    #FAF7F2;  /* Warmweiß — der Grund */
+  --os-salbei:   #8FA98F;  /* Handlung, Zustimmung, gelesen */
+  --os-rose:     #D9A6A0;  /* Markierung, Beenden — nie Alarm */
+  --os-olivgold: #B8A369;  /* Siegel, Hinweis, Referenz */
+  --os-tinte:    #2A2520;  /* Text */
+  --os-sub:      rgba(42,37,32,.55);
+
+  --os-serif: 'Playfair Display', Georgia, 'Times New Roman', serif; /* 400, nie fett; 34/30/28/22/21 */
+  --os-sans:  -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; /* 17/15/13/11 */
+  --os-mono:  'SF Mono', Menlo, Monaco, monospace; /* 11 — nur die Quellzeile */
+
+  --os-radius-karte: 16px;
+  --os-radius-innen: 12px;
+  --os-radius-blatt: 8px;
+  --os-radius-rund:  999px;
+
+  --os-motion-max: 300ms; /* eine Bedeutung je Animation */
+}
+/* Markierungen auf dem Blatt:
+   Beweis-Rechteck: 2px solid var(--os-rose) + rgba(217,166,160,.08)
+   Lese-Folie:      1.5px solid rgba(143,169,143,.5) + rgba(143,169,143,.13) */

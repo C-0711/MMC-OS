@@ -19,6 +19,12 @@ mit dem Prototyp `docs/spec-prototyp/gitchain-os-prototyp-v0.1.html` als visuell
 5. `docs/spec/ingress-flow-v0.1.md` + `docs/spec/interaction-voice-screen-v0.1.md` — Karten-Logik
 6. `docs/spec-prototyp/gitchain-os-prototyp-v0.1.html` — im Browser öffnen, durchklicken;
    `docs/spec-prototyp/test-prototyp.js` zeigt die erwarteten Zustandsübergänge
+7. **`docs/design-canvas/` — der Design-Canvas (Stand 30.08., ÜBERSCHREIBT den Brief, wo
+   sie sich widersprechen).** `LESEMICH.md` zuerst; Seite „OS-Sprache" (`Os*.dc.html`) ist
+   die VERBINDLICHE Fassung der Screens, `os-tokens.css` sind die verbindlichen Tokens
+   (u. a. Tinte `#2A2520`, Beweis-Rechteck = 2px Rosé + 8 % Fläche, Lese-Folie = Salbei,
+   Serife Playfair 400 nie fett, Mono 11px nur Quellzeile). `Bausteine.dc.html` ist das
+   Übergabe-Blatt mit Maßen.
 
 Die übrigen Specs (supercontainer, agent-containers, boot-and-desktop, communication,
 intelligent-ingester, os-manifest) sind Kontext — lesen, wo eine Entscheidung sie berührt.

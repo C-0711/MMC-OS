@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369
+       Schrift: Serife 34/22 (400, nie fett) · Sans 15/13/11 · Radius 16/8/999 */
+    body { margin: 0; }
+    a { color: #6e6550; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .karte {
+      background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+    }
+    .pill-salbei {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 44px; padding: 0 26px; border-radius: 999px;
+      background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+    }
+    .pill-still {
+      display: flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 22px; border-radius: 999px;
+      background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500;
+    }
+    .siegel {
+      width: 44px; height: 44px; border-radius: 999px; flex: none;
+      background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+      font-size: 14px;
+    }
+    .quellzeile {
+      font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .frag {
+      display: flex; align-items: center; gap: 10px; height: 44px;
+      background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px;
+      padding: 0 8px 0 18px; box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 12px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px">
+        <span style="width: 8px; height: 8px; border-radius: 999px; background: #D9A6A0"></span>
+        <span class="t13">Anruf · Unfall Passat</span>
+        <span class="t13 sub" style="font-family:'SF Mono',Menlo,monospace; font-size: 11px">04:26</span>
+      </div>
+      <span style="flex: 1"></span>
+      <div class="siegel serif">Du</div>
+    </div>
+
+    <div style="flex: 1; display: flex; min-height: 0; gap: 20px; padding: 8px 28px 0">
+
+      <!-- Die Menschen -->
+      <div style="flex: none; width: 200px; display: flex; flex-direction: column; gap: 14px; padding-top: 8px">
+        <div style="height: 130px; border-radius: 16px; background: linear-gradient(160deg, #a3bba3, #7d967d); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #fff">
+          <div class="siegel serif" style="width: 48px; height: 48px; font-size: 16px; background: rgba(255,255,255,.22); box-shadow: none">LW</div>
+          <span class="t13" style="font-weight: 600">Lena Weber</span>
+        </div>
+        <div style="height: 130px; border-radius: 16px; background: linear-gradient(160deg, #c9b88f, #a89463); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #fff">
+          <div class="siegel serif" style="width: 48px; height: 48px; font-size: 16px; background: rgba(255,255,255,.22); box-shadow: none">Du</div>
+          <span class="t13" style="font-weight: 600">Du</span>
+        </div>
+        <div style="margin-top: auto; padding-bottom: 20px; display: flex; justify-content: center">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 22px; border-radius: 999px; background: #D9A6A0; color: #fff; font-size: 15px; font-weight: 600; box-shadow: 0 8px 22px -10px rgba(190,130,120,.7)">Auflegen</div>
+        </div>
+      </div>
+
+      <!-- Die Mitschrift, live -->
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding-top: 8px">
+        <div class="t11" style="font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(42,37,32,.42); display: flex; align-items: center; gap: 8px">
+          <span style="width: 7px; height: 7px; border-radius: 999px; background: #8FA98F"></span>
+          Mitschrift läuft mit — jede Äußerung: Sprecher, Minute, Text
+        </div>
+
+        <div style="flex: 1; background: #fff; border-radius: 16px; border: 1px solid rgba(184,163,105,.22); padding: 22px 26px; display: flex; flex-direction: column; gap: 12px; overflow: hidden">
+          <div class="t13" style="display: flex; gap: 14px; color: rgba(42,37,32,.45)">
+            <span style="font-family:'SF Mono',Menlo,monospace; font-size: 11px; flex: none; width: 42px; padding-top: 1px">02:41</span>
+            <span>Lena: Termin hätte ich Freitag, den 6.3. — Auto ist abends fertig.</span>
+          </div>
+          <div class="t13" style="display: flex; gap: 14px; color: rgba(42,37,32,.45)">
+            <span style="font-family:'SF Mono',Menlo,monospace; font-size: 11px; flex: none; width: 42px; padding-top: 1px">03:12</span>
+            <span>Du: Und die Freigabe der Versicherung reicht euch so?</span>
+          </div>
+          <div class="t13" style="display: flex; gap: 14px">
+            <span style="font-family:'SF Mono',Menlo,monospace; font-size: 11px; flex: none; width: 42px; padding-top: 1px; font-weight: 600">04:12</span>
+            <span style="font-weight: 500">Lena: Ja — 2.480,00 € sind freigegeben, mehr brauchen wir nicht. Dann machen wir den 6.3. fest.</span>
+          </div>
+          <span style="width: 2px; height: 15px; background: #B8A369; margin-left: 56px"></span>
+        </div>
+
+        <!-- Die Karte im Anruf: der Beschluss-Kandidat -->
+        <div class="karte" style="padding: 18px 22px; display: flex; align-items: center; gap: 18px">
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+            <div class="serif" style="font-size: 21px">Festhalten: Werkstatttermin Freitag, 6.3.?</div>
+            <div class="t11 sub">wortgleich aus Minute 04:12 — wird ein Beschluss im Fall, für beide</div>
+          </div>
+          <div class="pill-salbei" style="height: 44px">Ja, festhalten</div>
+          <div class="pill-still" style="height: 44px">Verwerfen</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: none; height: 24px"></div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

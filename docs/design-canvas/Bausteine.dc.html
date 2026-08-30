@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369
+       Schrift: Serife 34/22 (400, nie fett) · Sans 15/13/11 · Radius 16/8/999 */
+    body { margin: 0; }
+    a { color: #6e6550; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .karte {
+      background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+    }
+    .pill-salbei {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 44px; padding: 0 26px; border-radius: 999px;
+      background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+    }
+    .pill-still {
+      display: flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 22px; border-radius: 999px;
+      background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500;
+    }
+    .siegel {
+      width: 44px; height: 44px; border-radius: 999px; flex: none;
+      background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+      font-size: 14px;
+    }
+    .quellzeile {
+      font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .frag {
+      display: flex; align-items: center; gap: 10px; height: 44px;
+      background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px;
+      padding: 0 8px 0 18px; box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+  <style>
+    .bez { font-family: 'SF Mono', Menlo, monospace; font-size: 10px; color: #96824c; letter-spacing: .02em; }
+    .sektion { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(42,37,32,.42); }
+    .zelle { display: flex; flex-direction: column; gap: 10px; }
+  </style>
+</helmet>
+
+<div class="os-grund" style="width: 1560px; height: 1220px; padding: 44px 52px; box-sizing: border-box; gap: 30px">
+
+  <div style="display: flex; align-items: baseline; gap: 16px">
+    <div class="serif" style="font-size: 34px">Die Bausteine.</div>
+    <div class="t13 sub">gitchain OS-Sprache · Stand dieser Fassung · alles unten ist mit genau diesen Werten gebaut</div>
+  </div>
+
+  <div style="flex: 1; display: flex; gap: 36px; min-height: 0">
+
+    <!-- Spalte 1: Grundstoffe -->
+    <div style="flex: none; width: 330px; display: flex; flex-direction: column; gap: 22px">
+
+      <div class="zelle">
+        <div class="sektion">Farben — vier, nicht mehr</div>
+        <div style="display: flex; flex-direction: column; gap: 7px">
+          <div style="display: flex; align-items: center; gap: 10px"><span style="width: 40px; height: 28px; border-radius: 6px; background: #FAF7F2; border: 1px solid rgba(42,37,32,.12); flex: none"></span><div><div class="t13">Warmweiß — der Grund</div><div class="bez">#FAF7F2</div></div></div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="width: 40px; height: 28px; border-radius: 6px; background: #8FA98F; flex: none"></span><div><div class="t13">Salbei — Handlung, Zustimmung, gelesen</div><div class="bez">#8FA98F</div></div></div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="width: 40px; height: 28px; border-radius: 6px; background: #D9A6A0; flex: none"></span><div><div class="t13">Rosé — Markierung, Beenden. Nie Alarm.</div><div class="bez">#D9A6A0</div></div></div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="width: 40px; height: 28px; border-radius: 6px; background: #B8A369; flex: none"></span><div><div class="t13">Olivgold — Siegel, Hinweis, Referenz</div><div class="bez">#B8A369</div></div></div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="width: 40px; height: 28px; border-radius: 6px; background: #2a2520; flex: none"></span><div><div class="t13">Tinte — Text</div><div class="bez">#2A2520 · sub: rgba(42,37,32,.55)</div></div></div>
+        </div>
+      </div>
+
+      <div class="zelle">
+        <div class="sektion">Schrift</div>
+        <div class="serif" style="font-size: 22px">Playfair Display 400 — nie fett.</div>
+        <div class="bez">Serife: 34 / 30 / 28 / 22 / 21 — Überschriften und Antworten</div>
+        <div style="font-size: 15px">System-Sans für alles Übrige.</div>
+        <div class="bez">Sans: 17 / 15 / 13 / 11 — mehr Größen gibt es nicht</div>
+        <div class="quellzeile"><span>SF Mono 11 — nur die Quellzeile</span></div>
+      </div>
+
+      <div class="zelle">
+        <div class="sektion">Form &amp; Bewegung</div>
+        <div class="t13" style="line-height: 1.6">Radius <b>16</b> Karte · <b>12</b> Innenfläche · <b>8</b> Dokumentblatt · <b>rund</b> Pille und Siegel. Bewegung höchstens 300 ms, eine Bedeutung je Animation.</div>
+      </div>
+
+      <div class="zelle">
+        <div class="sektion">Die Regeln</div>
+        <div class="t13" style="line-height: 1.75">Drei Screen-Formen: Karte · Liste (max. 3) · Beweis — was keine ist, ist falsch entworfen. Wortgleichheit: die Stimme sagt, was auf dem Screen steht. Ein Tap oder ein Wort = ein Commit. „Ja" ohne Screen zählt nicht. Geld, Abgaben, Verträge: immer Face ID. Icons 1,5–2,5 Strichstärke, nie gefüllt, nie Emoji.</div>
+      </div>
+
+      <div class="zelle">
+        <div class="sektion">Verboten</div>
+        <div class="t13" style="line-height: 1.6; color: rgba(42,37,32,.6)">Terminal-Look · Blau-Lila-SaaS · Cyberpunk · nachgemalte System-UI (Statusbalken, Tastatur) · Fettdruck in der Serife · vierte Akzentfarbe.</div>
+      </div>
+    </div>
+
+    <!-- Spalte 2: Bausteine, lebendig gebaut -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 0">
+      <div style="display: flex; gap: 28px">
+        <div class="zelle" style="flex: 1">
+          <div class="sektion">Die Karte — ein Vorschlag, zwei Antworten</div>
+          <div class="karte" style="padding: 24px 28px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <div class="serif" style="font-size: 22px">Umsatzsteuer fällig in 2 Tagen</div>
+              <div class="t13 sub">Voranmeldung August · 1.190,00 €</div>
+            </div>
+            <div style="display: flex; gap: 10px">
+              <div class="pill-salbei">Ja, machen</div>
+              <div class="pill-still">Später</div>
+            </div>
+            <div class="t11 sub" style="display: flex; align-items: center; gap: 7px">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B8A369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Sag „ja" — oder tipp. Beides gilt gleich.
+            </div>
+          </div>
+          <div class="bez">Titel Serife 21–22 · Sub 13 · Pillen 44–52 h · Hinweis 11 mit Schild</div>
+        </div>
+
+        <div class="zelle" style="flex: 1">
+          <div class="sektion">Die Listenzeile — still = erledigt</div>
+          <div class="karte" style="padding: 14px 16px; display: flex; align-items: center; gap: 12px; box-shadow: none; background: rgba(255,255,255,.65)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M20 6 9 17l-5-5"></path></svg>
+            <div style="flex: 1; min-width: 0">
+              <div class="t13">Stromrechnung → Haus &amp; Wohnen</div>
+              <div class="t11 sub" style="margin-top: 1px">gelesen auf diesem Gerät · bezeugt</div>
+            </div>
+            <span class="t11 sub">09:12</span>
+          </div>
+          <div class="bez">Grund weiß 65 % · Haken Salbei 2.4 · max. 3 je Screen</div>
+
+          <div class="sektion" style="margin-top: 8px">Plaketten &amp; Anwesenheit</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+            <span class="zug zug-ok">gelesen · 0,5 s</span>
+            <span class="zug" style="color:#96824c;background:rgba(184,163,105,.14)">Versicherungen</span>
+            <span class="zug" style="color:#9c6a63;background:rgba(217,166,160,.16)">geschwärzt</span>
+            <span style="position: relative; flex: none"><span class="av serif" style="width:28px;height:28px;font-size:10px;background:#D9A6A0">An</span><span style="position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;border-radius:999px;background:#8FA98F;border:1.5px solid #FAF7F2"></span></span>
+            <span style="position: relative; flex: none; opacity:.55"><span class="av serif" style="width:28px;height:28px;font-size:10px;background:#d8d8dc;color:rgba(0,0,0,.5)">A</span><span style="position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;border-radius:999px;background:#B8A369;border:1.5px solid #FAF7F2"></span></span>
+          </div>
+          <div class="bez">Zug 11/500 · rund · 4×10 px — online Salbei · wartet Olivgold, gedimmt 55 %</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 28px">
+        <div class="zelle" style="flex: 1.25">
+          <div class="sektion">Das Blatt — Original, Markierung, Folie</div>
+          <div style="background: #fff; border-radius: 8px; box-shadow: 0 14px 40px -16px rgba(70,58,38,.4); padding: 22px 26px; display: flex; flex-direction: column; gap: 9px">
+            <div style="font-size: 11px; font-weight: 600; color: rgba(42,37,32,.65); letter-spacing: .02em">RECHNUNG 2026-118</div>
+            <div class="t13" style="display: flex; justify-content: space-between"><span class="sub">Nettobetrag</span><span>6.263,16 €</span></div>
+            <div style="position: relative; display: flex; justify-content: space-between; font-size: 13px; padding: 4px 8px; margin: 0 -8px">
+              <span style="position: absolute; inset: 0; border: 2px solid #D9A6A0; border-radius: 6px; background: rgba(217,166,160,.08)"></span>
+              <span class="sub">Umsatzsteuer 19 %</span><span style="font-weight: 600">1.190,00 €</span>
+            </div>
+            <div style="position: relative; padding: 4px 8px; margin: 0 -8px">
+              <span style="position: absolute; inset: 0; border-radius: 5px; background: rgba(143,169,143,.13); border: 1.5px solid rgba(143,169,143,.5)"></span>
+              <div class="t11" style="position: relative; line-height: 1.6">gelesene Stelle — die Folie, abschaltbar</div>
+            </div>
+          </div>
+          <div class="bez">Beweis-Rechteck: Rosé 2 px + 8 % Füllung · Lese-Folie: Salbei 1.5 px + 13 %</div>
+          <div class="quellzeile" style="margin-top: 2px">
+            <span>Fall <b style="color:#2a2520">steuern-2026</b></span><span>·</span><span>rechnung-2026-118.pdf</span><span>·</span><span>Seite 1</span><span>·</span><span>Commit 8f0f849</span><span>·</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px; color: #5c705c">Signatur <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+          </div>
+          <div class="bez">Quellzeile: Mono 11 · Fall fett in Tinte · Trenner „·" · Haken Salbei</div>
+        </div>
+
+        <div class="zelle" style="flex: 1">
+          <div class="sektion">Siegel, Pillen, Fragefeld</div>
+          <div style="display: flex; align-items: center; gap: 14px">
+            <div class="siegel serif" style="width: 56px; height: 56px; font-size: 18px">Du</div>
+            <div class="siegel serif" style="width: 40px; height: 40px; font-size: 13px; background: radial-gradient(circle at 34% 30%, #a3bba3, #8FA98F 58%, #6f8a6f)">LW</div>
+            <div class="bez">Siegel: Radialverlauf zur Person · Serife · 34–96 px</div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <div class="pill-salbei" style="height: 44px">Zustimmen</div>
+            <div class="pill-still" style="height: 44px">Später</div>
+            <div style="display: flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border-radius: 999px; background: #D9A6A0; color: #fff; font-size: 15px; font-weight: 600">Beenden</div>
+          </div>
+          <div class="bez">Pille: 15/600 · h 44–52 · Schatten nur auf Farbpille · Rosé = beenden</div>
+          <div class="frag" style="height: 48px">
+            <span style="flex: 1; color: rgba(42,37,32,.4)">Frag mich — oder sag es einfach …</span>
+            <span style="width: 34px; height: 34px; border-radius: 999px; background: #8FA98F; display: flex; align-items: center; justify-content: center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>
+            </span>
+          </div>
+          <div class="bez">Fragefeld: rund · h 44–52 · Rand Olivgold 30 % · Knopf Salbei 32–40</div>
+
+          <div class="sektion" style="margin-top: 6px">Trenner &amp; Etikett</div>
+          <div class="etikett" style="display: flex; align-items: center; gap: 8px; color: #5c705c; letter-spacing: .06em; text-transform: uppercase; font-size: 11px; font-weight: 600">
+            <span style="height: 1px; flex: 1; background: rgba(143,169,143,.4)"></span>als Beschluss festgehalten<span style="height: 1px; flex: 1; background: rgba(143,169,143,.4)"></span>
+          </div>
+          <div class="bez">Etikett: 11 · 600 · Versalien · .06em — auch für „Still passiert" u. ä.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1560,"height":1220}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

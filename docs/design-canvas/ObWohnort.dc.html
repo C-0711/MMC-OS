@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369
+       Schrift: Serife 34/22 (400, nie fett) · Sans 15/13/11 · Radius 16/8/999 */
+    body { margin: 0; }
+    a { color: #6e6550; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .karte {
+      background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+    }
+    .pill-salbei {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 44px; padding: 0 26px; border-radius: 999px;
+      background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+    }
+    .pill-still {
+      display: flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 22px; border-radius: 999px;
+      background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500;
+    }
+    .siegel {
+      width: 44px; height: 44px; border-radius: 999px; flex: none;
+      background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+      font-size: 14px;
+    }
+    .quellzeile {
+      font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .frag {
+      display: flex; align-items: center; gap: 10px; height: 44px;
+      background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px;
+      padding: 0 8px 0 18px; box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; padding: 0 80px">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+        <div class="serif" style="font-size: 34px">Wo sollen deine Daten wohnen?</div>
+        <div class="t13 sub">Du kannst es später ändern — nichts geht dabei verloren.</div>
+      </div>
+
+      <div style="display: flex; gap: 18px">
+        <div class="karte" style="width: 240px; padding: 26px 24px; display: flex; flex-direction: column; gap: 12px">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B8A369" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"></rect><path d="M11 18h2"></path></svg>
+          <div class="serif" style="font-size: 21px">Hier, auf diesem Gerät</div>
+          <div class="t13 sub" style="line-height: 1.5">Dein Tresor. Niemand sonst.</div>
+        </div>
+        <div class="karte" style="width: 240px; padding: 26px 24px; display: flex; flex-direction: column; gap: 12px; outline: 2px solid #8FA98F; outline-offset: -2px">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>
+          <div class="serif" style="font-size: 21px">Auf deinem Mac zu Hause</div>
+          <div class="t13 sub" style="line-height: 1.5">Das Gerät wird zum Zeugen, dein Mac zum Denker.</div>
+        </div>
+        <div class="karte" style="width: 240px; padding: 26px 24px; display: flex; flex-direction: column; gap: 12px">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B8A369" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0-.4-9A6.5 6.5 0 0 0 4.4 12 4 4 0 0 0 6 19.5z"></path></svg>
+          <div class="serif" style="font-size: 21px">In deiner souveränen Cloud</div>
+          <div class="t13 sub" style="line-height: 1.5">Verschlüsselt. Der Betreiber sieht nur Chiffre.</div>
+        </div>
+      </div>
+
+      <div class="t11 sub" style="display: flex; align-items: center; gap: 7px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B8A369" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"></path></svg>
+        Tipp eine Karte an — oder sag einfach „auf dem Mac". Sprechen geht ab der ersten Minute, Pflicht ist es nie.
+      </div>
+    </div>
+    <div style="flex: none; display: flex; justify-content: center; gap: 8px; padding-bottom: 30px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #B8A369"></span><span style="width: 8px; height: 8px; border-radius: 999px; background: rgba(184,163,105,.25)"></span><span style="width: 8px; height: 8px; border-radius: 999px; background: rgba(184,163,105,.25)"></span></div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

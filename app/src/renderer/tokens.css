@@ -1,0 +1,140 @@
+/**
+ * Design-Tokens — VERBINDLICH nach docs/design-canvas/os-tokens.css
+ * Stand: 30.08.2026, Bausteine-Blatt
+ */
+
+:root {
+  /* Farben — vier, nicht mehr */
+  --os-grund:    #FAF7F2;  /* Warmweiß — der Grund */
+  --os-salbei:   #8FA98F;  /* Handlung, Zustimmung, gelesen */
+  --os-rose:     #D9A6A0;  /* Markierung, Beenden — nie Alarm */
+  --os-olivgold: #B8A369;  /* Siegel, Hinweis, Referenz */
+  --os-tinte:    #2A2520;  /* Text */
+  --os-sub:      rgba(42,37,32,.55);
+
+  /* Alias für Etappe-1-Kompatibilität */
+  --canvas: var(--os-grund);
+  --tinte: var(--os-tinte);
+  --salbei: var(--os-salbei);
+  --rose: var(--os-rose);
+  --olivgold: var(--os-olivgold);
+  --beige: #E8DFD3; /* bleibt für Hairline */
+  --hairline: #E8DFD3;
+
+  /* Schrift: Playfair Display 400, nie fett */
+  --os-serif: 'Playfair Display', Georgia, 'Times New Roman', serif; /* 34/30/28/22/21 */
+  --os-sans:  -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; /* 17/15/13/11 */
+  --os-mono:  'SF Mono', Menlo, Monaco, monospace; /* 11 — nur die Quellzeile */
+
+  /* Alias für Etappe-1-Kompatibilität */
+  --font-serif: var(--os-serif);
+  --font-sans: var(--os-sans);
+  --font-mono: var(--os-mono);
+  --text-basis: 15px;
+  --text-headline: 34px;
+  --text-karte: 13px;
+  --text-quelle: 11px;
+
+  /* Radien */
+  --os-radius-karte: 16px;
+  --os-radius-innen: 12px;
+  --os-radius-blatt: 8px;
+  --os-radius-rund:  999px;
+
+  /* Alias für Etappe-1-Kompatibilität */
+  --radius-karte: var(--os-radius-karte);
+  --radius-klein: var(--os-radius-innen);
+  --radius-pille: var(--os-radius-rund);
+  --border-hairline: 1px solid var(--hairline);
+
+  /* Bewegung: max 300ms, eine Bedeutung je Animation */
+  --os-motion-max: 300ms;
+  --transition-schnell: 150ms ease-out;
+  --transition-mittel: 250ms ease-out;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--os-sans);
+  font-size: 15px;
+  background: var(--os-grund);
+  color: var(--os-tinte);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typo-Klassen */
+.serif {
+  font-family: var(--os-serif);
+  font-weight: 400; /* nie fett */
+}
+
+.quelle {
+  font-family: var(--os-mono);
+  font-size: 11px;
+  color: rgba(42,37,32,.6);
+}
+
+/* Karten-Komponente */
+.karte {
+  background: #fff;
+  border: var(--border-hairline);
+  border-radius: var(--radius-karte);
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  transition: box-shadow var(--transition-mittel);
+  cursor: pointer;
+}
+
+.karte:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.karte.warn {
+  border-left: 4px solid var(--rose);
+}
+
+.karte.info {
+  border-left: 4px solid var(--olivgold);
+}
+
+/* Buttons */
+button {
+  font-family: var(--font-sans);
+  font-size: var(--text-karte);
+  font-weight: 500;
+  padding: 9px 20px;
+  border-radius: var(--radius-pille);
+  border: none;
+  cursor: pointer;
+  transition: transform var(--transition-schnell), opacity var(--transition-mittel);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--salbei);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: var(--beige-soft);
+  color: var(--tinte);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #8A817A;
+}

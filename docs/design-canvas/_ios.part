@@ -1,0 +1,57 @@
+  <style>
+    /* System: Schrift 28/17/15/13/11 · Radius 20/12/999 · Raster 8/12/16/24 */
+    body { margin: 0; }
+    a { color: #0060df; }
+    .tel {
+      width: 390px; height: 844px; overflow: hidden; position: relative;
+      display: flex; flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 17px; color: #1d1d1f; -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(120% 90% at 15% 12%, #f0e4cf 0%, rgba(240, 228, 207, 0) 45%),
+        linear-gradient(150deg, #b8d3ea 0%, #7fb0dd 38%, #2f6fbe 68%, #9db8d4 100%);
+    }
+    .tel::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,0.35) 46%, rgba(255,255,255,0.06) 52%, rgba(255,255,255,0) 60%);
+    }
+    .sicher { flex: none; height: 56px; }
+    .rumpf { flex: 1; min-height: 0; overflow: hidden; position: relative; z-index: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
+    .glas {
+      background: rgba(248, 250, 253, 0.82);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 20px 46px -18px rgba(20, 40, 70, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    .h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .t15 { font-size: 15px; }
+    .t13 { font-size: 13px; }
+    .sub { color: rgba(0, 0, 0, 0.45); }
+    .etikett { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(0,0,0,.42); }
+    .prim {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 52px; font-size: 17px; font-weight: 600; color: #fff; background: #0a84ff;
+      border-radius: 999px; padding: 0 24px; box-shadow: 0 10px 26px -8px rgba(10, 132, 255, 0.7);
+    }
+    .still {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 52px; font-size: 15px; font-weight: 500; color: #0060df;
+      background: rgba(255,255,255,.6); border-radius: 999px; padding: 0 20px;
+    }
+    .blatt {
+      width: 56px; height: 72px; flex: none; border-radius: 12px; background: #fff;
+      box-shadow: 0 2px 8px rgba(20,40,70,.18);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .zug { font-size: 13px; font-weight: 500; border-radius: 999px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px; }
+    .zug-ok { color: #1c7d3e; background: rgba(52,199,89,.16); }
+    .av { border-radius: 50%; flex: none; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .leiste {
+      flex: none; z-index: 1; padding: 8px 12px 28px; display: flex; gap: 4px;
+      background: rgba(255,255,255,.5); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,255,255,.6);
+    }
+    .reiter { flex: 1; height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border-radius: 12px; font-size: 11px; color: rgba(0,0,0,.5); }
+    .reiter.an { color: #0060df; background: rgba(255,255,255,.7); font-weight: 600; }
+    .rund { border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; }
+  </style>

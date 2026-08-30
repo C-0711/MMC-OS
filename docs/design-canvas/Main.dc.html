@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    a { color: #0060df; } a:hover { color: #0a2c55; }
+    .cs-root {
+      width: 1280px; height: 960px; overflow: hidden; position: relative;
+      display: flex; flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 16px; color: #1d1d1f; -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(120% 90% at 15% 12%, #f0e4cf 0%, rgba(240, 228, 207, 0) 45%),
+        linear-gradient(150deg, #b8d3ea 0%, #7fb0dd 38%, #2f6fbe 68%, #9db8d4 100%);
+    }
+    .cs-root::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,0.35) 46%, rgba(255,255,255,0.06) 52%, rgba(255,255,255,0) 60%);
+    }
+    .cs-drag { flex: none; height: 34px; position: relative; z-index: 1; }
+    .cs-scroll { flex: 1 1 auto; overflow: hidden; position: relative; z-index: 1; }
+    .cs-glass {
+      background: rgba(248, 250, 253, 0.78);
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 24px 60px -18px rgba(20, 40, 70, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    .cs-sub { font-size: 14px; color: rgba(0, 0, 0, 0.45); }
+    .cs-btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 16px; font-weight: 600; color: #ffffff; background: #0a84ff;
+      border: none; border-radius: 999px; padding: 12px 26px; cursor: pointer;
+      box-shadow: 0 10px 26px -8px rgba(10, 132, 255, 0.7);
+    }
+    .ampel { display: flex; gap: 8px; position: absolute; top: 13px; left: 14px; z-index: 3; }
+    .ampel span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+    .av { border-radius: 50%; flex: none; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .kartentitel { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: rgba(0,0,0,.46); }
+    .blase { padding: 11px 16px; font-size: 15px; line-height: 1.55; }
+    .beleg {
+      font-size: 12.5px; font-weight: 500; color: #0060df; background: rgba(232,241,253,.95);
+      border: none; border-radius: 999px; padding: 4px 11px; display: inline-flex; gap: 5px; align-items: center;
+    }
+    .zeit { font-size: 11px; color: rgba(0,0,0,.32); }
+    .tag { font-size: 10.5px; font-weight: 700; border-radius: 6px; padding: 2px 6px; letter-spacing: .02em; flex: none; }
+    .navpille {
+      display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,.45);
+      backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,.6); border-radius: 999px; padding: 6px 10px;
+    }
+    .navpille button { font: inherit; font-size: 13.5px; color: rgba(0,0,0,.55); background: transparent; border: none; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+    .navpille button.aktiv { font-weight: 600; color: #1d1d1f; background: rgba(255,255,255,.85); }
+  </style>
+</helmet>
+
+<div class="cs-root">
+  <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+  <div class="cs-drag"></div>
+
+  <div class="cs-scroll">
+    <div style="max-width: 1160px; width: 100%; margin: 0 auto; padding: 18px 24px 0; display: flex; flex-direction: column; gap: 16px">
+
+      <div style="display: flex; align-items: center; gap: 12px">
+        <div style="background: rgba(255,255,255,.5); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.6)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        </div>
+        <div style="flex: 1">
+          <div style="font-size: 22px; font-weight: 700; letter-spacing: -0.4px">Unfall Passat</div>
+          <div class="cs-sub">geteilt · ihr seht denselben Stand</div>
+        </div>
+        <div style="display: flex; padding-right: 6px">
+          <div style="margin-left: -9px; border: 2.5px solid #dbe8f4; border-radius: 50%"><div class="av" style="width:32px;height:32px;font-size:13.44px;background:#30b0a0">D</div></div>
+          <div style="margin-left: -9px; border: 2.5px solid #dbe8f4; border-radius: 50%"><div class="av" style="width:32px;height:32px;font-size:13.44px;background:#34c759">LW</div></div>
+          <div style="margin-left: -9px; border: 2.5px solid #dbe8f4; border-radius: 50%"><div class="av" style="width:32px;height:32px;font-size:13.44px;background:#30b0a0">G</div></div>
+          <div style="margin-left: -9px; border: 2.5px solid #dbe8f4; border-radius: 50%"><div class="av" style="width:32px;height:32px;font-size:13.44px;background:#ff9f0a">A</div></div>
+        </div>
+        <div class="cs-btn-primary" style="padding: 9px 16px; font-size: 14px; gap: 7px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"></path></svg>
+          Anrufen
+        </div>
+        <span style="flex: none; font-size: 12px; font-weight: 600; color: #7a5b00; background: rgba(255,244,222,.92); border: 1px solid rgba(184,134,11,.35); border-radius: 999px; padding: 5px 11px; white-space: nowrap">Vorschau · noch nicht verbunden</span>
+      </div>
+
+      <div class="cs-glass" style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; background: rgba(232,241,253,.85)">
+        <span style="font-size: 14.5px">Du bist eingeladen, diesen Fall mitzusehen.</span>
+        <div class="cs-btn-primary" style="padding: 7px 14px; font-size: 13.5px; margin-left: auto">Beitreten</div>
+      </div>
+
+      <div style="display: flex; gap: 20px; align-items: flex-start">
+
+        <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+          <div class="cs-glass" style="padding: 20px 20px 10px; display: flex; flex-direction: column; gap: 16px; height: 600px; overflow: hidden">
+
+            <div style="display: flex; flex-direction: column; gap: 5px; max-width: 80%; align-items: flex-start">
+              <div style="font-size: 12.5px; font-weight: 600; color: rgba(0,0,0,.46); display: flex; align-items: center; gap: 7px">
+                <div class="av" style="width:18px;height:18px;font-size:7.56px;background:#34c759">LW</div><span>Lena Weber</span>
+              </div>
+              <div class="blase" style="border-radius: 16px 16px 16px 5px; background: #fff; color: #1d1d1f; border: 1px solid rgba(0,0,0,.05); box-shadow: 0 2px 10px -6px rgba(20,40,70,.25)">Kostenvoranschlag liegt drin: 2.480,00 € inkl. Lackierung. Termin hätte ich Do. 6.3.</div>
+              <div class="beleg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Kostenvoranschlag.pdf</div>
+              <div class="zeit">11:20</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px; max-width: 80%; align-items: flex-start">
+              <div style="font-size: 12.5px; font-weight: 600; color: rgba(0,0,0,.46); display: flex; align-items: center; gap: 7px">
+                <div class="av" style="width:18px;height:18px;font-size:7.56px;background:#30b0a0">G</div><span>@Gemma</span>
+              </div>
+              <div class="blase" style="border-radius: 16px 16px 16px 5px; background: rgba(232,241,253,.9); color: #1d1d1f; border: 1px solid rgba(0,0,0,.05); box-shadow: 0 2px 10px -6px rgba(20,40,70,.25)">Zusammengefasst: Schaden 2.480,00 €, Selbstbeteiligung laut Police 150,00 €. AllianzHilfe, gebt ihr den Betrag frei?</div>
+              <div class="beleg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Kfz-Police.pdf</div>
+              <div class="zeit">11:21</div>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; color: #0060df; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin: 2px 0 12px">
+                <span style="height: 1px; flex: 1; background: rgba(10,132,255,.3)"></span>freigegeben<span style="height: 1px; flex: 1; background: rgba(10,132,255,.3)"></span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px; max-width: 80%; align-items: flex-start">
+                <div style="font-size: 12.5px; font-weight: 600; color: rgba(0,0,0,.46); display: flex; align-items: center; gap: 7px">
+                  <div class="av" style="width:18px;height:18px;font-size:7.56px;background:#ff9f0a">A</div><span>AllianzHilfe</span>
+                </div>
+                <div class="blase" style="border-radius: 16px 16px 16px 5px; background: #fff; color: #1d1d1f; border: 1px solid rgba(0,0,0,.05); box-shadow: 0 2px 10px -6px rgba(20,40,70,.25)">Freigegeben bis 2.480,00 €. Werkstatt kann reparieren.</div>
+                <div class="zeit">13:47</div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px; max-width: 80%; align-items: flex-end; margin-left: auto">
+              <div style="font-size: 12.5px; font-weight: 600; color: rgba(0,0,0,.46)">Du</div>
+              <div class="blase" style="border-radius: 16px 16px 5px 16px; background: #0a84ff; color: #fff">📞 Anruf (00:27) — Mitschrift im Git: 4 Zeilen. Kernpunkt: Reparatur Do. 6.3., Freigabe 2.480 €.</div>
+              <div class="zeit">jetzt</div>
+            </div>
+
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 7px">
+            <div class="cs-glass" style="display: flex; align-items: center; gap: 10px; border-radius: 999px; padding: 9px 10px 9px 18px">
+              <span style="flex: 1; font-size: 15px; color: rgba(0,0,0,.45)">Schreib etwas — alle Beteiligten sehen es …</span>
+              <div style="width: 34px; height: 34px; border-radius: 50%; background: #0a84ff; display: flex; align-items: center; justify-content: center; flex: none">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-4 7 4 7z"></path></svg>
+              </div>
+            </div>
+            <div style="font-size: 12.5px; color: rgba(0,0,0,.46); padding: 0 8px; display: flex; align-items: center; gap: 7px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>
+              <span>Sehen das: <b style="color: rgba(0,0,0,.62)">Lena Weber</b> · <b style="color: rgba(0,0,0,.62)">AllianzHilfe</b></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex: 0 1 320px; min-width: 262px; display: flex; flex-direction: column; gap: 14px">
+          <div class="cs-glass" style="padding: 15px 17px; display: flex; flex-direction: column; gap: 12px">
+            <div class="kartentitel">Wer ist drin</div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <div class="av" style="width:30px;height:30px;font-size:12.6px;background:#30b0a0">D</div>
+              <div style="flex: 1; min-width: 0"><div style="font-size: 14px; font-weight: 600">Du</div><div class="cs-sub" style="font-size: 12.5px">das bist du</div></div>
+              <span class="tag" style="color:#1c7d3e;background:rgba(52,199,89,.18)">du</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <div class="av" style="width:30px;height:30px;font-size:12.6px;background:#34c759">LW</div>
+              <div style="flex: 1; min-width: 0"><div style="font-size: 14px; font-weight: 600">Lena Weber</div><div class="cs-sub" style="font-size: 12.5px">Werkstatt Weber</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <div class="av" style="width:30px;height:30px;font-size:12.6px;background:#30b0a0">G</div>
+              <div style="flex: 1; min-width: 0"><div style="font-size: 14px; font-weight: 600">@Gemma</div><div class="cs-sub" style="font-size: 12.5px">auf deinem Gerät</div></div>
+              <span class="tag" style="color:#0060df;background:rgba(10,132,255,.14)">@Gemma</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <div class="av" style="width:30px;height:30px;font-size:12.6px;background:#ff9f0a">A</div>
+              <div style="flex: 1; min-width: 0"><div style="font-size: 14px; font-weight: 600">AllianzHilfe</div><div class="cs-sub" style="font-size: 12.5px">Versicherung</div></div>
+              <span class="tag" style="color:#8a5a00;background:rgba(255,196,88,.28)">extern</span>
+            </div>
+          </div>
+
+          <div class="cs-glass" style="padding: 15px 17px; display: flex; flex-direction: column; gap: 10px">
+            <div class="kartentitel">Was hier liegt</div>
+            <div style="display: flex; align-items: center; gap: 9px">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex: none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+              <div style="min-width: 0; flex: 1"><div style="font-size: 13.5px; font-weight: 500">Unfallbericht.pdf</div><div class="cs-sub" style="font-size: 12px">von Du</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 9px">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex: none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+              <div style="min-width: 0; flex: 1"><div style="font-size: 13.5px; font-weight: 500">Fotos Schaden.jpg</div><div class="cs-sub" style="font-size: 12px">von Du</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 9px">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex: none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+              <div style="min-width: 0; flex: 1"><div style="font-size: 13.5px; font-weight: 500">Kostenvoranschlag.pdf</div><div class="cs-sub" style="font-size: 12px">von Lena Weber</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 9px">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex: none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+              <div style="min-width: 0; flex: 1"><div style="font-size: 13.5px; font-weight: 500">Kfz-Police.pdf</div><div class="cs-sub" style="font-size: 12px">von Du</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 9px">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1.6" style="flex: none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+              <div style="min-width: 0; flex: 1"><div style="font-size: 13.5px; font-weight: 500; color: #0060df">Freigabe.pdf</div><div class="cs-sub" style="font-size: 12px">von AllianzHilfe</div></div>
+              <span style="font-size: 10px; color: #34c759; font-weight: 700">gemeinsam</span>
+            </div>
+          </div>
+
+          <div style="font-size: 13.5px; font-weight: 600; color: #0060df; background: rgba(255,255,255,.55); border-radius: 12px; padding: 11px 14px; display: flex; align-items: center; justify-content: center; gap: 8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="M16 6l-4-4-4 4"></path><path d="M12 2v14"></path></svg>
+            So tritt die Gegenseite bei
+          </div>
+          <div style="font-size: 12.5px; color: rgba(0,0,0,.32); text-decoration: underline; text-underline-offset: 2px; align-self: flex-start; padding-left: 4px">Zugriff für jemanden zurückziehen</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="flex: none; display: flex; justify-content: center; padding: 10px 0 14px; position: relative; z-index: 1">
+    <div class="navpille">
+      <button type="button">Sonstiges</button>
+      <button type="button">menu-test</button>
+      <button type="button">mc-bosch-mt5o</button>
+      <button type="button">mc-bosch-mt5n</button>
+      <span style="width: 1px; height: 14px; background: rgba(0,0,0,.12)"></span>
+      <button type="button">+ Neues Git</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":960}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
