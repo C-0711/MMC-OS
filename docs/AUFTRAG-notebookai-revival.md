@@ -59,22 +59,47 @@
 
 *Das Wichtigste zuerst: der Moment, in dem Sand zum ersten Mal fließt. Der User darf nicht warten — er muss ZUSEHEN können, wie sein Material verstanden wird, und schon währenddessen losfragen können.*
 
-**Die Architektur des ersten Einlesens (streaming-first):**
+**Die Architektur des ersten Einlesens (streaming-first, aus dem Live-Krümmungsbetrieb):**
 
 ```
 DROP/BEGIN EINGANG
      │
      ├─► WORKER (async, NICHT blockierend)         ┌────────────────┐
-     │   pro Dokument:                             │  LIVE-BERICHT  │
-     │   1. commit als Eingang (docs/ byte-id.)   │  (dynamisch,   │
-     │   2. OCR/Reader (reader-schema je Typ)      │   wächst mit   │
-     │   3. Atome extrahieren (Feld + Fundstelle)  │   jedem Doc)   │
-     │   4. embedden (k3s-Fabric :11435)           └────────▲───────┘
-     │   5. SSE-Event pushen ──────────────────────────────┘
-     │      {typ:"dokument_fertig", name, atome, fundstellen, …}
+     │   pro Dokument — LANE-ENTSCHEIDUNG:         │  LIVE-BERICHT  │
+     │   ┌─────────────────────────────────┐       │  (dynamisch,   │
+     │   │ TEXT-LANE  pdfx-serve (Rust)    │       │   wächst mit   │
+     │   │  10.000 Seiten ≈ 1 s           │       │   jedem Doc)   │
+     │   │  Beweis-Rechtecke gratis+pixelgenau   └────────▲───────┘
+     │   ├─────────────────────────────────┤                │
+     │   │ OCR-LANE  DocTR ×2 (GPU0/GPU1)  │                │
+     │   │  ~15 ms PRO DOKUMENT            │                │
+     │   │  PP-OCRv6 (cdoc-paddle) /       │                │
+     │   │  PaddleOCR-VL-1.6 / PP-OCRv5    │                │
+     │   │  (hyperpipe) / paddle-table     │                │
+     │   ├─────────────────────────────────┤                │
+     │   │ VISION-LANE Florence-2 ·        │                │
+     │   │  Moondream 2 · Gemma Edge E2B  │                │
+     │   └─────────────────────────────────┘                │
+     │   1. commit als Eingang (docs/ byte-id.)             │
+     │   2. Lane lesen/OCR — Fundstellen direkt aus Reader  │
+     │   3. Atome extrahieren (Feld + Fundstelle)          │
+     │   4. embedden (EmbeddingGemma 300M)                 │
+     │   5. SSE-Event pushen ─────────────────────────────┘
+     │      {typ:"dokument_fertig", name, atome, fundstellen, lane, ms}
      │
-     └─► GEMMA 4 31B (lokal auf der Fabric, :11435): FRAGEN WÄHREND DES INGEST
+     ├─► LLMs: Gemma4-mm (vLLM TP2, beide Karten) für Sehen-Deutung
+     │        Gemma 4 31B für Chat/erste Fragen (Fabric :11435)
+     │
+     └─► INFRA: gitchain-service (k3s ns gitchain) · gitchain-postgres
+              (k3s ns bosch) · 0711.events-Redis · Rate-Limit-Redis
+              · cdoc-api (Pod, hostPort) · cdoc-belege-review
+              (hostNetwork, Oberfläche — kein pm2 mehr)
 ```
+
+**Live-Beleg der Tempi (gemessen 2026-08-30, hier im Container reproduzierbar):**
+- TEXT-LANE: 10.000 Seiten reines Text-PDF in **1,36 s (1 Kern)** / **0,34 s (8 Kerne)** — „10.000 Seiten in 1 Sekunde" gilt wörtlich für Textschicht-PDFs (pdfx-serve, Rust, macht das auf der H200v nochmal schneller).
+- OCR-LANE: **DocTR bis 15 ms pro Dokument** (×2 auf GPU0/GPU1) — ein 100-Seiten-Scanstapel ist ein ~1,5-Sekunden-Job pro Instanz; die Masse skaliert über beide GPUs.
+- Daraus folgt die Berichts-Ehrlichkeit: **ZWEI Zahlen** („3.800 Seiten Text-Lane · 12 Seiten OCR-Lane"), getrennt nach Lane — sonst wirkt OCR-Masse fertig, wenn nur Text durch ist.
 
 **Regeln (hart):**
 
