@@ -185,7 +185,7 @@ Live-Verhalten:
 
 **Ticket-Antwort „Migration fehlt?" 🔎 — die Migration EXISTIERT, sie ist nur nicht angewendet.** Die Query liest `embedding_tq_polar, embedding_tq_qjl, embedding_tq_rnorm, embedding_tq_xnorm` aus `neo.rag_chunks` (search-turbo.ts:88; Kommentar dort: „one-shot brute-force scan … ~100 MB I/O"). Die Spalten legt `database/migrations/2026-04-19-embedding_tq.sql:20` an (bytea, TurboQuant seed=42, b=3); für die Vision-Variante analog `2026-04-19-visual_atoms.sql:58` (Tabelle `enriched.visual_atoms`, gelesen in search-vision.ts:166). Nach der Migration müssen die Spalten noch befüllt werden: `scripts/compute-turbo-embeddings.ts`. Der Mount trägt im Code den Kommentar **„T5 — TurboQuant … staging-only until Phase 14 cutover"** (simple-index.ts:842–844) — der 500er ist also erwartbar: eine staging-only-Route ist auf Prod erreichbar, deren Migration dort nie lief. Fix: Migrationen in der Prod-DB anwenden + Befüll-Skript, oder Route auf Prod nicht mounten.
 
-### 2.7 `POST /api/v2/search/vision` — Vision-Suche ✅ (auth-geschützt)
+### 2.7 `POST /api/v2/search/vision` — Vision-Suche ✅✅ live verifiziert mit gültigem PAT (2026-08-30)
 
 Ohne Auth → **401** `{"error":"Anmeldung erforderlich"}`. Route existiert (POST); GET auf denselben Pfad → 404 (nur POST registriert).
 
@@ -203,15 +203,84 @@ Ohne Auth → **401** `{"error":"Anmeldung erforderlich"}`. Route existiert (POS
 
 Erfolgs-Response 🔎: `{results: [{id, supplier_pid, container_id, document, document_sha256, page, page_png_sha256, page_width_px, page_height_px, dpi, score}], latency_ms}` — jeder Treffer trägt Seite + PNG-SHA256 der Seiten-Grafik (Beweis-Viewer-tauglich). **Achtung Deploy≠Checkout:** Im Checkout hat diese Route KEINE Auth-Middleware; der Live-401 (`"Anmeldung erforderlich"`, deutsch — String kommt im Checkout nirgends vor) stammt aus einer Auth-Schicht der deployten Instanz, die hier nicht vorliegt. `method:"turbo"` läuft auf `enriched.visual_atoms` und dürfte auf Prod am selben Migrations-Problem wie §2.6 scheitern.
 
-### 2.8 Authentifizierte User-Routen (401 live) ✅ Status, 📋 Inhalt
+**Live bestätigt mit gültigem PAT (2026-08-30, Test-Token `acceptance-test-temp`, User christoph@0711.io, Scopes api+write_repository):**
+
+```bash
+curl -sS -X POST -H "Authorization: Bearer <PAT>" -H 'Content-Type: application/json' \
+  -d '{"query_embedding":[0.02, ...1024 Werte...], "top_k": 2}' \
+  https://api-gitchain.0711.io/api/v2/search/vision
+```
+
+→ **200** nach 10 ms:
+
+```json
+{
+  "method": "hnsw", "k": 10, "d": 1024, "count": 10, "latency_ms": 10,
+  "results": [{
+    "id": "90be111b-d554-4243-be29-3668e2e5e161",
+    "supplier_pid": "7738601997",
+    "container_id": "0711:product:bosch:7738601997:v4",
+    "document": "bopapd_6721836891-000-00.pdf",
+    "document_sha256": "29bbe404111017a5446003bad56ea0d3cfd2c3f36a145241d7e11609097f8998",
+    "page": 159,
+    "page_png_sha256": "544d26adb8b4c6612462a7afb2190b151b98b51267d65b013182b235d1e36501",
+    "page_width_px": 1700, "page_height_px": 2387, "page_dpi": 200,
+    "score": -0.02219005620846759
+  }]
+}
+```
+
+**Bemerkenswerte Abweichungen zum Code-Schema:** Body nimmt live `top_k` (nicht nur `k`), Response nennt `page_dpi` (Code: `dpi`), Default-`k` ist 10, und `count` = gelieferte Treffer. HNSW-Index ist auf Prod **funktionsfähig** (10 ms) — im Gegensatz zur Turbo-Spalte (§2.6), obwohl beide aus derselben Migrations-Familie stammen sollen: HNSW läuft vermutlich über pgvector direkt, Turbo über die fehlenden bytea-Spalten.
+
+### 2.8 Authentifizierte User-Routen — ✅✅ live verifiziert mit gültigem PAT (2026-08-30)
 
 | Route | Live-Status | Body |
 |---|---|---|
-| `GET /v1/user` | **401** | `{"error":"Authentication required"}` |
-| `GET /api/user` (v1-Compat) | **401** | `{"error":"Authentication required"}` |
-| `GET /v1/admin` | **401** | `{"error":"Authentication required"}` |
+| `GET /v1/user` | **200 mit PAT** | s. u. |
+| `GET /api/user` (v1-Compat) | **401 auch mit gültigem PAT** | `{"error":"Authentication required"}` |
+| `GET /v1/admin` | **401 auch mit gültigem PAT** | `{"error":"Authentication required"}` (Scope `admin` fehlt beim Test-PAT) |
+| `GET /v1/organizations` | **200 mit PAT** | s. §2.8a |
 
-Mit Fake-Bearer (`Authorization: Bearer gct_test123`) → identische 401-Antwort (Token wird geprüft, ungültig = wie fehlend — keine Token-Leak-Orakel). Erfolgs-Responses 📋 abgeleitet (User-Objekt).
+`GET /v1/user` mit `Authorization: Bearer gcpat-…` → **200**:
+
+```json
+{
+  "username": "christoph",
+  "user_id": "7ac74529-12bb-412b-a506-59ddf9808d7e",
+  "scopes": ["api", "write_repository"],
+  "token_prefix": "gcpat-dc4e07",
+  "name": "acceptance-test-temp"
+}
+```
+
+**Auth-Modell damit live bestätigt:** PAT-Präfix `gcpat-` (GitChain PAT), Bearer-Schema, Token-Introspektion über `/v1/user` (liefert username, user_id, scopes, token_prefix — die ersten 7 Zeichen des Tokens — und den Namen des Tokens). `/api/user` und `/v1/admin` bleiben 401: die v1-Compat-Route akzeptiert das PAT nicht (andere Auth-Form? Session/JWT?) und `/v1/admin` braucht offenbar einen Admin-Scope, den `api, write_repository` nicht abdeckt. ⚠️ Token-Präfix-Leak: die ersten 7 Zeichen des Tokens werden in der Antwort preisgegeben — für Log-Korrelation nützlich, in sicherheitsbewussten Setups aber ungewöhnlich.
+
+### 2.8a `GET /v1/organizations` — Org-Listing ✅✅ live verifiziert mit gültigem PAT
+
+```bash
+curl -sS -H "Authorization: Bearer <PAT>" https://api-gitchain.0711.io/v1/organizations
+```
+
+→ **200**, Envelope `{data: {organizations: [...], total: N}}` (⚠️ anderes Response-Muster als search/health — `data`-Wrapper):
+
+```json
+{
+  "data": {
+    "organizations": [
+      {"id": "952b319d-…", "slug": "0711", "name": "0711 Intelligence",
+       "description": "Eigene Container und Werkzeuge", "verified": false,
+       "plan": "free", "tier": "free", "container_count": 0, "member_count": 2},
+      {"slug": "lightnet", "name": "Lightnet GmbH", "verified": true,
+       "plan": "enterprise", "container_count": 0, "member_count": 1},
+      {"slug": "bosch-thermotechnik", "name": "Bosch Thermotechnik GmbH",
+       "verified": true, "plan": "enterprise", "container_count": 768, "member_count": 7}
+    ],
+    "total": 3
+  }
+}
+```
+
+**Interessant:** 3 Orgs live (0711, Lightnet, Bosch Thermotechnik mit 768 Containern) — die Mandanten-Struktur der Registry. Weitere getestete Pfade (alle 404, auch mit PAT): `/v1/organizations/:slug/containers`, `/v1/projects`, `/v1/tokens`, `/v1/devices`, `/v1/billing`, `/v1/user/tokens`, `/api/v2/containers` — diese Flächen sind unter anderen Pfaden gemountet (🔎 Router-Tabelle §4) oder gar nicht auf Prod.
 
 ### 2.9 Git Smart HTTP — `/git/<type>/<namespace>/<id>.git/*` ✅
 
@@ -321,7 +390,8 @@ Acht öffentliche GETs je Container: `containers/:cid`, `…/atoms`, `…/atoms/
 - Container-IDs als Pfad-Parameter: `0711:<type>:<namespace>:<identifier>` — Doppelpunkte müssen URL-encoded werden (`%3A`) ✅.
 - Git-Smart-HTTP klassisch nach Git-Protokoll: `/git/<path>.git/info/refs?service=git-upload-pack` ✅.
 
-### 5.2 Auth-Modell ✅ Status, 🔎 Details
+### 5.2 Auth-Modell ✅✅ live verifiziert, 🔎 Details
+- **PAT-Bearer live bestätigt (2026-08-30):** `Authorization: Bearer gcpat-…` funktioniert auf `/v1/*`-Flächen — Token-Präfix ist **`gcpat-`**, Introspektion über `GET /v1/user` (username, user_id, scopes, token_prefix, Name). Scopes des Test-Tokens: `api`, `write_repository`.
 - **Zwei Mechanismen 🔎** (middleware/auth.ts): **`X-API-Key`-Header** — Key wird SHA256-gehasht gegen `api_keys.key_hash` geprüft — oder **`Authorization: Bearer <token>`** mit 0711-I-JWT (bzw. Legacy-Session).
 - **Das vermutete Token-Präfix `gct_` EXISTIERT NICHT im Code** — die frühere Vermutung ist gestrichen. Der getestete Fake `gct_test123` wurde als beliebiger ungültiger Bearer abgelehnt, nicht wegen des Präfixes.
 - Live-Fehlertexte: **401** `{"error":"Authentication required"}` (englisch, aus diesem Code) bzw. `{"error":"Anmeldung erforderlich"}` (deutsch — ⚠️ NICHT in diesem Checkout, siehe Deploy≠Checkout-Vermerk oben).
@@ -343,6 +413,7 @@ Voll offen (`*`, alle Standard-Methoden) — browserbasierte Clients direkt mög
 ## 6. Offene Punkte / Empfehlungen
 
 1. **Turbo-Suche produktionsreif machen** — GEKLÄRT 🔎: Migrationen `database/migrations/2026-04-19-embedding_tq.sql` + `2026-04-19-visual_atoms.sql` existieren, sind in der Prod-DB nur nicht angewendet; danach `scripts/compute-turbo-embeddings.ts` laufen lassen. Route ist laut Code „staging-only until Phase 14 cutover" (§2.6).
+   - **Update 2026-08-30 (PAT-Akzeptanztest):** HNSW-Vision-Suche (§2.7) läuft auf Prod einwandfrei (10 ms) — das Migrations-Problem betrifft NUR die Turbo-Spalten. Bestehende/alternative Deutung: `hnsw` läuft über pgvector (vorhanden), `turbo` braucht die bytea-Spalten (fehlen).
 2. **Chain-Verankerung inaktiv** — GEKLÄRT 🔎: es gibt **keinen Anchor-Worker**; pending-Batches bestätigen sich nur per manuellem `POST /api/chain/submit`, und `ANCHOR_WALLET_KEY` ist im Deployment nicht gesetzt (read-only). Offen bleibt die Entscheidung: Key setzen + Scheduler bauen, oder Multi-Anchor-Roadmap (QTSP/EBSI/OTS) abwarten (§2.2). **UPDATE 2026-08-30: Scheduler ist GEBAUT** (Commit 1fc2b40, Patch `docs/patches/0001-feat-service-anchor-scheduler-mode-field-network-con.patch`, Details §2.2). Ops-seitig bleiben zwei Schritte: `DEPLOYER_PRIVATE_KEY` in den Pod bringen (nicht ANCHOR_WALLET_KEY — der gilt nur für die v4-Fläche) und die Netzwerk-Entscheidung (Mainnet-Wallet vs. Sepolia-Config, siehe DIAGNOSE).
 3. **DB-Fehler leaken** in API-Antworten (Postgres-Meldungen) — für Produktion wrappen.
 4. **Gemischte Fehler-Sprachen** (en/de) und `containerId` vs. snake_case — vereinheitlichen.
