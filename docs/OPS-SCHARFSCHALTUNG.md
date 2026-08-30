@@ -82,14 +82,17 @@ kubectl -n gitchain create secret generic chain-signer \
   --from-literal=DEPLOYER_PRIVATE_KEY="$(grep DEPLOYER_PRIVATE_KEY ~/Documents/0711-Gitchain/apps/service/.env | cut -d= -f2-)"
 
 # 2. Netz-Decision — HIER ENTSCHEIDEN (nicht mischbar):
-#    VARIANTE SEPOLIA (empfohlen: Contract ist dort deployed, Tests frei):
-#      CONTENT_CERTIFICATE_ADDRESS_MAINNET NICHT setzen ODER auf den
-#      Sepolia-Contract-Spiegel zeigen lassen — exakt die Logik aus
-#      blockchain.ts prüfen: steuert die Variable NUR die Mainnet-Autodetekt
-#      oder ERZWINGT sie Mainnet? (Im Zweifel: leer lassen = Sepolia-Default)
-#    VARIANTE MAINNET (das finanzierte 0xD78E…-Wallet):
-#      Contract auf Base-Mainnet deployen ERST, dann Adresse eintragen.
-#      ACHTUNG: ohne Mainnet-Contract-Deploy ist diese Variante kaputt.
+#    ✅ ENTSCHIEDEN (Live-Messung e3271a5): MAINNET.
+#      eth_getCode auf beiden RPCs gegen 0xAd31…aEc7 (blockchain.ts:31 hartkodiert):
+#        base-mainnet → Bytecode vorhanden (Contract deployed)
+#        base-sepolia → 0x (kein Contract!)
+#      Die frühere Sepolia-Empfehlung war FALSCH HERUM: ohne Env wählt der Code
+#      Sepolia-RPC + Mainnet-Adresse OHNE Code → jeder Submit schlägt fehl.
+#      Mainnet ist der einzige gültige Weg und passt zum finanzierten Wallet
+#      (0xD78E… hat sein Guthaben auf Mainnet). Kein Contract-Deploy nötig.
+CONTENT_CERTIFICATE_ADDRESS_MAINNET="0xAd31465A5618Ffa27eC1f3c0056C2f5CC621aEc7"
+#      (ECHTEN Wert setzen, nicht "1" — dpp/ipfs zeigen die Variable als
+#       contractAddress an; im chain-Paket zählt nur Truthiness)
 
 # 3. Rollout mit neuem Env:
 helm upgrade gitchain ./deploy/helm -n gitchain \
