@@ -473,14 +473,8 @@ class App {
         // Bis zu 5 Quellen als Kacheln
         kontexte.slice(0, 5).forEach(k => {
           const kachel = document.createElement('div');
-          kachel.className = 't11';
-          kachel.style.cssText = `
-            padding: 6px 10px;
-            border-radius: 6px;
-            background: rgba(143,169,143,.14);
-            color: #5c705c;
-            cursor: pointer;
-          `;
+          kachel.className = 'zug zug-ok';
+          kachel.style.cursor = 'pointer';
           kachel.textContent = `${k.doc} S. ${k.seite}`;
           kachel.title = k.text;
           kachel.onclick = () => {
@@ -922,7 +916,7 @@ class App {
 
         const satzEl = document.createElement('div');
         satzEl.className = 'serif';
-        satzEl.style.fontSize = '17px';
+        satzEl.style.fontSize = '21px'; // Serifen-Skala: 34/30/28/22/21
         satzEl.style.lineHeight = '1.6';
         satzEl.textContent = satz.satz;
         item.appendChild(satzEl);
