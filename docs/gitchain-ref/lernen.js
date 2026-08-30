@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = '/opt/data/gitchain-ref';
+const ROOT = process.env.GITCHAIN_REF_ROOT || '/opt/data/gitchain-ref';
 const POLICY_PFAD = path.join(ROOT, 'policy.json');
 const LERN_PFAD = path.join(ROOT, 'brain', 'korrekturen.jsonl');
 const SCHWELLE = 3; // Spec: "Ab 3 identischen Korrekturen: Policy-Anpassung wird selbst Vorschlag"

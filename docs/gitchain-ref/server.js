@@ -19,10 +19,11 @@ const fassung = require('./fassung.js');
 const execFileAsync = promisify(execFile);
 
 const PORT = process.env.GITCHAIN_REF_PORT || 3361;
-const ROOT = '/opt/data/gitchain-ref';
+const ROOT = process.env.GITCHAIN_REF_ROOT || '/opt/data/gitchain-ref';
 const VAULT = path.join(ROOT, 'vault');
 const POLICY_PFAD = path.join(ROOT, 'policy.json');
 const STARTED = new Date();
+const ANRUF_SITZUNGEN = new Map(); // sitzungId → {transkript, wavB64}
 
 // ── Policy (gelernte Zuordnung, versioniert) ───────────────
 const STANDARD_POLICY = {
@@ -175,6 +176,43 @@ const server = http.createServer(async (req, res) => {
       const objekt = url.pathname.split('/').pop();
       return json(200, connectors.revisionsHistorie(objekt));
     }
+    // C.7-GET: Transkript einer Sitzung in exakt der App-Form
+    if (url.pathname.startsWith('/api/v2/anruf/') && url.pathname.endsWith('/transkript')) {
+      const sitzId = url.pathname.split('/').filter(Boolean)[3];
+      const sitzung = ANRUF_SITZUNGEN.get(sitzId);
+      if (!sitzung || !sitzung.transkript) return json(404, { fehler: 'sitzung unbekannt oder ohne transkript' });
+      return json(200, sitzung.transkript); // {art:'anruf', wav, dauer?, titel?, zeilen:[...]}
+    }
+    // C.7-GET: wav-Bytes zur Sitzung (Anhören ab Minute)
+    if (url.pathname.startsWith('/api/v2/anruf/') && url.pathname.endsWith('/wav')) {
+      const sitzId = url.pathname.split('/').filter(Boolean)[3];
+      const sitzung = ANRUF_SITZUNGEN.get(sitzId);
+      if (!sitzung || !sitzung.wavB64) return json(404, { fehler: 'keine Audio-Bytes für diese Sitzung' });
+      const bytes = Buffer.from(sitzung.wavB64, 'base64');
+      res.writeHead(200, { 'Content-Type': 'audio/wav', 'Content-Length': bytes.length });
+      return res.end(bytes);
+    }
+    // OsTisch: Fall-Doc-Liste (für Nebeneinander-Ansicht)
+    if (url.pathname.startsWith('/api/v2/fall/') && url.pathname.endsWith('/docs')) {
+      const teileD = url.pathname.split('/').filter(Boolean);
+      const fallId = teileD[3];
+      if (!await fallExistiert(fallId)) return json(404, { fehler: 'fall nicht gefunden' });
+      const log = await git(path.join(VAULT, fallId), 'log', '--all', '--name-only', '--pretty=format:', '--', 'docs/');
+      const dateien = [...new Set(log.split('\n').filter(l => l && !l.endsWith('.json') && !l.includes('.gitkeep')))];
+      return json(200, { fall: fallId, docs: dateien.map(d => ({ pfad: d })) });
+    }
+    // OsTisch: Doc-Abruf per Pfad (Bytes, für den Beweis-Viewer)
+    if (url.pathname.startsWith('/api/v2/fall/') && url.pathname.includes('/doc/')) {
+      const teileD = url.pathname.split('/').filter(Boolean);
+      const fallId = teileD[3];
+      const docRel = decodeURIComponent(teileD.slice(teileD.indexOf('doc') + 1).join('/'));
+      if (!await fallExistiert(fallId)) return json(404, { fehler: 'fall nicht gefunden' });
+      const abs = path.join(VAULT, fallId, docRel);
+      if (!abs.startsWith(path.join(VAULT, fallId)) || !fs.existsSync(abs)) return json(404, { fehler: 'doc nicht gefunden' });
+      const bytes = fs.readFileSync(abs);
+      res.writeHead(200, { 'Content-Type': 'application/octet-stream', 'Content-Length': bytes.length });
+      return res.end(bytes);
+    }
     // OsVereinbarung/OsUebernahme: Fassung abrufen (Diff-Daten + Siegel-Zeilen)
     if (url.pathname.startsWith('/api/v2/fall/') && url.pathname.endsWith('/fassung-uebersicht')) {
       const teileF = url.pathname.split('/').filter(Boolean);
@@ -242,11 +280,28 @@ const server = http.createServer(async (req, res) => {
       if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'widerspruch') {
         return json(200, connectors.widerspruchPruefung(daten.systemA || 'teamcenter', daten.systemB || 'pim', daten.objekt || 'MNR-4711'));
       }
-      // C.7: Anruf-Sitzung — eröffnet Live-Spur im Fall, Atoms mit Minuten-Fundstelle
+      // C.7: Anruf-Sitzung — eröffnet Live-Spur im Fall
       if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'anruf') {
         if (!await fallExistiert(teile[3])) return json(404, { fehler: 'fall nicht gefunden' });
         const sitzungId = 'anruf-' + Date.now().toString(36);
-        return json(201, { sitzungId, fall: teile[3], gestartet: new Date().toISOString(), hinweis: 'Atoms via /deutung mit fundstelle.art=anruf committen' });
+        // Sitzungs-Store: Transkript + wav können gleich mitgegeben werden (App-Form)
+        const sitzung = {
+          sitzungId, fall: teile[3], gestartet: new Date().toISOString(),
+          transkript: daten.transkript || null,   // {art:'anruf', wav, dauer?, titel?, zeilen:[{zeit,sprecher,text}]}
+          wavB64: daten.wavB64 || null,           // Audio-Bytes (committet dann als Blob)
+        };
+        ANRUF_SITZUNGEN.set(sitzungId, sitzung);
+        return json(201, { sitzungId, fall: teile[3], gestartet: sitzung.gestartet,
+          hinweis: 'Transkript/wav entweder hier mitgeben oder /anruf-transkript nachliefern' });
+      }
+      // C.7-Nachlieferung: Transkript nach Sitzungsstart committen (lokale STT läuft während des Gesprächs)
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'anruf-transkript') {
+        const sitzung = ANRUF_SITZUNGEN.get(daten.sitzungId);
+        if (!sitzung) return json(404, { fehler: 'sitzung unbekannt' });
+        if (!daten.transkript || !Array.isArray(daten.transkript.zeilen)) return json(400, { fehler: 'transkript.zeilen[] ist Pflicht' });
+        sitzung.transkript = daten.transkript;
+        if (daten.wavB64) sitzung.wavB64 = daten.wavB64;
+        return json(200, { sitzungId: sitzung.sitzungId, zeilen: sitzung.transkript.zeilen.length });
       }
       // OsDivergenz: Widerspruch auflösen → signierte Fassung (fail closed ohne Fundstelle)
       if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'aufloesen') {

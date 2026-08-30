@@ -20,7 +20,7 @@ const path = require('path');
 const { zustellerErstellen } = require('./zustaeller.js');
 const zusteller = zustellerErstellen();
 
-const ROOT = '/opt/data/gitchain-ref';
+const ROOT = process.env.GITCHAIN_REF_ROOT || '/opt/data/gitchain-ref';
 const AUTH_DIR = path.join(ROOT, 'auth');
 const ZUORDNUNGEN = path.join(AUTH_DIR, 'zuordnungen.json'); // nur Hashes!
 const OFFENE_ZUSTELLUNGEN = new Map(); // zustellId → {emailHash, codeHash, expires} (im Speicher, 10 Min)
