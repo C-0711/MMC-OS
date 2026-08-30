@@ -97,6 +97,34 @@ helm upgrade gitchain ./deploy/helm -n gitchain \
 # (oder service.yaml-Verdrahtung, die du gerade editierst — derselbe Effekt)
 ```
 
+**NETZ-DECISION AUFGELÖST (Claude Code, 2026-08-30 — live gemessen, nicht geraten):**
+
+Die Contract-Adresse ist in `packages/chain/src/blockchain.ts:31` **hartkodiert**
+(`0xAd31465A5618Ffa27eC1f3c0056C2f5CC621aEc7`) und wird auf JEDEM Netz verwendet.
+`eth_getCode` auf beiden RPCs:
+
+| Netz | Code an 0xAd31…aEc7 |
+|---|---|
+| base-mainnet | **Bytecode vorhanden** (Contract deployed) |
+| base-sepolia | `0x` — **kein Contract** |
+
+Damit ist die „VARIANTE SEPOLIA (empfohlen)" oben **kaputt**, nicht die Mainnet-Variante:
+ohne die Env-Variable wählt blockchain.ts:99–103 base-sepolia, ruft dort aber die
+Mainnet-Adresse ohne Code — jeder Submit schlägt fehl. Der Kommentar „Contract ist dort
+deployed" traf auf den chain-routes-Pfad nie zu (er galt der v4-Fläche/altem Stand).
+
+**Konsequenz — genau EIN gültiger Weg:**
+```bash
+# Env-Variable ist reiner Netz-Schalter (nur Truthiness geprüft, Wert wird im
+# chain-Paket NICHT als Adresse gelesen — Adresse ist hartkodiert):
+CONTENT_CERTIFICATE_ADDRESS_MAINNET=0xAd31465A5618Ffa27eC1f3c0056C2f5CC621aEc7
+# (den echten Wert setzen, nicht "1" — packages/dpp und packages/ipfs zeigen die
+#  Variable als contractAddress im Status an; konsistent halten)
+```
+Passt zum finanzierten Wallet: `0xD78E…` hat sein Guthaben (0,002791 ETH) auf
+base-mainnet — der S.3-Netzwerk-Wächter wäre bei Sepolia-Config sofort mit
+Cross-Chain-Mismatch angesprungen. Kein Contract-Deploy nötig, er ist schon da.
+
 **Erfolgs-Kriterien (ich messe sie live, sobald du „drauf" sagst):**
 - `walletAddress` zeigt `0xD78E…` (statt `read-only`) ← Key angekommen
 - `mode: "anchoring"`
