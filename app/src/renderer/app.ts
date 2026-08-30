@@ -603,7 +603,11 @@ class App {
       console.log(`OCR: ${ocr.pages.length} Seiten, ${ocr.totalMs}ms`);
 
       // 3. Deutung aus OCR — läuft im Main-Prozess (deutung.ts, eine Quelle der Wahrheit)
-      const deutung = await window.mmc.ocr.deutungAusOcr(ocr, file.name);
+      // Fundstelle.doc muss auf die VERWAHRTE Datei zeigen (zeitgestempelter
+      // Name im Vault, aus docPfad), nicht auf den Originalnamen — sonst
+      // findet der Beweis (readDocAsDataUrl auf docs/<doc>) das Bild nicht.
+      const verwahrterName = docPfad.split('/').pop() ?? file.name;
+      const deutung = await window.mmc.ocr.deutungAusOcr(ocr, verwahrterName);
 
       // 4. Vorschlag erstellen
       const proposalId = `deutung-${Date.now()}`;
