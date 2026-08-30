@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+
+    <div style="flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center">
+      <div class="t13 sub" style="position: absolute; top: 26px">Moment 2 · das Aufwachsen — bei ~150 von 300 ms</div>
+
+      <!-- Die Karte tritt zurück (Fade auf 25 %), nichts slidet -->
+      <div style="position: absolute; width: 560px; padding: 30px 34px; background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; opacity: .25; display: flex; flex-direction: column; gap: 18px">
+        <div class="serif" style="font-size: 21px; line-height: 1.45">Rechnung Stadtwerke, 89&nbsp;€, fällig 15.09. — stimmt das?</div>
+        <div style="height: 66px"></div>
+        <div class="mono">post · stadtwerke-2026-09.pdf · Seite 1</div>
+      </div>
+
+      <!-- Die Miniatur wächst zur Seite auf — das Rechteck bleibt am Betrag stehen -->
+      <div style="position: relative; width: 470px; background: #fff; border: 1px solid rgba(184,163,105,.35); border-radius: 6px; box-shadow: 0 24px 60px -22px rgba(70,58,38,.5); padding: 34px 38px; display: flex; flex-direction: column; gap: 12px">
+        <div style="height: 9px; width: 44%; background: rgba(42,37,32,.2); border-radius: 2px"></div>
+        <div style="height: 8px; width: 68%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 86%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 74%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="display: flex; gap: 10px; align-items: center; margin: 6px 0">
+          <div style="height: 8px; width: 34%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+          <div style="height: 16px; width: 96px; border: 2px solid #D9A6A0; border-radius: 2px; background: rgba(217,166,160,.22)"></div>
+        </div>
+        <div style="height: 8px; width: 80%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 58%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+      </div>
+
+      <div class="t11 sub" style="position: absolute; bottom: 66px; max-width: 56ch; text-align: center; line-height: 1.7">Die Miniatur wächst in 300 ms zur Seite auf — aus ihrer eigenen Position, nicht von rechts hereingeschoben. Das Rechteck bleibt die ganze Zeit am Betrag stehen: das Auge verliert die Stelle nie.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 26px">
+      <div class="mono">übergang karte → leseplatz · schritt 2 von 3 · ease-out, 300 ms, eine bedeutung</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
