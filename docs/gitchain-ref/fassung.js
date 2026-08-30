@@ -16,7 +16,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = '/opt/data/gitchain-ref';
+const ROOT = process.env.GITCHAIN_REF_ROOT || '/opt/data/gitchain-ref';
 const FASSUNGEN_DIR = path.join(ROOT, 'fassungen'); // je Fall eine JSON-Datei (Persistenz)
 
 function fallDatei(fallId) { return path.join(FASSUNGEN_DIR, `${fallId}.json`); }

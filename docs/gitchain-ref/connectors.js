@@ -14,7 +14,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = '/opt/data/gitchain-ref';
+const ROOT = process.env.GITCHAIN_REF_ROOT || '/opt/data/gitchain-ref';
 
 // ── Mock: Teamcenter (mit Revision C/D) ─────────────────────
 const TEAMCENTER_MOCK = {
