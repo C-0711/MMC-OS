@@ -19,6 +19,13 @@ function createWindow(): void {
 
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
+  // Sicherheitsnetz: NIE weg von der App-Seite navigieren (z. B. wenn ein
+  // Datei-Drop doch durchrutscht — Chromium wuerde sonst die Datei laden).
+  mainWindow.webContents.on('will-navigate', (e) => {
+    e.preventDefault();
+  });
+  mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+
   // In Entwicklung: DevTools öffnen
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools();

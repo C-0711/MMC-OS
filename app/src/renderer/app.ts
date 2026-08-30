@@ -5,7 +5,7 @@
  * Sechs Flächen: Heute, Karte, Beweis, Frag-mich-Dialog, Fall-Ansicht, Seitenbrett
  */
 
-import { renderBeweis, type BeweisOptions } from './beweis';
+import { renderBeweis, type BeweisOptions } from './beweis.js';
 
 type AppZustand = 'ruhig' | 'fragend' | 'antwortend' | 'fall-ansicht';
 
@@ -500,8 +500,10 @@ class App {
     const main = document.querySelector('main');
     if (!main) return;
 
-    // Drag-Events
-    main.addEventListener('dragover', (e) => {
+    // WICHTIG: Listener auf document, nicht nur auf <main>. Landet der Drop
+    // ausserhalb von <main> (Kopfzeile, Rand), macht Chromium sonst den
+    // Standard: er NAVIGIERT zur Datei — die Oberflaeche ist weg.
+    document.addEventListener('dragover', (e) => {
       e.preventDefault();
       if (!this.dropZoneActive) {
         this.dropZoneActive = true;
@@ -509,13 +511,16 @@ class App {
       }
     });
 
-    main.addEventListener('dragleave', (e) => {
+    document.addEventListener('dragleave', (e) => {
       e.preventDefault();
-      this.dropZoneActive = false;
-      main.style.background = '';
+      // Nur zuruecksetzen, wenn der Zeiger das Fenster wirklich verlaesst
+      if ((e as DragEvent).relatedTarget === null) {
+        this.dropZoneActive = false;
+        main.style.background = '';
+      }
     });
 
-    main.addEventListener('drop', async (e) => {
+    document.addEventListener('drop', async (e) => {
       e.preventDefault();
       this.dropZoneActive = false;
       main.style.background = '';
@@ -526,6 +531,26 @@ class App {
       const file = files[0]; // Nur erste Datei
       await this.handleEingang(file);
     });
+
+    // Zweiter Eingangsweg: Klick auf die Einladung öffnet die Dateiauswahl
+    const dateiInput = document.createElement('input');
+    dateiInput.type = 'file';
+    dateiInput.accept = '.jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf';
+    dateiInput.style.display = 'none';
+    document.body.appendChild(dateiInput);
+
+    dateiInput.addEventListener('change', async () => {
+      const file = dateiInput.files?.[0];
+      dateiInput.value = ''; // gleiche Datei erneut wählbar
+      if (file) await this.handleEingang(file);
+    });
+
+    const einladung = document.getElementById('gruss-klein');
+    if (einladung) {
+      einladung.style.cursor = 'pointer';
+      einladung.textContent = 'Zieh ein Dokument hierher — oder klick, um eines zu wählen.';
+      einladung.addEventListener('click', () => dateiInput.click());
+    }
   }
 
   private async handleEingang(file: File): Promise<void> {
