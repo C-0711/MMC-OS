@@ -440,6 +440,33 @@
       "h": 844,
       "page": "page-7",
       "title": "Aufzeichnen — Zustimmung wird committet"
+    },
+    {
+      "file": "OsWiderspruch.dc.html",
+      "x": 0,
+      "y": 9840,
+      "w": 1360,
+      "h": 900,
+      "page": "page-7",
+      "title": "Der Widerspruch — zwei Systeme, ein Attribut"
+    },
+    {
+      "file": "OsConnectorBeweis.dc.html",
+      "x": 1480,
+      "y": 9840,
+      "w": 1360,
+      "h": 900,
+      "page": "page-7",
+      "title": "Der Connector-Beweis — die Systemzelle"
+    },
+    {
+      "file": "OsRevision.dc.html",
+      "x": 2960,
+      "y": 9840,
+      "w": 390,
+      "h": 844,
+      "page": "page-7",
+      "title": "Die neue Revision — stiller Pull, eine Karte"
     }
   ],
   "annotations": [
@@ -578,6 +605,14 @@
       "w": 1350,
       "page": "page-7",
       "text": "REIHE 9 — CALL & MEET (Spec 18). Vier Fünftel standen schon: Anruf mit Fall-Kontext, Mitschrift + Karte, Minuten-Beweis, signierte Fassung im ruhigen Raum (R3), Gast ohne Konto. NEU: das MEETING — vier Kacheln, jede ihr eigener Zeuge („schreibt mit\"), das gemeinsame Dokument auf demselben Stand bei allen, und der Beschluss-Kandidat mit Multi-eyes live (drei Haken, dein Ja fehlt); die Unterschrift kommt danach, nie im Gespräch. Die AUFZEICHNUNG als Karte: fail closed, auch das Nein wird vermerkt — beweisbar statt einseitig geheim. Die DIVERGENZ: zwei lokale Mitschriften hören Minute 27:50 verschieden — beide Lesarten bleiben im Baum, die signierte Fassung entscheidet, nichts wird gelöscht. Nicht gezeichnet (Variante von „Der Anruf kommt\"): eingehender Festnetz-Anruf über die Brücke — gleicher Screen, Plakette „über die Telefon-Brücke · nur du hast danach den Beweis\"."
+    },
+    {
+      "id": "os-w1",
+      "x": 0,
+      "y": 9690,
+      "w": 1350,
+      "page": "page-7",
+      "text": "REIHE 10 — W1 WORKSPACE-CONNECTORS (Doppel-Auftrag, Front 1; die CALL-Front nutzt die vorhandenen Reihen 4+9 als Vorlage). Die dritte Gestalt der Fundstelle: das Rechteck des Dokuments, die Minute des Anrufs, die ZELLE DES SYSTEMS — System · Objekt · Revision · Attribut · abgerufen · durch wen. DER WIDERSPRUCH ist die Divergenz der Systeme: zwei Werte nebeneinander, jeder mit seiner Connector-Fundstelle, keiner überschrieben; die Rolle entscheidet mit Unterschrift, das unterlegene System bekommt die Korrektur als Vorschlag. DIE NEUE REVISION: der Pull ist still (Commit vor Deutung gilt auch für APIs — „byte-gleich verwahrt\"), nur der Diff mit Folgen wird die eine Karte, und sie zeigt beide Revisionen als Fundstellen. Max. 3 Karten gilt weiter."
     }
   ],
   "launch": {
