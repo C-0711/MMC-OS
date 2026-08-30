@@ -15,6 +15,7 @@ const { ladeKorrekturen, korrekturLernen, policyVorschlagErzeugen, policyAnwende
 const auth = require('./auth.js');
 const connectors = require('./connectors.js');
 const { signalingErweiternTcp } = require('./signaling-tcp.js');
+const fassung = require('./fassung.js');
 const execFileAsync = promisify(execFile);
 
 const PORT = process.env.GITCHAIN_REF_PORT || 3361;
@@ -174,6 +175,19 @@ const server = http.createServer(async (req, res) => {
       const objekt = url.pathname.split('/').pop();
       return json(200, connectors.revisionsHistorie(objekt));
     }
+    // OsVereinbarung/OsUebernahme: Fassung abrufen (Diff-Daten + Siegel-Zeilen)
+    if (url.pathname.startsWith('/api/v2/fall/') && url.pathname.endsWith('/fassung-uebersicht')) {
+      const teileF = url.pathname.split('/').filter(Boolean);
+      // [api, v2, fall, <fallId>, <fassungId>, fassung-uebersicht]
+      const f = fassung.fassungHolen(teileF[3], teileF[4]);
+      if (!f) return json(404, { fehler: 'Fassung nicht gefunden' });
+      return json(200, f);
+    }
+    // Übergaben eines Falls listen (OsUebergang: Zustandsanzeige)
+    if (url.pathname.startsWith('/api/v2/fall/') && url.pathname.endsWith('/uebergaben')) {
+      const teileF = url.pathname.split('/').filter(Boolean);
+      return json(200, { uebergaben: fassung.uebergabeListe(teileF[3]) });
+    }
     // OsDivergenz: was gilt aktuell (signierte Auflösungen)?
     if (url.pathname.startsWith('/api/v2/connectors/gueltigkeit/')) {
       const objekt = url.pathname.split('/').pop();
@@ -245,6 +259,25 @@ const server = http.createServer(async (req, res) => {
           giltSystem: daten.giltSystem, fundstelle: quelle, signiertVon: daten.signiertVon,
         });
         return json(200, { aufgeloest: true, fassung, hinweis: 'Signierte Fassung gilt ab jetzt — bis ein System sie wieder widerspricht' });
+      }
+      // ── OsVereinbarung: Fassung erzeugen / signieren ──
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'fassung') {
+        const r = fassung.fassungErstellen(teile[3], daten);
+        return json(201, r);
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'fassung-signieren') {
+        const r = fassung.fassungSignieren(teile[3], daten.fassungId, daten.did);
+        return json(200, r);
+      }
+      // ── OsUebernahme/OsUebergang: Übergabe des Klon-Angebots ──
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'uebergabe') {
+        return json(201, fassung.uebergabeStarten(daten));
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'uebergabe-annehmen') {
+        return json(200, fassung.uebergabeAnnehmen(daten.uebergabeId, daten.did));
+      }
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'uebergabe-ablehnen') {
+        return json(200, fassung.uebergabeAblehnen(daten.uebergabeId, daten.did, daten.grund));
       }
       // (der GET-/api/brain/lernen-Handler liegt oben beim anderen GET-Block)
       return json(404, { fehler: 'unbekannter Pfad', bekannt: ['/api/v2/health', '/api/brain/deploy (POST)', '/api/brain/metrics', '/api/brain/policy', '/api/brain/lernen (GET)', '/api/v2/fall/<id>/eingang', '/api/v2/fall/<id>/deutung'] });
