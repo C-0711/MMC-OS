@@ -64,6 +64,14 @@ router.post('/submit', requireChainAuth, handleSubmit);  // vor dem bestehenden 
 1. **Der Scheduler darf durch** — er ruft per Loopback mit Kennung; sonst schützt die Middleware den Scheduler selbst aus (genau der „zweite Codepfad"-Fehler, den S.1 verbot).
 2. **401-Format an die bestehenden Flächen angleichen** — die Registry nutzt bereits `{"error": "…"}` (live verifiziert bei /api/v2/search/vision → 401). Konsistenz statt neue Erfindung.
 
+**GEBAUT (Claude Code, Mac — 2026-08-30). Service-Commit `2fc8d2c`, Lieferung: `docs/patches/0002-feat-service-requireChainAuth-PAT-JWT-Schutz-f-r-POS.patch` (baut auf 0001 auf — beide zusammen: `git am docs/patches/000*.patch`).** Abweichungen/Präzisierungen gegenüber der Skizze oben:
+- **Pfad:** `src/middleware/requireChainAuth.ts` (nicht `src/routes/middleware/`) — konsistent mit der bestehenden Struktur (auth.ts, rbac.ts liegen dort).
+- **Echte Verifikation statt Platzhalter:** die Middleware reicht an `authenticate()` aus `middleware/auth.ts` durch — dieselbe Prüfung wie die /v1/*-Flächen (X-API-Key gegen api_keys-Tabelle, Bearer = 0711-I-JWT oder Legacy-Session). Kein neuer Auth-Pfad.
+- **Scope-Semantik** (requireScope-Konvention): API-Key-Principals brauchen `chain:submit` oder `admin` (403 im Format `{error, required, granted}`); JWT-/Session-User sind vollwertige Principals ohne Scope-Liste und passieren. 401: `{"error": "Anmeldung erforderlich — chain/submit ist geschützt"}`.
+- **Loopback ist sicher, weil** simple-index.ts KEIN `trust proxy` setzt → `req.ip` ist die rohe Socket-Adresse, von außen nicht auf 127.0.0.1 fälschbar. **Caveat:** wird jemals `trust proxy` aktiviert, muss der Loopback-Check neu bewertet werden.
+- **Scheduler sendet die Kennung** (`x-scheduler: 1`) am Loopback-Call — im selben Commit, kein Fenster, in dem er sich aussperrt.
+- `tsc --noEmit` grün. **Ops-Erinnerung:** Test-PAT mit Scope `chain:submit` über den tokens-Router anlegen (Kleinkram-Tabelle unten).
+
 ---
 
 ## P1 — DEPLOYER_PRIVATE_KEY + Netz-Env (kubectl, 3 Befehle)

@@ -1,0 +1,142 @@
+From 2fc8d2c5e268727ec89e491c30910abbe3c4927c Mon Sep 17 00:00:00 2001
+From: Christoph Bertsch <c@camm.org>
+Date: Sun, 30 Aug 2026 17:04:17 +0200
+Subject: [PATCH] =?UTF-8?q?feat(service):=20requireChainAuth=20=E2=80=94?=
+ =?UTF-8?q?=20PAT/JWT-Schutz=20f=C3=BCr=20POST=20/api/chain/submit=20(OPS-?=
+ =?UTF-8?q?SCHARFSCHALTUNG=20P1)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Neue Middleware src/middleware/requireChainAuth.ts: lässt (a) den
+pod-lokalen Anchor-Scheduler per Loopback + x-scheduler:1 durch
+(kein trust proxy gesetzt — req.ip von außen nicht fälschbar) und
+(b) authentifizierte Principals über die bestehende Verifikation in
+middleware/auth.ts (X-API-Key, 0711-I-JWT, Legacy-Session). API-Key-
+Principals brauchen Scope chain:submit oder admin (requireScope-
+Konvention). 401/403-Formate wie die bestehenden Flächen.
+
+scheduler.ts sendet die x-scheduler-Kennung am Loopback-Call im
+selben Commit — kein Fenster, in dem der Scheduler sich aussperrt.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+---
+ apps/service/src/anchor/scheduler.ts          |  4 +-
+ apps/service/src/chain-routes.ts              |  5 +-
+ .../src/middleware/requireChainAuth.ts        | 62 +++++++++++++++++++
+ 3 files changed, 69 insertions(+), 2 deletions(-)
+ create mode 100644 apps/service/src/middleware/requireChainAuth.ts
+
+diff --git a/apps/service/src/anchor/scheduler.ts b/apps/service/src/anchor/scheduler.ts
+index b97db91..ceb80af 100644
+--- a/apps/service/src/anchor/scheduler.ts
++++ b/apps/service/src/anchor/scheduler.ts
+@@ -185,9 +185,11 @@ export async function pruefeNetzwerkKonsistenz(): Promise<void> {
+ 
+ async function submitViaRoute(batchId: number): Promise<{ ok: boolean; body: any; status: number }> {
+   // THE existing submit route — same code path as a manual submit.
++  // "x-scheduler: 1" ist die Kennung für requireChainAuth (OPS-SCHARFSCHALTUNG
++  // P1): Loopback + Marker lässt den Scheduler durch die Auth-Middleware.
+   const res = await fetch(`${state.baseUrl}/api/chain/submit`, {
+     method: "POST",
+-    headers: { "Content-Type": "application/json" },
++    headers: { "Content-Type": "application/json", "x-scheduler": "1" },
+     body: JSON.stringify({ batchId }),
+   });
+   const body: any = await res.json().catch(() => null);
+diff --git a/apps/service/src/chain-routes.ts b/apps/service/src/chain-routes.ts
+index 8203273..f8a5214 100644
+--- a/apps/service/src/chain-routes.ts
++++ b/apps/service/src/chain-routes.ts
+@@ -21,6 +21,7 @@ import {
+   logAudit, getChainStats,
+ } from "./chain-db";
+ import { getSchedulerMetrics, getNetzwerkHinweis } from "./anchor/scheduler";
++import { requireChainAuth } from "./middleware/requireChainAuth";
+ 
+ export function createChainRouter(): Router {
+   const router = Router();
+@@ -130,7 +131,9 @@ export function createChainRouter(): Router {
+   });
+ 
+   // POST /submit — Submit batch to blockchain
+-  router.post("/submit", async (req: Request, res: Response, next: NextFunction) => {
++  // Geschützt (OPS-SCHARFSCHALTUNG P1): PAT/JWT nötig — der pod-lokale
++  // Scheduler kommt per Loopback + x-scheduler-Kennung durch.
++  router.post("/submit", requireChainAuth, async (req: Request, res: Response, next: NextFunction) => {
+     try {
+       const { batchId, metadataURI } = req.body;
+       if (!batchId) return res.status(400).json({ error: "batchId is required" });
+diff --git a/apps/service/src/middleware/requireChainAuth.ts b/apps/service/src/middleware/requireChainAuth.ts
+new file mode 100644
+index 0000000..8458b67
+--- /dev/null
++++ b/apps/service/src/middleware/requireChainAuth.ts
+@@ -0,0 +1,62 @@
++/**
++ * Auth-Wächter für Verankerungs-Schreibrouten (OPS-SCHARFSCHALTUNG.md P1).
++ *
++ * Erlaubt:
++ *  (a) den pod-lokalen Anchor-Scheduler: Loopback-Quelle + Kennung
++ *      `x-scheduler: 1`. Er ruft POST /api/chain/submit über 127.0.0.1 im
++ *      selben Pod auf — derselbe Code-Pfad wie der Hand-Submit
++ *      (AUFTRAG-anchor-scheduler.md S.1). Sicher, weil simple-index.ts
++ *      KEIN `trust proxy` setzt: req.ip ist die rohe Socket-Adresse und
++ *      von außen (über Ingress) nicht auf 127.0.0.1 zu fälschen.
++ *  (b) authentifizierte Principals über die bestehende Infrastruktur in
++ *      middleware/auth.ts (X-API-Key gegen api_keys-Tabelle, Bearer =
++ *      0711-I-JWT oder Legacy-Session) — dieselbe Verifikation wie die
++ *      /v1/*-Flächen, kein neuer Auth-Pfad. API-Key-Principals brauchen
++ *      zusätzlich den Scope `chain:submit` (oder `admin`) — Konvention
++ *      wie requireScope() in middleware/auth.ts.
++ *
++ * Fehlerformat wie die Live-Registry: {"error": "…"} (401) bzw.
++ * {"error", "required", "granted"} (403, wie requireScope).
++ */
++
++import { Request, Response, NextFunction } from "express";
++
++import { authenticate, AuthenticatedRequest } from "./auth";
++
++export const CHAIN_SUBMIT_SCOPE = "chain:submit";
++
++export function requireChainAuth(req: Request, res: Response, next: NextFunction): void {
++  // (a) Scheduler-Loopback zulassen — sonst sperrt die Middleware den
++  // Scheduler selbst aus (genau der "zweiter Codepfad"-Fehler, den S.1 verbot).
++  const isLoopback =
++    req.ip === "127.0.0.1" || req.ip === "::1" || req.ip === "::ffff:127.0.0.1";
++  if (isLoopback && req.get("x-scheduler") === "1") {
++    next();
++    return;
++  }
++
++  // (b) Bestehende PAT-/JWT-Verifikation durchlaufen lassen; authenticate()
++  // ist permissiv (setzt req.user nur bei gültigem Credential), die harte
++  // Kante ziehen wir hier.
++  const areq = req as AuthenticatedRequest;
++  void authenticate(areq, res, () => {
++    if (!areq.user) {
++      res.status(401).json({ error: "Anmeldung erforderlich — chain/submit ist geschützt" });
++      return;
++    }
++    // Scope nur für API-Key-Principals erzwingen (requireScope-Konvention):
++    // JWT-/Session-User sind vollwertige Principals ohne Scope-Liste.
++    if (areq.user.apiKeyId) {
++      const scopes = areq.user.apiKeyScopes || [];
++      if (!scopes.includes(CHAIN_SUBMIT_SCOPE) && !scopes.includes("admin")) {
++        res.status(403).json({
++          error: "Insufficient scope",
++          required: CHAIN_SUBMIT_SCOPE,
++          granted: scopes,
++        });
++        return;
++      }
++    }
++    next();
++  });
++}
+-- 
+2.50.1 (Apple Git-155)
+
