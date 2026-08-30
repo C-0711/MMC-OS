@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369
+       Schrift: Serife 34/22 (400, nie fett) · Sans 15/13/11 · Radius 16/8/999 */
+    body { margin: 0; }
+    a { color: #6e6550; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .karte {
+      background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+    }
+    .pill-salbei {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 44px; padding: 0 26px; border-radius: 999px;
+      background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 8px 22px -10px rgba(110,140,110,.7);
+    }
+    .pill-still {
+      display: flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 22px; border-radius: 999px;
+      background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500;
+    }
+    .siegel {
+      width: 44px; height: 44px; border-radius: 999px; flex: none;
+      background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px -4px rgba(150,130,76,.6), inset 0 1px 2px rgba(255,255,255,.4);
+      font-size: 14px;
+    }
+    .quellzeile {
+      font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .frag {
+      display: flex; align-items: center; gap: 10px; height: 44px;
+      background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px;
+      padding: 0 8px 0 18px; box-shadow: 0 4px 16px -8px rgba(90,75,50,.25);
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 12px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <span style="flex: 1"></span>
+      <div class="siegel serif">Du</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 26px; padding: 8px 80px 0">
+
+      <div class="serif" style="font-size: 30px">Woher weißt du das?</div>
+      <div class="t13 sub" style="margin-top: -14px">„Die Wanddicke von M-4711 beträgt 2,1 mm."</div>
+
+      <!-- Die Systemzelle: der Auszug aus dem fremden System, die Zeile selbst -->
+      <div style="width: 620px; background: #fff; border-radius: 8px; box-shadow: 0 18px 50px -18px rgba(70,58,38,.4); padding: 30px 38px; display: flex; flex-direction: column; gap: 11px">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <div style="font-size: 12px; font-weight: 600; color: rgba(42,37,32,.65); letter-spacing: .02em; flex: 1">TEAMCENTER · M-4711 · REVISION C</div>
+          <span class="zug zug-fall">abgerufen heute 06:12</span>
+        </div>
+        <div style="height: 1px; background: rgba(42,37,32,.08)"></div>
+        <div class="t13" style="display: flex; gap: 16px; color: rgba(42,37,32,.5)"><span style="width: 140px; flex: none">Werkstoff</span><span>1.4301</span></div>
+        <div style="position: relative; display: flex; gap: 16px; font-size: 13px; padding: 5px 8px; margin: 0 -8px">
+          <span style="position: absolute; inset: 0; border: 2px solid #D9A6A0; border-radius: 6px; background: rgba(217,166,160,.08)"></span>
+          <span class="sub" style="width: 140px; flex: none">wanddicke</span><span style="font-weight: 600">2,1 mm</span>
+        </div>
+        <div class="t13" style="display: flex; gap: 16px; color: rgba(42,37,32,.5)"><span style="width: 140px; flex: none">Oberfläche</span><span>gebeizt</span></div>
+        <div class="t13" style="display: flex; gap: 16px; color: rgba(42,37,32,.5)"><span style="width: 140px; flex: none">Freigabestand</span><span>freigegeben · 27.08.2026</span></div>
+      </div>
+
+      <div class="quellzeile">
+        <span>System <b style="color:#2a2520">teamcenter</b></span><span>·</span>
+        <span>Objekt M-4711</span><span>·</span>
+        <span>Revision C</span><span>·</span>
+        <span>Attribut wanddicke</span><span>·</span>
+        <span>abgerufen 30.08. 06:12 durch dich</span><span>·</span>
+        <span style="display: inline-flex; align-items: center; gap: 4px; color: #5c705c">Antwort byte-gleich verwahrt
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8FA98F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 10px">
+        <div class="pill-salbei">Stimmt</div>
+        <div class="pill-still">Im System öffnen</div>
+        <div class="pill-still" style="background: rgba(217,166,160,.16); color: #9c6a63">Falsch zugeordnet</div>
+      </div>
+
+      <div class="t11 sub" style="max-width: 58ch; text-align: center; line-height: 1.7">Kein Attribut aus einem System ohne diese Zeile — das Rechteck des Dokuments,<br>die Minute des Anrufs und die Zelle des Systems sind dieselbe Pflicht in drei Gestalten.</div>
+    </div>
+
+    <div style="flex: none; height: 30px"></div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
