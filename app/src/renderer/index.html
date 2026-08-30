@@ -28,19 +28,7 @@
       flex-shrink: 0;
     }
 
-    .siegel {
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, var(--olivgold), #96854F);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 18px;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    }
+    /* .siegel kommt aus tokens.css — rund, Radialverlauf, Serife */
 
     .zustand {
       font-size: 13px;
@@ -286,7 +274,7 @@
 
   <!-- Leiste -->
   <header>
-    <div class="siegel" title="Du — Identität, Autonomie, Recovery">○</div>
+    <div class="siegel" title="Du — Identität, Autonomie, Recovery">Du</div>
     <div class="zustand">
       <span id="zustand-text">heute · lädt…</span>
     </div>
@@ -319,7 +307,7 @@
             id="frag-mich-eingabe"
             placeholder="z. B. Was habe ich mit Weber vereinbart?"
             autocomplete="off">
-          <button class="btn-primary" id="frag-mich-senden">↑</button>
+          <button class="pill-salbei" id="frag-mich-senden" style="padding: 0 18px" aria-label="Fragen">↑</button>
         </div>
       </div>
     </div>
