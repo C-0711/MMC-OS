@@ -97,6 +97,7 @@ interface MMCVaultAPI {
     kartentext: { titel: string; frage: string }
   ): Promise<{ branch: string; sha: string }>;
   listVorschlaege(fallId: string): Promise<Vorschlag[]>;
+  listAtomsMain(fallId: string): Promise<Array<{ titel: string; atoms: Atom[] }>>;
   mergeVorschlag(fallId: string, proposalId: string): Promise<{ sha: string }>;
   rejectVorschlag(fallId: string, proposalId: string, grund?: string): Promise<void>;
   fallErzaehlung(fallId: string): Promise<ErzaehlSatz[]>;

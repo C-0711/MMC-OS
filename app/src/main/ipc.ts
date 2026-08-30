@@ -58,6 +58,10 @@ export function registerIpcHandlers(): void {
     return await vault.listVorschlaege(fallId);
   });
 
+  ipcMain.handle('vault:listAtomsMain', async (_event, fallId: string) => {
+    return await vault.listAtomsMain(fallId);
+  });
+
   ipcMain.handle('vault:mergeVorschlag', async (_event, fallId: string, proposalId: string) => {
     return await vault.mergeVorschlag(fallId, proposalId);
   });
