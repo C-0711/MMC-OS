@@ -1,0 +1,57 @@
+From 184d9332a73aa4ce4651bdc5d60b4db2826e053c Mon Sep 17 00:00:00 2001
+From: Christoph Bertsch <c@camm.org>
+Date: Sun, 30 Aug 2026 19:47:37 +0200
+Subject: [PATCH] =?UTF-8?q?feat(service):=20TURBO=5FSEARCH=5FENABLED-Gate?=
+ =?UTF-8?q?=20f=C3=BCr=20/api/v1/search/turbo=20(Prod-500-Fix)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Der TurboQuant-Mount war ungegated, obwohl staging-only (Kommentar T5,
+Phase-14-Cutover): auf Prod fehlen die Migrationen
+2026-04-19-embedding_tq.sql — search-turbo.ts liest embedding_tq_*-Spalten
+aus neo.rag_chunks, die dort nicht existieren, und die Postgres-Meldung
+"column does not exist" leakte als 500 in die Antwort
+(gitchain-api.md §2.6, PAT-Akzeptanztest 2026-08-30).
+
+Fix: Mount nur bei TURBO_SEARCH_ENABLED=1|true, sonst nicht gemountet
+(= 404 wie jede fremde Fläche). Beide Zweige loggen einmalig beim Start.
+Nach Migration + scripts/compute-turbo-embeddings.ts schaltet Ops die
+Route per Env-Flag frei — kein Rebuild nötig. Die Vision-Route
+(/api/v2/search/vision, HNSW/pgvector) läuft auf Prod und bleibt
+ungegated.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+---
+ apps/service/src/simple-index.ts | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/apps/service/src/simple-index.ts b/apps/service/src/simple-index.ts
+index 3931991..e5ca2b0 100644
+--- a/apps/service/src/simple-index.ts
++++ b/apps/service/src/simple-index.ts
+@@ -843,7 +843,18 @@ app.use("/v1/signing", createSigningRouter(pool));
+ // ═══ T5 — TurboQuant vector search (staging-only until Phase 14 cutover) ═══
+ // Requires neo.rag_chunks.embedding_tq_* columns (see migration
+ // 2026-04-19-embedding_tq.sql) to be populated by scripts/compute-turbo-embeddings.ts.
+-app.use("/api/v1/search/turbo", createTurboSearchRouter(pool));
++// GATED (gitchain-api.md §2.6): auf Prod fehlen die Migrationen — ungegated
++// liefert die Route dort 500 (Postgres "column does not exist" leakt in die
++// Antwort). Default AUS → 404 wie jede nicht gemountete Fläche. Freischalten
++// NACH Migration + Befüll-Skript: TURBO_SEARCH_ENABLED=1 (kein Rebuild nötig).
++const turboSearchEnabled =
++  process.env.TURBO_SEARCH_ENABLED === "1" || process.env.TURBO_SEARCH_ENABLED === "true";
++if (turboSearchEnabled) {
++  app.use("/api/v1/search/turbo", createTurboSearchRouter(pool));
++  console.log("[turbo-search] aktiviert (TURBO_SEARCH_ENABLED gesetzt) — /api/v1/search/turbo gemountet");
++} else {
++  console.log("[turbo-search] deaktiviert (staging-only, Migrationen 2026-04-19-embedding_tq.sql nötig) — /api/v1/search/turbo NICHT gemountet");
++}
+ 
+ // ═══ Track D — vision-RAG retrieval over enriched.visual_atoms ═══
+ // Two retrieval methods (hnsw, turbo). See routes/search-vision.ts for contract.
+-- 
+2.50.1 (Apple Git-155)
+
