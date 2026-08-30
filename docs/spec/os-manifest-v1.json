@@ -156,6 +156,7 @@
     "docs/spec/ingress-flow-v0.1.md",
     "docs/spec/massen-ingest-v0.1.md",
     "docs/spec/buerger-assistent-v0.1.md",
+    "docs/spec/meister-seite-v0.1.md",
     "docs/spec/boot-and-desktop-v0.1.md",
     "docs/spec/design-brief-for-claude.md"
   ]
