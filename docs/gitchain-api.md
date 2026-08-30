@@ -1,11 +1,13 @@
 # gitchain API-Referenz — api-gitchain.0711.io
 
-> **Stand:** 2026-08-30 · **Methode:** Live-Analyse der Produktions-API per `curl` (nur öffentliche Zugriffe, ohne Credentials).
-> Quellcode (Repo `C-0711/MMC-OS`, `apps/service/`, Entry `simple-index.ts`, 22 Router in `src/routes/`) war **nicht** lesbar — die Router-Struktur ist aus bekannten Router-Namen abgeleitet.
+> **Stand:** 2026-08-30 · **Methode:** Live-Analyse der Produktions-API per `curl` (nur öffentliche Zugriffe, ohne Credentials) **+ Quellcode-Abgleich am selben Tag** auf dem Mac: `~/Documents/0711-Gitchain/apps/service/src/` (Entry `simple-index.ts`, Mounts Z. 790–869; `src/routes/` enthält **13** Dateien, die restlichen Router liegen außerhalb — Aufschlüsselung in §4).
 >
 > **Legende:**
 > - ✅ **live verifiziert** — Antwort wurde per curl tatsächlich erhalten (Status-Code + Body belegt).
-> - 📋 **abgeleitet** — aus Router-Namen / Kontext erschlossen, NICHT live geprüft.
+> - 🔎 **quell-verifiziert** — im Quellcode nachgelesen (mit `datei:zeile`), nicht live gegen Prod geprüft.
+> - 📋 **abgeleitet** — erschlossen, weder live noch im Code geprüft (nach dem Abgleich fast leer).
+>
+> ⚠️ **Deploy≠Checkout-Vermerk:** Der Live-Fehlertext `"Anmeldung erforderlich"` (§2.7) kommt in diesem Checkout **nicht vor** (`grep` über `apps/service/src` leer). Die deployte Instanz hat mindestens eine `/api/v2`-Auth-Schicht, die neuer oder anders ist als der Mac-Quellstand. Alle 🔎-Angaben gelten für den Checkout-Stand; wo Live-Verhalten abweicht, ist es markiert.
 
 ---
 
@@ -73,6 +75,8 @@ curl -sS --max-time 10 https://api-gitchain.0711.io/api/chain/status
 ```
 
 **Interessant:** `connected: false`, alle 9 Batches `pending`, keine `confirmedBatches` — die Verankerung läuft aktuell nicht produktiv (Testnet base-sepolia, Read-only-Wallet). Redundanz: `contractAddress` und `contract` doppelt. Enthält direkten Basescan-Explorer-Link.
+
+**Ticket-Antwort „läuft der Anchor-Worker?" 🔎 — es gibt keinen.** Im Quellcode existiert **kein Worker, kein Cron, kein Auto-Polling**: pending-Batches werden nur durch einen manuellen `POST /api/chain/submit` (chain-routes.ts:131–174) bestätigt. `connected` ist ein reiner RPC-Erreichbarkeits-Check, kein Worker-Status (Status-Shape: chain-routes.ts:177–188). `walletAddress: "read-only"` heißt: `ANCHOR_WALLET_KEY` ist im Deployment nicht gesetzt (Env-Konfiguration anchor-routes.ts:21–32 — `ANCHOR_WALLET_KEY` [ohne → read-only, Schreibrouten 503], `ANCHOR_CHAIN` [Default base-sepolia], `ANCHOR_RPC_URL`, `ANCHOR_CONTRACT_ADDRESS` [Default 0xAd31…aEc7]; Wallet-Adresse wird aus dem Key abgeleitet, anchor-routes.ts:162). **Fix:** `ANCHOR_WALLET_KEY` setzen + einmal manuell submitten — oder einen Scheduler davor bauen.
 
 ### 2.3 `GET /api/verify/:id` — Container-/Hash-Verifikation ✅
 
@@ -167,11 +171,25 @@ Live-Verhalten:
 - Ohne/ungültiges Embedding → **400** `{"error":"query_embedding must be a 1024-dim array (got length=not-array)"}` bzw. `(got length=10)` bei 10 Dim — Validierung existiert und ist präzise.
 - Mit gültigem 1024-dim-Vektor → **500** `{"error":"column \"embedding_tq_polar\" does not exist","latency_ms":4041}` — **Produktions-Bug**: die TurboQuant-Polar-Spalte fehlt in der Postgres-Tabelle. Die Route ist korrekt verdrahtet (Validierung → Query), aber die DB-Migration steht aus.
 
-**Abgeleitet aus dem Fehlerbild:** Erfolgsantwort würde Treffer mit Distanz/Score + `latency_ms` enthalten (Feldname `latency_ms` ist live belegt).
+**Ticket-Antwort „Migration fehlt?" 🔎 — die Migration EXISTIERT, sie ist nur nicht angewendet.** Die Query liest `embedding_tq_polar, embedding_tq_qjl, embedding_tq_rnorm, embedding_tq_xnorm` aus `neo.rag_chunks` (search-turbo.ts:88; Kommentar dort: „one-shot brute-force scan … ~100 MB I/O"). Die Spalten legt `database/migrations/2026-04-19-embedding_tq.sql:20` an (bytea, TurboQuant seed=42, b=3); für die Vision-Variante analog `2026-04-19-visual_atoms.sql:58` (Tabelle `enriched.visual_atoms`, gelesen in search-vision.ts:166). Nach der Migration müssen die Spalten noch befüllt werden: `scripts/compute-turbo-embeddings.ts`. Der Mount trägt im Code den Kommentar **„T5 — TurboQuant … staging-only until Phase 14 cutover"** (simple-index.ts:842–844) — der 500er ist also erwartbar: eine staging-only-Route ist auf Prod erreichbar, deren Migration dort nie lief. Fix: Migrationen in der Prod-DB anwenden + Befüll-Skript, oder Route auf Prod nicht mounten.
 
 ### 2.7 `POST /api/v2/search/vision` — Vision-Suche ✅ (auth-geschützt)
 
-Ohne Auth → **401** `{"error":"Anmeldung erforderlich"}`. Route existiert (POST); GET auf denselben Pfad → 404 (nur POST registriert). Body-Schema 📋 abgeleitet (vermutlich Bild-/Embedding-Payload, da `vision`).
+Ohne Auth → **401** `{"error":"Anmeldung erforderlich"}`. Route existiert (POST); GET auf denselben Pfad → 404 (nur POST registriert).
+
+**Body-Schema 🔎** (search-vision.ts:82–97 — es ist KEINE Bild-Upload-Route, sondern Vektor-Suche über Seiten-Renderings):
+
+```json
+{
+  "query_embedding": [/* 1024 floats, bge-m3 — Pflicht */],
+  "method": "hnsw",          // optional: "hnsw" (Default) | "turbo"
+  "k": 10,                   // optional, max 100
+  "supplier_pid": "…",       // optional Filter
+  "container_id": "…"        // optional Filter
+}
+```
+
+Erfolgs-Response 🔎: `{results: [{id, supplier_pid, container_id, document, document_sha256, page, page_png_sha256, page_width_px, page_height_px, dpi, score}], latency_ms}` — jeder Treffer trägt Seite + PNG-SHA256 der Seiten-Grafik (Beweis-Viewer-tauglich). **Achtung Deploy≠Checkout:** Im Checkout hat diese Route KEINE Auth-Middleware; der Live-401 (`"Anmeldung erforderlich"`, deutsch — String kommt im Checkout nirgends vor) stammt aus einer Auth-Schicht der deployten Instanz, die hier nicht vorliegt. `method:"turbo"` läuft auf `enriched.visual_atoms` und dürfte auf Prod am selben Migrations-Problem wie §2.6 scheitern.
 
 ### 2.8 Authentifizierte User-Routen (401 live) ✅ Status, 📋 Inhalt
 
@@ -223,52 +241,79 @@ Dokumentierte 404er (belegen, dass diese Flächen existieren aber anders lauten)
 
 | Fläche | Präfix | Status |
 |---|---|---|
-| Registry v2 | `/api/v2/*` | ✅ `/api/v2/health`, `/api/v2/search` live; `search/vision` 401 |
-| Git Smart HTTP + Objekt-API | `/git/*` | ✅ `info/refs` live; Upload-Pack 📋 |
-| OCP Tier-0-Protokoll | `/api/ocp/v1/*` | 📋 Pfad live 404 — konkrete Sub-Routen unbekannt; `ocp_state`-Feld in Search-Results belegt OCP-Integration |
-| User/PAT/Device/Admin/Billing | `/v1/*` | ✅ `/v1/user`, `/v1/admin` live 401; weitere 📋 |
-| v1-Compat | `/api/*` | ✅ `/api/user` live 401; `/api/v1/inject`, `/api/v1/search/turbo` live; `/api/verify/:id`, `/api/chain/status` live |
-| Chain/Verify | `/api/chain`, `/api/verify` | ✅ live |
+| Registry v2 | `/api/v2/*` | ✅ `/api/v2/health`, `/api/v2/search` live; `search/vision` 401 · 🔎 registry-routes.ts |
+| Git Smart HTTP | `/git/<type>/<ns>/<id>.git/*` | ✅ `info/refs` live · 🔎 Direkt-Routen `info/refs`, `git-upload-pack`, `git-receive-pack` mit gitAuth (simple-index.ts:592/658/718) |
+| **OCP Tier-0-Protokoll** | **`/ocp/v1/*`** — NICHT `/api/ocp/v1` (daher der Live-404!) | 🔎 ocp/router.ts, öffentlich gemountet (simple-index.ts, „NO persona logic"); Sub-Routen in §4 |
+| User/Auth/Admin/Billing | `/v1/*` | ✅ `/v1/user`, `/v1/admin` live 401 · 🔎 users.ts, admin.ts, billing-v1.ts, signing.ts, webhooks.ts, remotes.ts |
+| v1-Compat | `/api/*` | ✅ `/api/user` live 401; `/api/v1/inject`, `/api/v1/search/turbo` live · 🔎 registry-v1-compat.ts als LETZTER Mount („search only") |
+| Chain/Verify/Anchor | `/api/chain`, `/v1/chain`, `/api/verify`, `/v1/verify`, `/api/v4` | ✅ status/verify live · 🔎 chain-routes.ts, anchor-routes.ts (v4 hinter promoterKey-Middleware) |
+| Discovery OCP/MCP | `/v1/ocp`, `/v1/mcp` | 🔎 Discovery + inject/tools/disclose-Subrouten (simple-index.ts:1017–1042) |
+| Bridge (Root) | `/` | 🔎 bridge.ts, als Root gemountet |
 
 ---
 
-## 4. Router-Struktur (22 Router, aus Router-Namen abgeleitet) 📋
+## 4. Router-Struktur 🔎 (quell-verifiziert: simple-index.ts, Mounts Z. 790–869)
 
-Quelle: Router-Namen aus `src/routes/` (Kontext; Quellcode nicht lesbar). Bekannte Namen und ihre wahrscheinlichen Flächen — **Pfade unterhalb der Router sind erschlossen, nicht live verifiziert** (außer wo ✅):
+**Auflösung der „22 Router":** `src/routes/` enthält exakt **13** Dateien (ls-verifiziert): `admin, batch, billing-v1, bridge, containers, organizations, remotes, search-turbo, search-vision, signing, storage, users, webhooks`. Dazu kommen ~9 Router **außerhalb** von `src/routes/`: `chain-routes` (+ verifyRouter), `registry-routes`, `promote-routes`, `anchor-routes`, `ocp/router`, `ocp/query`, `registry-v1-compat` — plus Direkt-Routen ohne Router (inject, Git Smart HTTP, whoami, Discovery). Die früheren Vermutungen `git-objects`, `device`, `tokens`, `merge-requests`, `issues` **existieren nicht als Router-Dateien**.
 
-| # | Router | Vermutete Fläche | Verifiziert |
-|---|---|---|---|
-| 1 | `containers` | Container-CRUD/Listing, vermutlich `/api/v2/containers/:id` o.ä. | Route 404 am getesteten Pfad; Container-Schema über Search/Inject indirekt ✅ |
-| 2 | `git-objects` | Git-Objekt-API (Blobs/Trees/Atoms), vermutlich unter `/git/*` neben Smart HTTP | 📋 |
-| 3 | `device` | Device-Registrierung/-Bindung, `/v1/device*` | 📋 |
-| 4 | `tokens` | PAT-Verwaltung (Personal Access Tokens), `/v1/tokens*` | 📋 |
-| 5 | `users` | User-Management/Profile | `/v1/user`, `/api/user` 401 ✅ |
-| 6 | `organizations` | Orgs/Namespaces (analog `namespace`-Feld in Search) | 📋 |
-| 7 | `merge-requests` | MRs auf Container-Repos | 📋 |
-| 8 | `issues` | Issues pro Container | 📋 |
-| 9 | `webhooks` | Webhook-Registrierung/-Auslieferung | 📋 |
-| 10 | `billing` | Abrechnung (Euro-Settlement, Capability-Economy), `/v1/billing*` | 📋 |
-| 11 | `signing` | Signatur-API (Ed25519, Fassung-Signaturen) | 📋 |
-| 12 | `search-turbo` | Vektor-Suche TurboQuant | ✅ `POST /api/v1/search/turbo` |
-| 13 | `search-vision` | Vision-Suche | ✅ `POST /api/v2/search/vision` (401) |
-| 14–22 | *unbekannt* (9 weitere) | u.a. vermutlich: registry/health, chain/anchors, verify/inject, admin | `/api/v2/health`, `/api/chain/status`, `/api/verify/:id`, `/api/v1/inject` existieren — welcher Router sie bedient ist ohne Quellcode nicht zuordenbar |
+### 4.1 Mounts (Reihenfolge wie im Code)
 
-**Ehrlichkeits-Vermerk:** Nur 13 Router-Namen sind bekannt; die restlichen 9 der 22 sind unbenannt. Die Zuordnung Router→Präfix ist plausibel (Router-Namen entsprechen den Flächen), aber nicht belegt.
+| Mount-Pfad(e) | Router-Datei | Anmerkung |
+|---|---|---|
+| `/api/chain`, `/v1/chain` | chain-routes.ts | status ✅, submit (manuell, §2.2) |
+| `/api/verify`, `/v1/verify` | verifyRouter (chain-routes.ts) | ✅ `:id`-Route |
+| `/api/v2` | registry-routes.ts | health ✅, search ✅ |
+| `/api/v4` | promote-routes.ts + anchor-routes.ts | hinter **promoterKey-Middleware** |
+| `/ocp/v1` | ocp/router.ts + ocp/query.ts | **öffentlich** („NO persona logic") — s. 4.3 |
+| `/v1/containers`, `/api/containers` | containers.ts | |
+| `/v1/storage`, `/api/storage` | storage.ts | |
+| `/v1/billing` | billing-v1.ts | |
+| `/v1/webhooks` | webhooks.ts | |
+| `/v1/signing` | signing.ts | |
+| `/api/v1/search/turbo` | search-turbo.ts | ✅ live (500, §2.6); „staging-only until Phase 14 cutover" (simple-index.ts:842–844) |
+| `/api/v2/search/vision` | search-vision.ts | ✅ live (401, §2.7); „NOTE: mounted BEFORE registryV1Router" |
+| `/v1/batch`, `/api/batch` | batch.ts | |
+| `/v1/admin` | admin.ts | ✅ 401 live |
+| `/v1/organizations`, `/api/organizations` | organizations.ts | |
+| `/v1` | users.ts | ✅ `/v1/user` 401 live |
+| `/api/user` | users.ts | ✅ 401 live (v1-Compat) |
+| `/v1/remotes` | remotes.ts | |
+| `/` | bridge.ts | Root-Mount |
+| `/api` | registry-v1-compat.ts | LETZTER Mount, „search only" |
+
+### 4.2 Direkt-Routen (ohne Router-Datei, direkt in simple-index.ts)
+
+| Route | Zeile | Auth |
+|---|---|---|
+| `GET /v1/auth/whoami` | :152 | requireAuth |
+| `POST /api/v1/inject` | :319 | quotaMiddleware (öffentlich mit Quota) ✅ live |
+| `POST /api/v1/inject/skeleton`, `…/expand` | nahe :319 | wie inject |
+| `GET /api/v1/search` | — | öffentlich |
+| `GET /git/:type/:ns/:id.git/info/refs` | :592 | gitAuth ✅ live |
+| `POST …/git-upload-pack` | :658 | gitAuth |
+| `POST …/git-receive-pack` | :718 | gitAuth (push!) |
+| `/v1/ocp`, `/v1/mcp` Discovery + inject/tools/disclose | :1017–1042 | — |
+| `/api/billing/*`, `/registry`, `/registry/health` | — | — |
+
+### 4.3 OCP-Fläche `/ocp/v1/*` (ocp/router.ts:228–531 + ocp/query.ts)
+
+Acht öffentliche GETs je Container: `containers/:cid`, `…/atoms`, `…/atoms/:atom_id`, `…/citations`, `…/documents`, `…/coverage`, `…/conflicts`, `…/verify` — dazu `POST /embed` und `POST /containers/:id/retrieve` (Stubs in query.ts). Der Live-404 auf `/api/ocp/v1` in §2.4a war schlicht der falsche Präfix.
 
 ---
 
 ## 5. Konventionen
 
 ### 5.1 Pfad-Stil ✅/📋
-- Versionierte Präfixe je Fläche: `/api/v2/*` (Registry), `/api/v1/*` (v1-Compat neu), `/api/*` (v1-Compat alt), `/v1/*` (User/Admin/Billing), `/api/ocp/v1/*` (Protokoll), `/git/*` (transport) ✅ (anhand der Live-Routen belegt).
+- Versionierte Präfixe je Fläche: `/api/v2/*` (Registry), `/api/v1/*` (v1-Compat neu), `/api/*` (v1-Compat alt), `/v1/*` (User/Admin/Billing), `/ocp/v1/*` (Protokoll — 🔎 korrigiert, NICHT `/api/ocp/v1`), `/api/v4/*` (Promote/Anchor, promoterKey), `/git/*` (Transport) ✅/🔎.
 - Ressourcen-Pfade singular/plural gemischt: `/v1/user` (singular), `/api/v2/search` — daher wurden `/v1/users` (404) vs. `/v1/user` (401) unterschieden ✅.
 - Container-IDs als Pfad-Parameter: `0711:<type>:<namespace>:<identifier>` — Doppelpunkte müssen URL-encoded werden (`%3A`) ✅.
 - Git-Smart-HTTP klassisch nach Git-Protokoll: `/git/<path>.git/info/refs?service=git-upload-pack` ✅.
 
-### 5.2 Auth-Modell ✅ Status, 📋 Details
-- **Bearer-Auth:** Authentifizierte Routen antworten ohne/gültiges Token mit **401** `{"error":"Authentication required"}` (englisch) bzw. vision-Suche mit `{"error":"Anmeldung erforderlich"}` (deutsch — gemischte Sprachen im Fehlerformat).
-- **PAT/Device-Bearer** (📋 aus Kontext: Router `tokens` + `device`): `Authorization: Bearer <token>`; Token-Präfix in der Praxis häufig `gct_` (unbestätigt — getesteter Fake `gct_test123` wurde abgelehnt; das Präfix selbst ist nicht verifizierbar ohne echtes Token).
-- **Öffentlich ohne Auth:** health, chain/status, verify/:id, inject, v2/search, git smart HTTP (upload-pack read).
+### 5.2 Auth-Modell ✅ Status, 🔎 Details
+- **Zwei Mechanismen 🔎** (middleware/auth.ts): **`X-API-Key`-Header** — Key wird SHA256-gehasht gegen `api_keys.key_hash` geprüft — oder **`Authorization: Bearer <token>`** mit 0711-I-JWT (bzw. Legacy-Session).
+- **Das vermutete Token-Präfix `gct_` EXISTIERT NICHT im Code** — die frühere Vermutung ist gestrichen. Der getestete Fake `gct_test123` wurde als beliebiger ungültiger Bearer abgelehnt, nicht wegen des Präfixes.
+- Live-Fehlertexte: **401** `{"error":"Authentication required"}` (englisch, aus diesem Code) bzw. `{"error":"Anmeldung erforderlich"}` (deutsch — ⚠️ NICHT in diesem Checkout, siehe Deploy≠Checkout-Vermerk oben).
+- **Öffentlich ohne Auth:** health, chain/status, verify/:id, inject (mit Quota), v2/search, `/ocp/v1/*`, git smart HTTP read (gitAuth lässt upload-pack public durch; receive-pack = push braucht Auth).
 
 ### 5.3 Fehlerformate ✅
 Zwei Formate live belegt:
@@ -285,10 +330,11 @@ Voll offen (`*`, alle Standard-Methoden) — browserbasierte Clients direkt mög
 
 ## 6. Offene Punkte / Empfehlungen
 
-1. **Turbo-Suche produktionsreif** (500 statt 200 — fehlende Spalte `embedding_tq_polar`) — vermutlich fehlende Migration im K8s-Image.
-2. **Chain-Verankerung inaktiv** (`connected:false`, 9/9 Batches pending) — mit Multi-Anchor-Roadmap (QTSP/EBSI/OTS statt reiner Base-Sepolia) abgleichen.
+1. **Turbo-Suche produktionsreif machen** — GEKLÄRT 🔎: Migrationen `database/migrations/2026-04-19-embedding_tq.sql` + `2026-04-19-visual_atoms.sql` existieren, sind in der Prod-DB nur nicht angewendet; danach `scripts/compute-turbo-embeddings.ts` laufen lassen. Route ist laut Code „staging-only until Phase 14 cutover" (§2.6).
+2. **Chain-Verankerung inaktiv** — GEKLÄRT 🔎: es gibt **keinen Anchor-Worker**; pending-Batches bestätigen sich nur per manuellem `POST /api/chain/submit`, und `ANCHOR_WALLET_KEY` ist im Deployment nicht gesetzt (read-only). Offen bleibt die Entscheidung: Key setzen + Scheduler bauen, oder Multi-Anchor-Roadmap (QTSP/EBSI/OTS) abwarten (§2.2).
 3. **DB-Fehler leaken** in API-Antworten (Postgres-Meldungen) — für Produktion wrappen.
 4. **Gemischte Fehler-Sprachen** (en/de) und `containerId` vs. snake_case — vereinheitlichen.
-5. **OCP v1-Fläche** (`/api/ocp/v1/*`) konnte nicht live verifiziert werden — Sub-Routen brauchen Quellcode oder Doku vom Mac.
+5. **OCP v1-Fläche** — GEKLÄRT 🔎: liegt unter `/ocp/v1/*` (nicht `/api/ocp/v1`), 8 öffentliche GETs + 2 POST-Stubs (§4.3). Live-Verifikation der Sub-Routen steht noch aus.
+6. **NEU — Deploy≠Checkout:** Die deployte `/api/v2`-Auth-Schicht (`"Anmeldung erforderlich"`) existiert im Mac-Checkout nicht. Klären, welcher Stand/welches Layer auf Prod läuft, bevor 🔎-Angaben zu v2-Auth als verbindlich gelten.
 
-*Erstellt von einem repo-externen Agenten ausschließlich über die öffentliche API; alle ✅-Angaben sind echte curl-Responses vom 2026-08-30.*
+*✅-Angaben: echte curl-Responses eines repo-externen Agenten (2026-08-30, öffentliche API). 🔎-Angaben: Quellcode-Abgleich am selben Tag auf dem Mac (`~/Documents/0711-Gitchain/apps/service/src/`), Mounts wörtlich gegengelesen, Turbo-Query/Migrationen/Routen-Dateien per Stichprobe direkt verifiziert.*
