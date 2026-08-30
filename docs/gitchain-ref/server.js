@@ -14,6 +14,7 @@ const crypto = require('crypto');
 const { ladeKorrekturen, korrekturLernen, policyVorschlagErzeugen, policyAnwenden, SCHWELLE } = require('./lernen.js');
 const auth = require('./auth.js');
 const connectors = require('./connectors.js');
+const { signalingErweiternTcp } = require('./signaling-tcp.js');
 const execFileAsync = promisify(execFile);
 
 const PORT = process.env.GITCHAIN_REF_PORT || 3361;
@@ -236,4 +237,12 @@ const server = http.createServer(async (req, res) => {
 fs.mkdirSync(VAULT, { recursive: true });
 ladePolicy();
 auth.init();
+
+// ── Signaling-Server (CALL C.2) — TCP-JSON auf :3362 ──
+const net = require('net');
+const SIGNALING_PORT = 3362;
+const sig = signalingErweiternTcp();
+net.createServer(sock => sig.verbinde(sock)).listen(SIGNALING_PORT, '127.0.0.1', () => {
+  console.log('Signaling (TCP-JSON) auf :' + SIGNALING_PORT + ' — sieht nie Medien');
+});
 server.listen(PORT, '127.0.0.1', () => console.log(`gitchain-ref v0.3-lernend auf :${PORT} · Auto-Deploy aktiv`));
