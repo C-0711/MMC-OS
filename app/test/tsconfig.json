@@ -13,6 +13,6 @@
     "moduleResolution": "node",
     "types": ["node"]
   },
-  "include": ["**/*.ts", "../src/main/vault.ts", "../src/main/services.ts"],
+  "include": ["**/*.ts", "../src/main/vault.ts", "../src/main/services.ts", "../src/main/deutung.ts"],
   "exclude": ["node_modules"]
 }

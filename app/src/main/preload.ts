@@ -1,26 +1,111 @@
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 
 /**
  * window.mmc API — IPC-Bridge zwischen Renderer und Main-Prozess
- *
- * Wird in Etappe 2 (Vault) und Etappe 3 (Ingress + LLM) gefüllt.
  */
 
+// Type definitions (matching vault.ts, services.ts)
+export interface FallInfo {
+  id: string;
+  pfad: string;
+  offeneVorschlaege: number;
+  letzterCommitIso: string;
+}
+
+export interface Atom {
+  id: string;
+  feld: string;
+  wert: string;
+  fundstelle: {
+    doc: string;
+    seite: number;
+    bbox: [number, number, number, number];
+  };
+  conf: number;
+}
+
+export interface Vorschlag {
+  id: string;
+  kartentext: {
+    titel: string;
+    frage: string;
+  };
+  atoms: Atom[];
+  branch: string;
+}
+
+export interface ErzaehlSatz {
+  satz: string;
+  commitZeile: string;
+  sha: string;
+  datumIso: string;
+}
+
+export interface OcrLine {
+  bbox: [number, number, number, number];
+  text: string;
+  conf: number;
+}
+
+export interface OcrPage {
+  index: number;
+  width: number;
+  height: number;
+  lines: OcrLine[];
+}
+
+export interface OcrErgebnis {
+  name: string;
+  pagesTotal: number;
+  totalMs: number;
+  pages: OcrPage[];
+}
+
+export interface DeutungErgebnis {
+  atoms: Atom[];
+  kartentext: {
+    titel: string;
+    frage: string;
+  };
+  zweifel: boolean;
+}
+
+export interface ZitatKontext {
+  fall: string;
+  doc: string;
+  seite: number;
+  text: string;
+}
+
 export interface MMCVaultAPI {
-  // TODO Etappe 2: Fall-Repos anlegen/lesen, Eingang-Commit, Branch-Vorschlag, Merge
-  // createFall(name: string): Promise<string>;
-  // commitEingang(fallId: string, file: ArrayBuffer, meta: object): Promise<string>;
-  // listFaelle(): Promise<Array<{name: string, path: string}>>;
+  listFaelle(): Promise<FallInfo[]>;
+  createFall(id: string): Promise<FallInfo>;
+  commitEingang(
+    fallId: string,
+    quelle: { absender: string; kanal: string },
+    datei: { name: string; bytes: ArrayBuffer }
+  ): Promise<{ sha: string; docPfad: string }>;
+  proposeDeutung(
+    fallId: string,
+    proposalId: string,
+    atoms: Atom[],
+    kartentext: { titel: string; frage: string }
+  ): Promise<{ branch: string; sha: string }>;
+  listVorschlaege(fallId: string): Promise<Vorschlag[]>;
+  mergeVorschlag(fallId: string, proposalId: string): Promise<{ sha: string }>;
+  rejectVorschlag(fallId: string, proposalId: string, grund?: string): Promise<void>;
+  fallErzaehlung(fallId: string): Promise<ErzaehlSatz[]>;
+  readDocAsDataUrl(fallId: string, docRelPath: string): Promise<string>;
 }
 
 export interface MMCOCR_API {
-  // TODO Etappe 3: belegsrv /v1/ocr aufrufen
-  // deuteBeleg(file: ArrayBuffer): Promise<{zeilen: Array<{text: string, conf: number, bbox: [number, number, number, number]}>, secs: number}>;
+  health(): Promise<boolean>;
+  deuteBeleg(datei: { name: string; bytes: ArrayBuffer; mime?: string }): Promise<OcrErgebnis>;
+  deutungAusOcr(ocr: OcrErgebnis, docName: string): Promise<DeutungErgebnis>;
 }
 
 export interface MMCLLM_API {
-  // TODO Etappe 3: vLLM :11435 (OpenAI-kompatibel) für Frag-mich-Antworten
-  // ask(frage: string, context: string[]): Promise<{antwort: string, zitate: Array<{text: string, quelle: object}>}>;
+  fragMich(frage: string, kontext: ZitatKontext[]): Promise<{ antwort: string }>;
 }
 
 export interface MMCAPI {
@@ -29,15 +114,42 @@ export interface MMCAPI {
   llm: MMCLLM_API;
 }
 
+// Helper: ArrayBuffer → Number-Array für IPC
+function arrayBufferToNumbers(ab: ArrayBuffer): number[] {
+  return Array.from(new Uint8Array(ab));
+}
+
 const api: MMCAPI = {
   vault: {
-    // Platzhalter — wird in Etappe 2 mit ipcRenderer.invoke(...) gefüllt
+    listFaelle: () => ipcRenderer.invoke('vault:listFaelle'),
+    createFall: (id: string) => ipcRenderer.invoke('vault:createFall', id),
+    commitEingang: (fallId: string, quelle: { absender: string; kanal: string }, datei: { name: string; bytes: ArrayBuffer }) =>
+      ipcRenderer.invoke('vault:commitEingang', fallId, quelle, {
+        name: datei.name,
+        bytes: arrayBufferToNumbers(datei.bytes)
+      }),
+    proposeDeutung: (fallId: string, proposalId: string, atoms: Atom[], kartentext: { titel: string; frage: string }) =>
+      ipcRenderer.invoke('vault:proposeDeutung', fallId, proposalId, atoms, kartentext),
+    listVorschlaege: (fallId: string) => ipcRenderer.invoke('vault:listVorschlaege', fallId),
+    mergeVorschlag: (fallId: string, proposalId: string) => ipcRenderer.invoke('vault:mergeVorschlag', fallId, proposalId),
+    rejectVorschlag: (fallId: string, proposalId: string, grund?: string) =>
+      ipcRenderer.invoke('vault:rejectVorschlag', fallId, proposalId, grund),
+    fallErzaehlung: (fallId: string) => ipcRenderer.invoke('vault:fallErzaehlung', fallId),
+    readDocAsDataUrl: (fallId: string, docRelPath: string) => ipcRenderer.invoke('vault:readDocAsDataUrl', fallId, docRelPath)
   },
   ocr: {
-    // Platzhalter — wird in Etappe 3 mit ipcRenderer.invoke(...) gefüllt
+    health: () => ipcRenderer.invoke('ocr:health'),
+    deuteBeleg: (datei: { name: string; bytes: ArrayBuffer; mime?: string }) =>
+      ipcRenderer.invoke('ocr:deuteBeleg', {
+        name: datei.name,
+        bytes: arrayBufferToNumbers(datei.bytes),
+        mime: datei.mime
+      }),
+    deutungAusOcr: (ocr: OcrErgebnis, docName: string) =>
+      ipcRenderer.invoke('deutung:ausOcr', ocr, docName)
   },
   llm: {
-    // Platzhalter — wird in Etappe 3 mit ipcRenderer.invoke(...) gefüllt
+    fragMich: (frage: string, kontext: ZitatKontext[]) => ipcRenderer.invoke('llm:fragMich', frage, kontext)
   }
 };
 

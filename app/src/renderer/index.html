@@ -6,7 +6,7 @@
   <title>Der ruhige Raum</title>
   <link rel="stylesheet" href="tokens.css">
   <style>
-    /* Layout — ein Fenster, drei Zustände */
+    /* Layout — ein Fenster, vier Zustände */
     html, body {
       width: 100%;
       height: 100%;
@@ -80,6 +80,9 @@
     /* Karten */
     #karten-container {
       display: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     .karte h3 {
@@ -134,6 +137,7 @@
       color: #8A817A;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       transition: all var(--transition-mittel);
+      z-index: 10;
     }
 
     .frag-mich:hover {
@@ -202,6 +206,60 @@
       flex-shrink: 0;
     }
 
+    /* Fall-Ansicht */
+    #fall-ansicht-container {
+      display: none;
+    }
+
+    /* Seitenbrett */
+    #seitenbrett-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 28px;
+      background: #fff;
+      border: var(--border-hairline);
+      border-radius: var(--radius-pille);
+      padding: 12px 22px;
+      cursor: pointer;
+      font-size: var(--text-karte);
+      color: #8A817A;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all var(--transition-mittel);
+      z-index: 10;
+    }
+
+    #seitenbrett-toggle:hover {
+      color: var(--tinte);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    #seitenbrett-panel {
+      position: fixed;
+      left: 28px;
+      bottom: 80px;
+      width: 280px;
+      max-height: 400px;
+      background: #fff;
+      border: var(--border-hairline);
+      border-radius: var(--radius-karte);
+      padding: 16px;
+      box-shadow: 0 10px 34px -18px rgba(90,75,50,.35);
+      display: none;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    /* Beweis-Overlay */
+    #beweis-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.3);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -216,7 +274,7 @@
       opacity: 0;
       transition: opacity var(--transition-mittel);
       pointer-events: none;
-      z-index: 1000;
+      z-index: 1100;
     }
 
     .toast.sichtbar {
@@ -237,7 +295,7 @@
   <!-- Bühne -->
   <main>
     <div class="gruss serif" id="gruss">Guten Morgen.</div>
-    <div class="gruss-klein">Alles ruhig.</div>
+    <div class="gruss-klein" id="gruss-klein">Zieh ein Dokument hierher, dann fangen wir an.</div>
 
     <!-- Zustand: ruhig -->
     <div class="alles-ruhig serif" id="alles-ruhig" style="display: none;">
@@ -265,10 +323,24 @@
         </div>
       </div>
     </div>
+
+    <!-- Zustand: fall-ansicht (Erzählung) -->
+    <div id="fall-ansicht-container"></div>
   </main>
 
+  <!-- Beweis-Overlay -->
+  <div id="beweis-overlay"></div>
+
+  <!-- Seitenbrett-Toggle -->
+  <div id="seitenbrett-toggle">Fälle</div>
+
+  <!-- Seitenbrett-Panel -->
+  <div id="seitenbrett-panel">
+    <div id="seitenbrett-liste"></div>
+  </div>
+
   <!-- Frag-mich-Toggle -->
-  <div class="frag-mich" id="frag-mich-toggle">💬 Frag mich</div>
+  <div class="frag-mich" id="frag-mich-toggle">Frag mich</div>
 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
