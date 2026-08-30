@@ -109,3 +109,32 @@ Realistisch erst Etappe 5 — die App hat noch keinen Live-Call-Client
   zeigt auf den VERWAHRTEN Namen (app.ts:833).
 - Fehler-Schlüssel der Ref ist `fehler`, nicht `error` — die App wird
   darauf asserten.
+
+## 5. AUFLÖSUNG (2026-08-30, gleicher Tag): Endpunkte geliefert und quer-bewiesen
+
+Das Backend-Team hat noch am selben Tag geliefert (Merge `fda3220`):
+`GITCHAIN_REF_ROOT`-Env (§2 erledigt), `GET /api/v2/anruf/:sitzId/transkript`
+(§3a), `GET …/wav` (§3b), `GET /api/v2/fall/:id/docs` + `…/doc/<pfad>` (§3d,
+per Pfad statt Hash — für den Beweis-Viewer ausreichend), plus
+Transkript-Mitgabe beim `POST …/anruf` bzw. Nachlieferung via
+`…/anruf-transkript`.
+
+Gemessen, lokal (`GITCHAIN_REF_ROOT=/tmp/gitchain-ref-test`, :3361):
+
+- Health → `@gitchain/ref 0.3.0-lernend git-fs` — der ROOT-Schalter
+  funktioniert, EACCES weg.
+- `test-kontrakt.js` (vom Backend): **8/8** — inkl. Pfad-Traversal-Block
+  und 404 für unbekannte Sitzungen.
+- **Quer-Beweis** (`/tmp/nahtstelle-cross.js`): Sitzung an der Ref eröffnet,
+  Transkript per GET geholt und **unverändert** in die laufende App
+  (CDP :9222) gefüttert → `deutungAusTranskript` liefert 2 Atoms, Betrag
+  `12.500,00` mit Fundstelle `{art:'anruf', minute:'11:03', wav}` →
+  `NAHTSTELLE-CROSS-OK`. Was die Ref liefert, deutet die App ohne
+  Anpassung — der Kontrakt hält in beide Richtungen.
+
+**Was von §1/§3 offen bleibt:**
+- Deployment: auf `192.168.145.10:3361` läuft weiterhin die registry
+  (postgres), nicht diese Ref — die neuen Routen sind dort erst nutzbar,
+  wenn die Ref deployed oder die Routen in die registry übernommen sind.
+- §3c Signaling (:3362) — unverändert Etappe 5.
+- Anruf-POST hinter der registry-Auth: klärt erst ein Device-Login.
