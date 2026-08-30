@@ -163,3 +163,28 @@ Test-PAT chain:submit für externe Batch-Pflege, Phase-3-Inspektor-Ablösung.
 
 *Damit gilt ab jetzt auf der Website zu Recht: „sealed truth, signed, on-chain" — selbstlaufend,
 sichtbar ehrlich (mode), geschützt (401), und für ~Bruchteil eines Cents pro Beweis.*
+
+
+---
+
+## 🎉 DRAIN KOMPLETT — 9/9 CONFIRMED (30.08., ~16:50 UTC, live verifiziert)
+
+```
+confirmed: 9/9 · pending: 0 · fehlversuche: 0 · fehlerhafte: 0
+mode: "anchoring" · base-mainnet · wallet 0xD78E… (Nonce 14 → 23: 9 echte Tx)
+```
+
+**Alle 10 Manifeste / 9 Batches der Registry sind auf Base-Mainnet verankert.**
+Der Wächter wurde gestoppt (Aufgabe erfüllt). Der Scheduler läuft weiter und
+verankert künftige Batches automatisch (15-Min-Tick, ~0,00000087 ETH pro Batch).
+
+**Die vollständige Erfolgskette des Tages:** Diagnose „Verankerung INAKTIV" →
+Code-Analyse (falscher Key-Name) → Wallet-Inventur (Mainnet vs Sepolia) →
+eth_getCode-Messung (Contract = MAINNET) → Auftrag → Patch 0001+0002 →
+k3s-Migration → Scharfschaltung (mode:anchoring, 401-Auth) → **9/9 verankert.**
+
+Von „connected: false, 0/9, niemand weiß warum" bis „selbstlaufend, geschützt,
+für einen Bruchteil eines Cents pro Beweis" — an einem Nachmittag.
+
+*Der Wahrheitsgehalt der Website ist hergestellt: „sealed truth, signed, on-chain —
+verifiable by anyone, anytime."*
