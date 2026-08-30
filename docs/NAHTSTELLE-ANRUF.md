@@ -30,6 +30,22 @@ Anruf-Endpunkt auf der registry deployed? Und falls der Schreibpfad dort
 Anmeldung verlangt: Device-Login ist der einzige Auth-Pfad der App
 (Secrets werden nie übertragen).
 
+**Nachtrag (Statuscode-Messung, 2026-08-30):** Das Backend-Team bestätigt
+die Adresse (öffentlich api-gitchain.0711.io, LAN 192.168.145.10:3361,
+Cluster `gitchain-service.gitchain.svc.cluster.local:3361`) — es ist also
+die eine GitChain-API, kein Proxy-Irrtum. Unterscheidung Auth-Gate vs.
+fehlende Route:
+
+    POST /api/v2/fall/x/anruf          → 401   } beide 401 → globale Auth-
+    POST /api/v2/fall/x/gibt-es-nicht  → 401   } Middleware, nicht entscheidbar
+    GET  /api/v2/fall/x/anruf/y/transkript → 404   } GETs sind nicht auth-
+    GET  /api/v2/fall/x/docs               → 404   } gegated (Health geht ja)
+                                                     → Routen FEHLEN sicher
+
+Die Lese-Endpunkte aus §3 (Transkript, wav, Doc-Liste) fehlen also
+definitiv. Ob der Anruf-POST hinter der Auth existiert, klärt erst ein
+Device-Login.
+
 ## 2. Lokaler Betrieb der Ref scheitert an hartkodiertem Vault-Pfad
 
 `docs/gitchain-ref/server.js:299` macht `mkdirSync('/opt/data/gitchain-ref/vault')`
@@ -93,3 +109,32 @@ Realistisch erst Etappe 5 — die App hat noch keinen Live-Call-Client
   zeigt auf den VERWAHRTEN Namen (app.ts:833).
 - Fehler-Schlüssel der Ref ist `fehler`, nicht `error` — die App wird
   darauf asserten.
+
+## 5. AUFLÖSUNG (2026-08-30, gleicher Tag): Endpunkte geliefert und quer-bewiesen
+
+Das Backend-Team hat noch am selben Tag geliefert (Merge `fda3220`):
+`GITCHAIN_REF_ROOT`-Env (§2 erledigt), `GET /api/v2/anruf/:sitzId/transkript`
+(§3a), `GET …/wav` (§3b), `GET /api/v2/fall/:id/docs` + `…/doc/<pfad>` (§3d,
+per Pfad statt Hash — für den Beweis-Viewer ausreichend), plus
+Transkript-Mitgabe beim `POST …/anruf` bzw. Nachlieferung via
+`…/anruf-transkript`.
+
+Gemessen, lokal (`GITCHAIN_REF_ROOT=/tmp/gitchain-ref-test`, :3361):
+
+- Health → `@gitchain/ref 0.3.0-lernend git-fs` — der ROOT-Schalter
+  funktioniert, EACCES weg.
+- `test-kontrakt.js` (vom Backend): **8/8** — inkl. Pfad-Traversal-Block
+  und 404 für unbekannte Sitzungen.
+- **Quer-Beweis** (`/tmp/nahtstelle-cross.js`): Sitzung an der Ref eröffnet,
+  Transkript per GET geholt und **unverändert** in die laufende App
+  (CDP :9222) gefüttert → `deutungAusTranskript` liefert 2 Atoms, Betrag
+  `12.500,00` mit Fundstelle `{art:'anruf', minute:'11:03', wav}` →
+  `NAHTSTELLE-CROSS-OK`. Was die Ref liefert, deutet die App ohne
+  Anpassung — der Kontrakt hält in beide Richtungen.
+
+**Was von §1/§3 offen bleibt:**
+- Deployment: auf `192.168.145.10:3361` läuft weiterhin die registry
+  (postgres), nicht diese Ref — die neuen Routen sind dort erst nutzbar,
+  wenn die Ref deployed oder die Routen in die registry übernommen sind.
+- §3c Signaling (:3362) — unverändert Etappe 5.
+- Anruf-POST hinter der registry-Auth: klärt erst ein Device-Login.
