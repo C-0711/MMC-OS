@@ -1,3 +1,5 @@
 app/node_modules/
 app/dist/
 app/release/
+docs/gitchain-ref/vault/
+docs/gitchain-ref/brain/
