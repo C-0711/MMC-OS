@@ -13,6 +13,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { ladeKorrekturen, korrekturLernen, policyVorschlagErzeugen, policyAnwenden, SCHWELLE } = require('./lernen.js');
 const auth = require('./auth.js');
+const connectors = require('./connectors.js');
 const execFileAsync = promisify(execFile);
 
 const PORT = process.env.GITCHAIN_REF_PORT || 3361;
@@ -72,10 +73,18 @@ async function commitEingang(fallId, eingang) {
 async function proposeDeutung(fallId, deutung) {
   const { proposalId, atoms, kartentext } = deutung;
   if (!Array.isArray(atoms) || !atoms.length) throw new Error('atoms[] ist Pflicht');
-  for (const a of atoms) if (!a.fundstelle || !a.fundstelle.doc) throw new Error('jedes Atom braucht fundstelle.doc');
+  for (const a of atoms) {
+    const f = a.fundstelle;
+    const ok = f && (
+      (f.art === 'dokument' || !f.art) && f.doc                            // klassisch
+      || (f.art === 'anruf' && f.wav && f.minute)                          // C.1/C.7
+      || (f.art === 'connector' && f.system && f.objekt && f.revision)   // W1.1
+    );
+    if (!ok) throw new Error('jedes Atom braucht eine gültige Fundstelle (dokument: doc | anruf: wav+minute | connector: system+objekt+revision)');
+  }
   const fallPfad = path.join(VAULT, fallId);
   const branch = `vorschlag/${proposalId || crypto.randomBytes(4).toString('hex')}`;
-  await git(fallPfad, 'checkout', '-q', '-b', branch);
+  try { await git(fallPfad, 'checkout', '-q', '-b', branch); } catch { await git(fallPfad, 'checkout', '-q', branch); } // idempotent
   const zeilen = atoms.map((a, i) => JSON.stringify({ id: `atom-${Date.now()}-${i}`, feld: a.feld || 'deutung', wert: a.wert, fundstelle: a.fundstelle, conf: a.conf ?? null, zweifel: (a.conf ?? 1) < 0.5 }));
   fs.mkdirSync(path.join(fallPfad, 'atoms'), { recursive: true });
   fs.writeFileSync(path.join(fallPfad, 'atoms', `${proposalId || 'vorschlag'}.jsonl`), zeilen.join('\n') + '\n');
@@ -149,6 +158,9 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === 'GET' && url.pathname === '/api/brain/metrics') return json(200, (await metrikArtefakt()).metrik);
     if (req.method === 'GET' && url.pathname === '/api/brain/policy') return json(200, ladePolicy());
+    if (req.method === 'GET' && url.pathname === '/api/v2/connectors/mocks') {
+      return json(200, Object.fromEntries(Object.entries(connectors.MOCKS).map(([k, m]) => [k, { system: k, endpoint: m.endpoint, objekte: Object.keys(m.items), abgerufenDurch: m.abgerufenDurch }])));
+    }
     if (req.method === 'GET' && url.pathname === '/api/chain/status') return json(200, { status: 'ok', modus: 'referenz (kein chain-backend — Signatur/Anchor laut Spec: QTSP/EBSI/OTS)', signaturErzwungen: false, hinweis: 'Referenz-Instanz beweist Container-Mechanik, nicht Verankerung' });
 
     if (req.method === 'GET' && url.pathname === '/api/brain/lernen') {
@@ -189,6 +201,20 @@ const server = http.createServer(async (req, res) => {
       }
       if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'auth' && teile[3] === 'bestaetigen') {
         return json(200, await auth.authBestaetigen(daten.zustellId, daten.code, { createFall: (id) => createFall(id) }));
+      }
+      // W1.5: Connector-Pull — System-API wird committeter Eingang mit Fundstellen
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'pull') {
+        return json(200, await connectors.connectorPull(daten, (fallId, eingang) => commitEingang(fallId, eingang)));
+      }
+      // W1.5: Widerspruchs-Engine — Karte mit ZWEI Fundstellen
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'connectors' && teile[3] === 'widerspruch') {
+        return json(200, connectors.widerspruchPruefung(daten.systemA || 'teamcenter', daten.systemB || 'pim', daten.objekt || 'MNR-4711'));
+      }
+      // C.7: Anruf-Sitzung — eröffnet Live-Spur im Fall, Atoms mit Minuten-Fundstelle
+      if (teile[0] === 'api' && teile[1] === 'v2' && teile[2] === 'fall' && teile[4] === 'anruf') {
+        if (!await fallExistiert(teile[3])) return json(404, { fehler: 'fall nicht gefunden' });
+        const sitzungId = 'anruf-' + Date.now().toString(36);
+        return json(201, { sitzungId, fall: teile[3], gestartet: new Date().toISOString(), hinweis: 'Atoms via /deutung mit fundstelle.art=anruf committen' });
       }
       // (der GET-/api/brain/lernen-Handler liegt oben beim anderen GET-Block)
       return json(404, { fehler: 'unbekannter Pfad', bekannt: ['/api/v2/health', '/api/brain/deploy (POST)', '/api/brain/metrics', '/api/brain/policy', '/api/brain/lernen (GET)', '/api/v2/fall/<id>/eingang', '/api/v2/fall/<id>/deutung'] });
