@@ -40,7 +40,8 @@
     "../src/renderer/anruf-live-renderer.ts",
     "../src/renderer/types.d.ts",
     "../src/main/kontakte.ts",
-    "../src/renderer/screens-kontakte.ts"
+    "../src/renderer/screens-kontakte.ts",
+    "../src/main/fall-strom.ts"
   ],
   "exclude": [
     "node_modules"
