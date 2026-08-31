@@ -12,6 +12,7 @@ import * as anruf from './anruf';
 import * as themen from './themen';
 import * as suche from './suche';
 import * as ingest from './ingest';
+import * as anrufLive from './anruf-live';
 import { deutungAusOcr, deutungAusTranskript, type Transkript } from './deutung';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
@@ -229,5 +230,17 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('ingest:ask', async (_event, frage: string) => {
     return ingest.antwortAusAtomen(frage);
+  });
+
+  // ============================================================================
+  // Anruf-Live (Etappe D, T15) — Signaling über die gitchain-Registry
+  // ============================================================================
+  ipcMain.handle('anrufLive:signalSenden', async (_event, nachricht: anrufLive.SignalNachricht) => {
+    await anrufLive.signalSenden(nachricht);
+    return { ok: true };
+  });
+
+  ipcMain.handle('anrufLive:signalEmpfangen', async (_event, meineId: string, seitIso: string | null) => {
+    return await anrufLive.signalEmpfangen(meineId, seitIso);
   });
 }

@@ -259,6 +259,17 @@ declare global {
     ja(): Promise<{ ok: boolean }>;
   }
 
+  interface MMCAnrufLiveAPI {
+    signalSenden(nachricht: {
+      von: string; an: string;
+      art: 'angebot' | 'antwort' | 'kandidat' | 'auflegen';
+      daten: unknown; zeit: string;
+    }): Promise<{ ok: boolean }>;
+    signalEmpfangen(meineId: string, seitIso: string | null): Promise<Array<{
+      von: string; an: string; art: string; daten: unknown; zeit: string;
+    }>>;
+  }
+
   interface MMCAPI {
     vault: MMCVaultAPI;
     ocr: MMCOCR_API;
@@ -266,6 +277,7 @@ declare global {
     gitchain: MMCGitchainAPI;
     daten: MMCDatenAPI;
     update: MMCUpdateAPI;
+    anrufLive: MMCAnrufLiveAPI;
   }
 
   interface Window {

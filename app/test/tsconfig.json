@@ -29,7 +29,9 @@
     "../src/main/ingest.ts",
     "../src/main/log.ts",
     "../src/main/backup.ts",
-    "../src/main/update.ts"
+    "../src/main/update.ts",
+    "../src/main/gitchain.ts",
+    "../src/main/anruf-live.ts"
   ],
   "exclude": [
     "node_modules"

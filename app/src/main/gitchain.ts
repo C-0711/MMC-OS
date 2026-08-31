@@ -284,6 +284,80 @@ export async function pushFall(fallId: string): Promise<PushErgebnis> {
 }
 
 // ============================================================================
+// Signal-Transport (Etappe D): Signaling-Einträge als Commits in einem
+// lokalen Signal-Fall, gepusht/gepullt über den selben git-Transport.
+// Kein neuer Backend-Endpunkt — die Registry IST der Signal-Anker.
+// ============================================================================
+
+function signalFallPfad(id: string): string {
+  const vaultRoot = process.env.MMC_VAULT ?? path.join(require('os').homedir(), 'MMC-Vault');
+  return path.join(vaultRoot, `mmc-signal-${id}`);
+}
+
+/** Signal als Commit in den lokalen Signal-Fall schreiben, dann pushen. */
+export async function pushSignal(fallSignalName: string, inhalt: string): Promise<void> {
+  const pat = lesePat();
+  if (!pat) throw new Error('Kein PAT verwahrt — erst anmelden.');
+
+  const pfad = signalFallPfad(fallSignalName.replace(/^mmc-signal-/, ''));
+  fs.mkdirSync(path.join(pfad, 'docs'), { recursive: true });
+  if (!fs.existsSync(path.join(pfad, '.git'))) {
+    const init = await gitLauf(['init', '-b', 'main'], pfad, pat);
+    if (init.code !== 0) throw new Error(`git init fehlgeschlagen: ${init.out}`);
+  }
+  const datei = path.join(pfad, 'docs', `signal-${Date.now()}.json`);
+  fs.writeFileSync(datei, inhalt);
+  await gitLauf(['add', '.'], pfad, pat);
+  const commit = await gitLauf(['commit', '-m', `signal: ${new Date().toISOString()}`, '--allow-empty'], pfad, pat);
+  if (commit.code !== 0 && !/nothing to commit/.test(commit.out)) {
+    throw new Error(`git commit fehlgeschlagen: ${commit.out.slice(0, 200)}`);
+  }
+  const remoteUrl = `${API_URL}/git/${GIT_TYP}/${GIT_NS}/${fallSignalName}.git`;
+  const push = await gitLauf(['push', '-u', 'origin', 'main', remoteUrl], pfad, pat);
+  // Push-Fehler sind kein harter Fehler — der nächste Poll holt nach.
+  if (push.code !== 0) logWarn(`pushSignal push fehlgeschlagen: ${push.out.slice(0, 200)}`);
+}
+
+/** Signale seit `seitIso` aus dem Remote pullen (Felder geprüft). */
+export async function pullSignal(fallSignalName: string, seitIso: string | null): Promise<string[]> {
+  const pat = lesePat();
+  if (!pat) return [];
+
+  const pfad = signalFallPfad(fallSignalName.replace(/^mmc-signal-/, ''));
+  fs.mkdirSync(pfad, { recursive: true });
+  if (!fs.existsSync(path.join(pfad, '.git'))) return []; // noch nichts da — still
+
+  const remoteUrl = `${API_URL}/git/${GIT_TYP}/${GIT_NS}/${fallSignalName}.git`;
+  await gitLauf(['pull', remoteUrl, 'main'], pfad, pat); // kein Fehler bei leer
+
+  const seit = seitIso ? `--since=${seitIso}` : '-20';
+  const logOut = await gitLauf(['log', 'main', seit, '--format=%b'], pfad, pat);
+  if (logOut.code !== 0) return [];
+  // Signal-Commits tragen die Nachricht im Body — wir lesen die JSON-Dateien direkter:
+  const docs = path.join(pfad, 'docs');
+  try {
+    const dateien = fs.readdirSync(docs).filter(f => f.endsWith('.json')).sort();
+    const roh: string[] = [];
+    for (const d of dateien.slice(-50)) {
+      try {
+        const n = JSON.parse(fs.readFileSync(path.join(docs, d), 'utf8')) as { zeit?: string };
+        if (seitIso && n.zeit && n.zeit <= seitIso) continue;
+        roh.push(fs.readFileSync(path.join(docs, d), 'utf8'));
+      } catch { continue; }
+    }
+    return roh;
+  } catch {
+    return [];
+  }
+}
+
+function logWarn(meldung: string): void {
+  // gitchain.ts hat keinen log-Import (Zirkulargefahr mit electron) —
+  // console als stiller Fallback; main.ts loggt ohnehin global.
+  console.warn(`[gitchain] ${meldung}`);
+}
+
+// ============================================================================
 // Status (für die UI)
 // ============================================================================
 

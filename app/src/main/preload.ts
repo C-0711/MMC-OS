@@ -252,6 +252,17 @@ export interface MMCUpdateAPI {
   ja(): Promise<{ ok: boolean }>;
 }
 
+export interface MMCAnrufLiveAPI {
+  signalSenden(nachricht: {
+    von: string; an: string;
+    art: 'angebot' | 'antwort' | 'kandidat' | 'auflegen';
+    daten: unknown; zeit: string;
+  }): Promise<{ ok: boolean }>;
+  signalEmpfangen(meineId: string, seitIso: string | null): Promise<Array<{
+    von: string; an: string; art: string; daten: unknown; zeit: string;
+  }>>;
+}
+
 export interface MMCAPI {
   vault: MMCVaultAPI;
   ocr: MMCOCR_API;
@@ -259,6 +270,7 @@ export interface MMCAPI {
   gitchain: MMCGitchainAPI;
   daten: MMCDatenAPI;
   update: MMCUpdateAPI;
+  anrufLive: MMCAnrufLiveAPI;
 }
 
 // Helper: ArrayBuffer → Number-Array für IPC
@@ -269,6 +281,11 @@ function arrayBufferToNumbers(ab: ArrayBuffer): number[] {
 const api: MMCAPI = {
   update: {
     ja: () => ipcRenderer.invoke('update:ja')
+  },
+  anrufLive: {
+    signalSenden: (nachricht: unknown) => ipcRenderer.invoke('anrufLive:signalSenden', nachricht),
+    signalEmpfangen: (meineId: string, seitIso: string | null) =>
+      ipcRenderer.invoke('anrufLive:signalEmpfangen', meineId, seitIso),
   },
   vault: {
     listFaelle: () => ipcRenderer.invoke('vault:listFaelle'),

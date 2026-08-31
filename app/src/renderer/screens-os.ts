@@ -11,6 +11,10 @@
 import type { AppCtx } from './router.js';
 import { navigate } from './router.js';
 import { kopf } from './screens-onboarding.js';
+import { AnrufLive } from './anruf-live-renderer.js';
+
+/** Die eine Live-Instanz — Anruf-Kommt und Anruf-Läuft teilen sie. */
+export const anrufLive = new AnrufLive();
 
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K, klassen?: string, text?: string
@@ -280,8 +284,32 @@ export function renderOsUebergang(container: HTMLElement, _ctx: AppCtx): void {
 export function renderOsAnrufKommt(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const anrufe = ((ctx?.daten ?? {}) as StoreDaten)?.anrufe ?? [];
+  const daten = (ctx?.daten ?? {}) as StoreDaten;
+  const anrufe = daten?.anrufe ?? [];
   const b = buehne(titelSerif('Anrufe', 28));
+
+  // Klon zu Klon: ein Partner anrufen (WebRTC, kein Anbieter dazwischen)
+  const wahl = el('div', 'frag');
+  wahl.style.cssText = 'width:100%;max-width:560px';
+  const nummer = el('input') as HTMLInputElement;
+  nummer.placeholder = 'Wen rufst du an? (Klon-Name)';
+  nummer.style.cssText = 'flex:1;border:none;background:transparent;font-size:15px;outline:none';
+  const ruf = el('button', 'pill-salbei', 'Anrufen');
+  wahl.append(nummer, ruf);
+  const hinweis = el('div', 't11 sub',
+    'Klon zu Klon — kein Anbieter dazwischen · Mitschrift mit Minute, bei euch beiden');
+  ruf.addEventListener('click', async () => {
+    const partner = nummer.value.trim();
+    if (!partner) return;
+    try {
+      await anrufLive.anrufen(partner);
+      navigate('anruf-laeuft', ctx);
+    } catch {
+      b.appendChild(el('div', 't13 sub',
+        'Der Anruf kam nicht zustande — kein PAT oder die Registry antwortet nicht. Nichts geht verloren.'));
+    }
+  });
+  b.append(wahl, hinweis);
 
   if (anrufe.length === 0) {
     b.appendChild(el('div', 't13 sub', 'Noch keine Anrufe in diesem Fall — wenn einer kommt, liegt er hier mit Minute und Sprecher.'));
@@ -304,28 +332,77 @@ export function renderOsAnrufKommt(container: HTMLElement, ctx: AppCtx): void {
 export function renderOsAnrufLaeuft(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const anrufe = ((ctx?.daten ?? {}) as StoreDaten)?.anrufe ?? [];
+  const daten = (ctx?.daten ?? {}) as StoreDaten;
+  const anrufe = daten?.anrufe ?? [];
   const a = anrufe[0];
+  const live = anrufLive.phase === 'laeuft' || anrufLive.phase === 'rufend';
+
   const b = buehne(
-    el('div', 'etikett', a ? `Anruf · ${a.partner}` : 'Anruf'),
-    a ? el('div', 'serif t15', a.dauer) : el('div', 't13 sub', 'Kein Anruf ausgewählt.')
+    el('div', 'etikett', live
+      ? `Anruf · ${anrufLive.zeilen.length > 0 ? 'live' : 'verbinde'}`
+      : a ? `Anruf · ${a.partner}` : 'Anruf'),
+    el('div', 'serif t15', live ? 'läuft' : a ? a.dauer : '—')
   );
-  if (!a) {
-    b.appendChild(el('div', 't13 sub', 'Noch keine Mitschrift — wähle im Anrufe-Bereich einen Anruf.'));
-    gr.append(kopf(), b, fuss());
-    container.appendChild(gr);
-    return;
-  }
+
   const mitschrift = el('div', 'karte');
   mitschrift.style.cssText = 'text-align:left;width:100%;max-width:560px';
-  for (const z of a.zeilen.slice(0, 12)) {
-    const markiert = a.minuten.includes(z.zeit);
-    const zeile = el('div', markiert ? 't13' : 't13 sub', `${z.zeit} · ${z.sprecher}: ${z.text}`);
-    if (markiert) zeile.style.cssText = 'background:rgba(217,166,160,.08);border-radius:6px;padding:3px 8px;margin:0 -8px';
-    mitschrift.appendChild(zeile);
+
+  if (live) {
+    // Live-Mitschrift aus dem DataChannel (Nachricht = Commit)
+    const zeilenBox = el('div');
+    const zeichne = () => {
+      zeilenBox.textContent = '';
+      for (const z of anrufLive.zeilen.slice(-12)) {
+        zeilenBox.appendChild(el('div', 't13', `${z.zeit} · ${z.sprecher}: ${z.text}`));
+      }
+    };
+    anrufLive.beimAendern(zeichne);
+    zeichne();
+    mitschrift.appendChild(zeilenBox);
+
+    // Sende-Feld: sage etwas → bei beiden in der Mitschrift
+    const feld = el('div', 'frag');
+    feld.style.cssText = 'width:100%';
+    const input = el('input') as HTMLInputElement;
+    input.placeholder = 'Sagen oder festhalten …';
+    input.style.cssText = 'flex:1;border:none;background:transparent;font-size:15px;outline:none';
+    const send = el('button', 'pill-salbei', 'Sagen');
+    feld.append(input, send);
+    const schicken = () => {
+      const text = input.value.trim();
+      if (!text) return;
+      anrufLive.sage(text);
+      input.value = '';
+    };
+    send.addEventListener('click', schicken);
+    input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') schicken(); });
+    mitschrift.appendChild(feld);
+
+    const knopfLeiste = el('div');
+    knopfLeiste.style.cssText = 'display:flex;gap:10px';
+    const auflegen = el('button', 'pill-rose', 'Auflegen');
+    auflegen.addEventListener('click', () => {
+      anrufLive.auflegen();
+      navigate('anruf-kommt', ctx);
+    });
+    knopfLeiste.appendChild(auflegen);
+    b.appendChild(mitschrift);
+    b.appendChild(knopfLeiste);
+    b.appendChild(el('div', 't11 sub',
+      'Klon zu Klon — die Mitschrift entsteht auf beiden Geräten, kein Anbieter dazwischen.'));
+  } else if (a) {
+    // Gespeicherte Mitschrift (aus dem Fall)
+    for (const z of a.zeilen.slice(0, 12)) {
+      const markiert = a.minuten.includes(z.zeit);
+      const zeile = el('div', markiert ? 't13' : 't13 sub', `${z.zeit} · ${z.sprecher}: ${z.text}`);
+      if (markiert) zeile.style.cssText = 'background:rgba(217,166,160,.08);border-radius:6px;padding:3px 8px;margin:0 -8px';
+      mitschrift.appendChild(zeile);
+    }
+    mitschrift.appendChild(quelle(`fall ${a.fallId} · ${a.doc} · Signatur ✓`));
+    b.appendChild(mitschrift);
+  } else {
+    b.appendChild(el('div', 't13 sub', 'Noch keine Mitschrift — rufe jemanden an oder wähle im Anrufe-Bereich.'));
   }
-  mitschrift.appendChild(quelle(`fall ${a.fallId} · ${a.doc} · Signatur ✓`));
-  b.appendChild(mitschrift);
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
@@ -627,7 +704,7 @@ export function renderOsDivergenz(container: HTMLElement, _ctx: AppCtx): void {
   container.appendChild(gr);
 }
 
-export function renderOsAufzeichnung(container: HTMLElement, _ctx: AppCtx): void {
+export function renderOsAufzeichnung(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
   const b = buehne(
@@ -635,8 +712,26 @@ export function renderOsAufzeichnung(container: HTMLElement, _ctx: AppCtx): void
     el('div', 't13 sub', 'Anruf · Badrenovierung · Minute 02:10'),
     el('div', 't13 sub', 'Das Audio liegt dann als Datei im Fall — bei euch beiden, nicht bei einem Anbieter')
   );
-  b.append(knoepfe(['Zustimmen', 'pill-salbei'], ['Nicht aufzeichnen', 'pill-still']),
-    el('div', 't11 sub', 'Zustimmung wird committet — vor dem ersten Ton, nicht danach'));
+  const fussHinweis = el('div', 't11 sub', 'Zustimmung wird committet — vor dem ersten Ton, nicht danach');
+  b.append(knoepfe(
+    ['Zustimmen', 'pill-salbei', async () => {
+      // Die Erlaubnis wird als Commit im Fall festgehalten (vor dem Ton)
+      try {
+        const fall = ctx?.fallId ?? 'unfall-passat';
+        await window.mmc.vault.commitEingang(fall,
+          { absender: 'System', kanal: 'anruf-aufzeichnung' },
+          { name: `aufzeichnung-einwilligung-${Date.now()}.json`,
+            bytes: new TextEncoder().encode(JSON.stringify({
+              art: 'einwilligung', partner: 'Frau Weber',
+              minute: '02:10', zeit: new Date().toISOString(),
+            })).buffer });
+        fussHinweis.textContent = 'Einwilligung committet · vor dem ersten Ton · bei euch beiden';
+      } catch {
+        fussHinweis.textContent = 'Das konnte ich nicht committen — es wurde nichts aufgenommen.';
+      }
+    }],
+    ['Nicht aufzeichnen', 'pill-still']),
+    fussHinweis);
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
