@@ -79,6 +79,7 @@ function beweisZeile(links: string, rechts: string): HTMLElement {
 export interface StoreDaten {
   uebersicht?: FallUebersicht;
   anrufe?: AnrufInfo[];
+  anrufeAlle?: AnrufInfo[];
   themen?: ThemaInfo[];
   stapel?: StapelEintrag[];
   neuesThema?: ThemaVorschlag[];
@@ -285,7 +286,9 @@ export function renderOsAnrufKommt(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
   const daten = (ctx?.daten ?? {}) as StoreDaten;
-  const anrufe = daten?.anrufe ?? [];
+  // Anrufe über ALLE Fälle (Dogfood-Befund): der Screen zeigt jeden
+  // Anruf aus dem Leben — anrufeAlle zuerst, Fall-Liste als Fallback.
+  const anrufe = (daten?.anrufeAlle?.length ? daten.anrufeAlle : daten?.anrufe) ?? [];
   const b = buehne(titelSerif('Anrufe', 28));
 
   // Klon zu Klon: ein Partner anrufen (WebRTC, kein Anbieter dazwischen)
@@ -333,7 +336,7 @@ export function renderOsAnrufLaeuft(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
   const daten = (ctx?.daten ?? {}) as StoreDaten;
-  const anrufe = daten?.anrufe ?? [];
+  const anrufe = (daten?.anrufeAlle?.length ? daten.anrufeAlle : daten?.anrufe) ?? [];
   const a = anrufe[0];
   const live = anrufLive.phase === 'laeuft' || anrufLive.phase === 'rufend';
 

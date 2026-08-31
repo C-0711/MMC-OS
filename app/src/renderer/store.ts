@@ -46,6 +46,7 @@ export class LiveStore {
   faelle: FallInfoLight[] = [];
   uebersichten = new Map<string, FallUebersicht>();
   anrufe = new Map<string, AnrufInfo[]>();
+  alleAnrufe: AnrufInfo[] = [];
   themen: Array<{ name: string; anzahl: number; fallId: string }> = [];
   stapel: Array<{ fallId: string; satz: string; commitZeile: string }> = [];
   neuesThema: Array<{ fallIdVorschlag: string; titel: string; quelle: string; proposalId: string }> = [];
@@ -96,12 +97,14 @@ export class LiveStore {
       } catch { /* still — Screen zeigt Leer-Zustand */ }
     }
 
-    // Anrufe je Fall (für den Anrufe-Bereich im Siegel-Menü)
+    // Anrufe je Fall — für den Anrufe-Bereich über ALLE Fälle
     for (const f of this.faelle) {
       if (!this.anrufe.has(f.id)) {
         this.anrufe.set(f.id, await window.mmc.daten.listAnrufe(f.id).catch(() => []));
       }
     }
+    // Aggregate über alle Fälle für den Anrufe-Screen (ohne ausgewählten Fall)
+    this.alleAnrufe = [...this.anrufe.values()].flat().sort((a, b) => b.id.localeCompare(a.id));
 
     this.themen = await window.mmc.daten.themenAlle().catch(() => []);
     this.stapel = await window.mmc.daten.stapel().catch(() => []);
@@ -140,7 +143,8 @@ export class LiveStore {
       fallId: fall,
       daten: {
         uebersicht: fall ? this.uebersichten.get(fall) : undefined,
-        anrufe: fall ? (this.anrufe.get(fall) ?? []) : [],
+        anrufe: fall ? (this.anrufe.get(fall) ?? []) : this.alleAnrufe,
+        anrufeAlle: this.alleAnrufe,
         themen: this.themen,
         stapel: this.stapel,
         neuesThema: this.neuesThema,

@@ -75,7 +75,7 @@ export function navigate(id: ScreenId, ctx: AppCtx = {}, container?: HTMLElement
   // Router-Screen IST jetzt die Ansicht. (Zurück-Kontext bleibt im
   // history-Array; der Shell-Zustand wird von app.ts bei 'heute' gehebelt.)
   ziel.style.display = 'block';
-  for (const shellId of ['gruss', 'gruss-klein', 'alles-ruhig', 'karten-container', 'dialog-container', 'fall-ansicht-container']) {
+  for (const shellId of ['gruss', 'gruss-klein', 'alles-ruhig', 'karten-container', 'dialog-container', 'fall-ansicht-container', 'fussleiste']) {
     const e = document.getElementById(shellId);
     if (e) e.style.display = 'none';
   }
@@ -92,6 +92,8 @@ export function navigate(id: ScreenId, ctx: AppCtx = {}, container?: HTMLElement
     if (karten) karten.style.display = 'block';
     const zustand = document.getElementById('alles-ruhig');
     if (zustand) zustand.style.display = 'block';
+    const fuss = document.getElementById('fussleiste');
+    if (fuss) fuss.style.display = 'block';
   }
 
   ziel.textContent = '';
