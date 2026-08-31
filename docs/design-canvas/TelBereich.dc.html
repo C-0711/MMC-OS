@@ -15,6 +15,7 @@
     .sub { color: rgba(42,37,32,.55); }
     .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
     .pill-salbei { display: flex; align-items: center; justify-content: center; height: 40px; padding: 0 22px; border-radius: 999px; background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600; box-shadow: 0 8px 22px -10px rgba(110,140,110,.7); }
+    .pill-still { display: flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px; border-radius: 999px; background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500; }
     /* Foto-Avatar: Porträt-Wärme + Siegel-Ring in Olivgold */
     .foto { border-radius: 999px; flex: none; position: relative; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.92); font-family: 'Playfair Display', Georgia, serif; box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 3.5px #B8A369, 0 6px 14px -6px rgba(70,58,38,.45); }
     .foto.lw { background: radial-gradient(circle at 36% 26%, #ecd0af 0 30%, #c59a6d 55%, #7a5a3c 100%); }
@@ -42,8 +43,13 @@
 
     <div style="flex: 1; display: flex; flex-direction: column; padding: 0 70px 20px; gap: 20px; overflow: hidden">
       <div style="display: flex; align-items: baseline; gap: 20px">
-        <div class="serif" style="font-size: 30px">Telefon</div>
-        <div class="pill-salbei" style="margin-left: auto">Anrufen</div>
+        <div class="serif" style="font-size: 30px">Gespräche</div>
+        <div class="t13 sub">Anruf, Text, Meet — ein Ort, ein Verlauf</div>
+        <div style="display: flex; gap: 10px; margin-left: auto">
+          <div class="pill-salbei">Anrufen</div>
+          <div class="pill-still">Meet</div>
+          <div class="pill-still">Text</div>
+        </div>
       </div>
 
       <!-- Deine Menschen: Poster wie auf dem iPhone — Bild, Name, und darunter der Kontext -->
@@ -89,7 +95,33 @@
           </div>
         </div>
         <div class="trenner"></div>
+        <div class="zeile">
+          <div class="foto lw" style="width: 44px; height: 44px; font-size: 14px">LW</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="serif" style="font-size: 15px">Lena Weber</span>
+              <span class="tag">Text</span>
+              <span class="mono" style="margin-left: auto">15:02 · gelesen ✓</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">„Gutachter kommt Mittwoch, ich schick dir den Termin."</div>
+          </div>
+        </div>
+        <div class="trenner"></div>
         <div class="mono" style="padding: 10px 14px 4px; letter-spacing: .08em">DIESE WOCHE</div>
+        <div class="zeile">
+          <div class="foto lw" style="width: 44px; height: 44px; font-size: 14px">LW</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="serif" style="font-size: 15px">Lena Weber</span>
+              <span class="tag gold">Meet</span>
+              <span class="tag">1 Divergenz geklärt</span>
+              <span class="mono" style="margin-left: auto">Di 14:00 · 48:00 ▸</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">Video mit geteiltem Leseplatz — das Gutachten lag zwischen euch auf dem Tisch.</div>
+            <div class="mono">unfall-passat · aufzeichnung ✓ · beide signiert ✓ · Min 32:10</div>
+          </div>
+        </div>
+        <div class="trenner"></div>
         <div class="zeile">
           <div class="foto fb" style="width: 44px; height: 44px; font-size: 14px">FB</div>
           <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
@@ -106,7 +138,7 @@
     </div>
 
     <div style="flex: none; display: flex; justify-content: center; padding: 0 0 22px">
-      <div class="mono">ein verlauf für alles · tippen öffnet den menschen, nie versehentlich einen anruf · verpasst = karte, nie rote zahl</div>
+      <div class="mono">anruf · text · meet — ein verlauf, ein ort · tippen öffnet den menschen, nie versehentlich einen anruf · verpasst = karte, nie rote zahl</div>
     </div>
   </div>
 </div>
