@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .quellzeile { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); display: flex; align-items: center; gap: 10px; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 20px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="t13" style="color: #2a2520">‹ zurück zur Karte</div>
+      <div class="mono" style="margin-left: auto">Seite 1 von 2</div>
+    </div>
+
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px 80px 0">
+      <!-- Das Blatt: die Original-Seite, das Rechteck steht -->
+      <div style="width: 520px; background: #fff; border: 1px solid rgba(184,163,105,.35); border-radius: 4px; box-shadow: 0 24px 60px -22px rgba(70,58,38,.5); padding: 44px 48px; display: flex; flex-direction: column; gap: 13px">
+        <div style="height: 11px; width: 40%; background: rgba(42,37,32,.24); border-radius: 2px"></div>
+        <div style="height: 8px; width: 26%; background: rgba(42,37,32,.12); border-radius: 2px; margin-bottom: 10px"></div>
+        <div style="height: 8px; width: 88%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 74%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 82%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="display: flex; gap: 12px; align-items: center; margin: 8px 0">
+          <div style="height: 8px; width: 30%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+          <div style="height: 20px; width: 110px; border: 2px solid #D9A6A0; border-radius: 2px; background: rgba(217,166,160,.24); display: flex; align-items: center; justify-content: center"><span class="t11" style="color: rgba(42,37,32,.7); font-weight: 500">89,00 €</span></div>
+        </div>
+        <div style="height: 8px; width: 84%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 66%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 78%; background: rgba(42,37,32,.11); border-radius: 2px"></div>
+        <div style="height: 8px; width: 36%; background: rgba(42,37,32,.11); border-radius: 2px; margin-top: 12px"></div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0 24px">
+      <div class="quellzeile">post · stadtwerke-2026-09.pdf · Seite 1 · commit 7b3e · Signatur ✓</div>
+      <div class="t11 sub">Blättern blättert im Dokument — nie in einem Ordner. Zurück bringt dich exakt zur Karte, aus der du kamst.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

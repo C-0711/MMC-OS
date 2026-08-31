@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .karte { background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; box-shadow: 0 10px 34px -18px rgba(90,75,50,.35); }
+    .quellzeile { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    /* Gedrückt: das Rechteck wird eine Spur tiefer — 150 ms, mehr nicht */
+    .mark-beweis-tipp { background: rgba(217,166,160,.45); outline: 2px solid #c98f88; border-radius: 2px; padding: 1px 3px; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding: 0 80px">
+      <div class="t13 sub">Moment 1 · der Tipp — 0 ms</div>
+
+      <div class="karte" style="width: 560px; padding: 30px 34px; display: flex; flex-direction: column; gap: 20px; position: relative">
+        <div class="serif" style="font-size: 21px; line-height: 1.45">Rechnung Stadtwerke, <span class="mark-beweis-tipp" style="position: relative">89&nbsp;€<span style="position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; transform: translate(-50%,-50%); border-radius: 999px; border: 1px solid rgba(42,37,32,.3); background: rgba(42,37,32,.05)"></span></span>, fällig 15.09. — stimmt das?</div>
+
+        <div style="border: 1px solid rgba(184,163,105,.3); border-radius: 8px; background: #fff; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+          <div style="height: 7px; width: 62%; background: rgba(42,37,32,.14); border-radius: 2px"></div>
+          <div style="height: 7px; width: 84%; background: rgba(42,37,32,.10); border-radius: 2px"></div>
+          <div style="display: flex; gap: 8px; align-items: center">
+            <div style="height: 7px; width: 38%; background: rgba(42,37,32,.10); border-radius: 2px"></div>
+            <div style="height: 12px; width: 74px; border: 2px solid #D9A6A0; border-radius: 2px; background: rgba(217,166,160,.2)"></div>
+          </div>
+          <div style="height: 7px; width: 52%; background: rgba(42,37,32,.10); border-radius: 2px"></div>
+        </div>
+
+        <div class="quellzeile">post · stadtwerke-2026-09.pdf · Seite 1 · commit 7b3e · Signatur ✓</div>
+      </div>
+
+      <div class="t11 sub" style="max-width: 52ch; text-align: center; line-height: 1.7">Jedes Rosé-Rechteck und jede Quellzeile ist derselbe Tap-Punkt. Beim Druck wird das Rechteck eine Spur tiefer (150 ms) — kein Ripple, kein Sprung.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 26px">
+      <div class="mono">übergang karte → leseplatz · schritt 1 von 3</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
