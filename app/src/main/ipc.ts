@@ -13,6 +13,7 @@ import * as themen from './themen';
 import * as suche from './suche';
 import * as ingest from './ingest';
 import * as kontakte from './kontakte';
+import * as fallStrom from './fall-strom';
 import * as anrufLive from './anruf-live';
 import { deutungAusOcr, deutungAusTranskript, type Transkript } from './deutung';
 import * as fs from 'node:fs/promises';
@@ -276,5 +277,32 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('kontakte:commDatei', async (_event, slug: string, datei: { name: string; bytes: number[] }) => {
     return await kontakte.commDatei(slug, { name: datei.name, bytes: Buffer.from(datei.bytes) });
+  });
+
+  // ============================================================================
+  // Der Fall als Chat (AUFTRAG-der-fall §2): Strom + private Spur
+  // ============================================================================
+  ipcMain.handle('strom:eintrag', async (_event, fallId: string, eintrag: {
+    typ: string; inhalt: string; von: string; payload?: Record<string, unknown>;
+  }) => {
+    return await fallStrom.stromEintrag(fallId, eintrag as never);
+  });
+
+  ipcMain.handle('strom:liste', async (_event, fallId: string) => {
+    return await fallStrom.listeStrom(fallId);
+  });
+
+  ipcMain.handle('privat:eintrag', async (_event, did: string, fallId: string, eintrag: {
+    art: string; inhalt: string; ergebnis?: string;
+  }) => {
+    return await fallStrom.privatEintrag(did, fallId, eintrag as never);
+  });
+
+  ipcMain.handle('privat:liste', async (_event, did: string, fallId: string) => {
+    return await fallStrom.listePrivat(did, fallId);
+  });
+
+  ipcMain.handle('privat:teilen', async (_event, did: string, fallId: string, sha: string) => {
+    return await fallStrom.teilePrivat(did, fallId, sha);
   });
 }

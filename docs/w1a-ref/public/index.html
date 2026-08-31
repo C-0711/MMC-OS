@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>W1a — Der erste Eingang</title>
+<style>
+  :root {
+    --bg: #0e1116; --panel: #161b23; --line: #232a35;
+    --fg: #e6e9ee; --dim: #8b94a3; --acc: #4f8cff; --ok: #3fbf7f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--fg);
+         font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; align-items: center; gap: 10px;
+           padding: 12px 18px; border-bottom: 1px solid var(--line);
+           position: sticky; top: 0; background: var(--bg); z-index: 10; }
+  .logo { font-weight: 700; letter-spacing: .5px; margin-right: 12px; }
+  nav { display: flex; gap: 4px; position: relative; }
+  .btn { background: none; border: 1px solid transparent; color: var(--dim);
+         padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 15px; }
+  .btn:hover { color: var(--fg); background: var(--panel); }
+  .btn[aria-current="true"] { color: var(--fg);
+         background: var(--panel); border-color: var(--line); }
+  .btn.siegel { color: var(--acc); font-weight: 600; }
+  main { max-width: 860px; margin: 0 auto; padding: 22px 18px 60px; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+       color: var(--dim); margin: 26px 0 10px; }
+  .panel { background: var(--panel); border: 1px solid var(--line);
+           border-radius: 12px; padding: 16px 18px; }
+  .bericht { color: var(--fg); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip { background: var(--bg); border: 1px solid var(--line);
+          border-radius: 999px; padding: 4px 12px; font-size: 13px; }
+  .fragen { display: flex; flex-direction: column; gap: 8px; }
+  .frage { text-align: left; background: var(--bg); color: var(--fg);
+           border: 1px solid var(--acc); border-radius: 10px;
+           padding: 12px 14px; cursor: pointer; font-size: 15px; }
+  .frage:hover { background: #1a2333; }
+  .antwort { margin-top: 14px; white-space: pre-wrap; }
+  .antwort .zitat { color: var(--ok); font-size: 13px; }
+  .leer { color: var(--dim); font-style: italic; }
+  /* Siegeln-Overlay-Menü */
+  .overlay { position: fixed; inset: 0; background: rgba(5,8,12,.6);
+             display: none; align-items: flex-start; justify-content: center;
+             padding-top: 90px; z-index: 20; }
+  .overlay.offen { display: flex; }
+  .menue { background: var(--panel); border: 1px solid var(--line);
+           border-radius: 14px; min-width: 300px; overflow: hidden;
+           box-shadow: 0 18px 50px rgba(0,0,0,.5); }
+  .menue .titel { padding: 14px 18px 10px; font-weight: 700;
+           border-bottom: 1px solid var(--line); color: var(--acc); }
+  .menue button { display: flex; width: 100%; justify-content: space-between;
+           align-items: center; background: none; border: 0; color: var(--fg);
+           padding: 14px 18px; font-size: 16px; cursor: pointer; text-align: left; }
+  .menue button:hover { background: var(--bg); }
+  .menue button .hin { color: var(--dim); font-size: 13px; }
+  .liste { list-style: none; }
+  .liste li { padding: 10px 14px; border-bottom: 1px solid var(--line);
+              display: flex; justify-content: space-between; gap: 12px; }
+  .liste li:last-child { border-bottom: 0; }
+  .liste .nr { color: var(--dim); font-variant-numeric: tabular-nums; }
+  .status { color: var(--dim); font-size: 13px; }
+  .punkt { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+           background: var(--dim); margin-right: 6px; }
+  .punkt.laeuft { background: var(--acc); animation: bl 1s infinite; }
+  .punkt.fertig { background: var(--ok); }
+  @keyframes bl { 50% { opacity: .3; } }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">W1a</span>
+  <nav>
+    <button class="btn" id="nav-eingang" aria-current="true">Eingang</button>
+    <button class="btn siegel" id="nav-siegeln">⚙ Siegeln</button>
+  </nav>
+  <span class="status" style="margin-left:auto">
+    <span class="punkt" id="punkt"></span><span id="phase">bereit</span>
+  </span>
+</header>
+
+<!-- Siegeln-Menü: Einstieg zu Anrufe / Themen -->
+<div class="overlay" id="overlay">
+  <div class="menue" role="menu" aria-label="Siegeln">
+    <div class="titel">Siegeln</div>
+    <button role="menuitem" data-ziel="anrufe">
+      <span>📞 Anrufe</span><span class="hin" id="menue-anrufe-n">0 Namen</span>
+    </button>
+    <button role="menuitem" data-ziel="themen">
+      <span>🗂 Themen</span><span class="hin" id="menue-themen-n">0 Themen</span>
+    </button>
+    <button role="menuitem" data-ziel="eingang">
+      <span>← zurück zum Eingang</span><span class="hin"></span>
+    </button>
+  </div>
+</div>
+
+<main>
+  <!-- Ansicht: Eingang (Live-Bericht + Fragen) -->
+  <section id="sicht-eingang">
+    <h2>Live-Bericht</h2>
+    <div class="panel bericht" id="bericht"><span class="leer">Noch kein Ingest — Ordner einwerfen (POST /api/ingest/start).</span></div>
+    <h2>Fragen</h2>
+    <div class="fragen" id="fragen"><span class="leer">Fragen erscheinen, sobald erste Atome verarbeitet sind.</span></div>
+    <div class="panel antwort" id="antwort" style="display:none"></div>
+  </section>
+
+  <!-- Ansicht: Anrufe (aus Siegeln erreichbar) -->
+  <section id="sicht-anrufe" style="display:none">
+    <h2>Anrufe — Namen aus Dokumenten</h2>
+    <div class="panel"><ul class="liste" id="anrufe"><li><span class="leer">Noch keine Namen gelesen.</span></li></ul></div>
+  </section>
+
+  <!-- Ansicht: Themen (aus Siegeln erreichbar) -->
+  <section id="sicht-themen" style="display:none">
+    <h2>Themen — was in den Dokumenten steckt</h2>
+    <div class="panel"><ul class="liste" id="themen"><li><span class="leer">Noch keine Atome.</span></li></ul></div>
+  </section>
+</main>
+
+<script>
+'use strict';
+// Derselbe SSE-Strom speist alle drei Ansichten: Eingang, Anrufe, Themen.
+const $ = (id) => document.getElementById(id);
+let berichtState = null, fragenState = [];
+
+function wechsle(sicht) {
+  for (const s of ['eingang', 'anrufe', 'themen'])
+    $('sicht-' + s).style.display = s === sicht ? '' : 'none';
+  $('nav-eingang').setAttribute('aria-current', sicht === 'eingang');
+  $('overlay').classList.remove('offen');
+  if (sicht === 'anrufe') zeichneAnrufe();
+  if (sicht === 'themen') zeichneThemen();
+}
+
+$('nav-siegeln').onclick = () => $('overlay').classList.add('offen');
+$('overlay').onclick = (e) => { if (e.target === $('overlay')) $('overlay').classList.remove('offen'); };
+$('nav-eingang').onclick = () => wechsle('eingang');
+for (const b of document.querySelectorAll('.menue button'))
+  b.onclick = () => wechsle(b.dataset.ziel);
+
+function zeichneBericht(b) {
+  berichtState = b;
+  $('bericht').innerHTML = '';
+  $('bericht').append(document.createTextNode(b.zusammenfassung));
+  const chips = document.createElement('div'); chips.className = 'chips';
+  for (const n of b.namenAusDokumenten || []) {
+    const c = document.createElement('span'); c.className = 'chip';
+    c.textContent = n; chips.append(c);
+  }
+  if (chips.childNodes.length) $('bericht').append(chips);
+  $('menue-anrufe-n').textContent =
+    (b.namenAusDokumenten || []).length + ' Namen';
+}
+
+// Themen zählen wir aus den Fragen-Typen (verfügbar ohne Atome-Event):
+// jede Frage entspricht einem Atom-Typ (Rechnung / Vertrag / Absender).
+function zeichneThemen() {
+  const ul = $('themen'); ul.innerHTML = '';
+  if (!fragenState.length) { ul.innerHTML = '<li><span class="leer">Noch keine Themen erkannt.</span></li>'; return; }
+  const themen = [
+    ['Rechnungen', /rechnung|bezahl/i],
+    ['Verträge', /vertrag|kaution|laufzeit/i],
+    ['Kontakte / Absender', /absender|erreichen/i],
+  ];
+  for (const [name, re] of themen) {
+    const n = fragenState.filter(f => re.test(f.text || '')).length;
+    if (!n) continue;
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${name}</span><span class="nr">${n} Frage(n)</span>`;
+    ul.append(li);
+  }
+}
+
+function zeichneAnrufe() {
+  const ul = $('anrufe'); ul.innerHTML = '';
+  const namen = berichtState ? (berichtState.namenAusDokumenten || []) : [];
+  if (!namen.length) { ul.innerHTML = '<li><span class="leer">Noch keine Namen gelesen.</span></li>'; return; }
+  for (const n of namen) {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${n}</span><span class="nr">aus Dokument</span>`;
+    ul.append(li);
+  }
+  $('menue-anrufe-n').textContent = namen.length + ' Namen';
+}
+
+function zeichneFragen(fragen) {
+  fragenState = fragen;
+  const box = $('fragen'); box.innerHTML = '';
+  if (!fragen || !fragen.length) return;
+  for (const f of fragen) {
+    const b = document.createElement('button'); b.className = 'frage';
+    b.textContent = f.frage || f.text || String(f);
+    b.onclick = () => stelleFrage(b.textContent);
+    box.append(b);
+  }
+}
+
+function stelleFrage(frage) {
+  const out = $('antwort'); out.style.display = ''; out.textContent = '…';
+  fetch('/api/ingest/ask', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ frage }) }).then(async (r) => {
+    const reader = r.body.getReader(); const dec = new TextDecoder();
+    let buf = ''; out.textContent = '';
+    for (;;) {
+      const { done, value } = await reader.read(); if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const parts = buf.split('\n\n'); buf = parts.pop();
+      for (const p of parts) {
+        if (!p.startsWith('data: ')) continue;
+        const ev = JSON.parse(p.slice(6));
+        if (ev.typ === 'token') out.textContent += ev.t;
+        if (ev.typ === 'antwort_fertig' && ev.zitiert) {
+          const z = document.createElement('div'); z.className = 'zitat';
+          z.textContent = ' ✓ ' + ev.zitiert.join(' · ');
+          out.append(z);
+        }
+      }
+    }
+  });
+}
+
+// Live-Strom
+const es = new EventSource('/api/ingest/stream');
+es.onmessage = (e) => {
+  const ev = JSON.parse(e.data);
+  if (ev.typ === 'bericht_aktualisiert') { zeichneBericht(ev); if ($('sicht-themen').style.display === '') zeichneThemen(); if ($('sicht-anrufe').style.display === '') zeichneAnrufe(); }
+  if (ev.typ === 'fragen_bereit') zeichneFragen(ev.fragen);
+  if (ev.typ === 'done') { $('phase').textContent = 'fertig · ' + Math.round(ev.totalMs/100)/10 + ' s'; $('punkt').className = 'punkt fertig'; }
+};
+</script>
+</body>
+</html>

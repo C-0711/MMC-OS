@@ -20,7 +20,7 @@ export type ScreenId =
   | 'freund' | 'ausgruendung' | 'gruppe' | 'leseplatz' | 'tisch' | 'einladen'
   | 'suche' | 'rueckruf' | 'stapel' | 'neues-thema' | 'meet' | 'divergenz'
   | 'aufzeichnung' | 'widerspruch' | 'connector-beweis' | 'revision'
-  | 'meister-seite' | 'mix-antwort' | 'kontakte' | 'phone';
+  | 'meister-seite' | 'mix-antwort' | 'kontakte' | 'fall-strom' | 'phone';
 
 export interface AppCtx {
   faelle?: { id: string; name: string }[];
@@ -163,6 +163,10 @@ route('phone', 'heute', os.renderOsPhone);
 // Kontakte (Spec 21) — Liste + Detail als fortlaufender Verlauf
 import * as sk from './screens-kontakte.js';
 route('kontakte', 'kontakte', (c: HTMLElement) => { void sk.renderKontakteListe(c); });
+
+// Der Fall als Chat (AUFTRAG-der-fall) — der Strom als Leitform
+import * as fs2 from './screens-fall-strom.js';
+route('fall-strom', 'faelle', (c: HTMLElement, ctxX: AppCtx) => { void fs2.renderFallStrom(c, ctxX); });
 
 // Bestehende screens.ts-Komponenten (geben HTMLElement zurück — Adapter).
 route('vereinbarung', 'leute', (c: HTMLElement) => c.appendChild(renderVereinbarung({

@@ -238,6 +238,12 @@ const server = http.createServer((req, res) => {
     return res.end(JSON.stringify({ ok: true, phase: state.phase, fertig: state.fertig, total: state.total }));
   }
 
+  // Statische UI: Menü mit Siegeln → Anrufe / Themen
+  if (req.method === 'GET' && (url === '/' || url === '/index.html')) {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    return fs.createReadStream(path.join(__dirname, 'public', 'index.html')).pipe(res);
+  }
+
   res.writeHead(404);
   res.end('nicht gefunden');
 });

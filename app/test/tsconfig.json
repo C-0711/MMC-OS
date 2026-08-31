@@ -41,7 +41,8 @@
     "../src/renderer/types.d.ts",
     "../src/main/kontakte.ts",
     "../src/renderer/screens-kontakte.ts",
-    "../src/main/fall-strom.ts"
+    "../src/main/fall-strom.ts",
+    "../src/renderer/screens-fall-strom.ts"
   ],
   "exclude": [
     "node_modules"
