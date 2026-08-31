@@ -674,6 +674,15 @@
    "h": 900,
    "page": "page-11",
    "title": "Telefon · Ein Mensch entsteht"
+  },
+  {
+   "file": "TelDuo.dc.html",
+   "x": 4440,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Du & Lena — euer Kontext"
   }
  ],
  "annotations": [
@@ -875,7 +884,7 @@
    "y": -150,
    "w": 1350,
    "page": "page-11",
-   "text": "REIHE 1 — DER TELEFONBEREICH. Links Menschen, rechts Verlauf — kein Adressbuch, kein Ziffernblock. Ein Kontakt ist ein Mensch mit Siegel und gemeinsamem Kontext (geteilte Fälle, Vereinbarungen, Anrufe); Kontakte entstehen aus Gesprächen und Einladungen, niemand pflegt sie. Der Verlauf zeigt nicht, wer wann klingelte, sondern was aus Gesprächen WURDE: Vereinbarungen, Atome, Offenes — jede Zeile mit Minute als Fundstelle, jede Mitschrift committet und signiert. Verpasstes ist eine Karte, keine rote Zahl. Detail-Screen „Ein Gespräch, ganz\": die Ernte oben (Vereinbarung/Atom/Offen mit Minuten), die Mitschrift als Beweis darunter — R3 (Geld/Verträge) wird nie im Gespräch unterschrieben, sondern danach im ruhigen Raum."
+   "text": "REIHE 1 — DER TELEFONBEREICH (nach iPhone-Studie überarbeitet: Contact-Poster, Foto-Avatare mit Siegel-Ring, vereinheitlichter Verlauf). TelBereich: oben Poster deiner Menschen (Bild trägt Name + Kontext-Zeile), darunter EIN Verlauf für alles — jede Zeile zeigt Foto, Namen, ein wörtliches Zitat aus der Mitschrift, Ernte-Tags (Vereinbarung ✓ / Atome / offen) und die Fundstellen-Zeile; Verpasstes in Rosé-Text, nie als rote Zahl; die Assistent-Abnahme steht als Zitat da (Commit vor Deutung). Tippen öffnet den Menschen, nie versehentlich einen Anruf (iOS-Classic-Fehler vermieden). TelKontakt: Poster-Kopf (Bild trägt den Namen, Siegel-Ring statt Verifikations-Häkchen), Aktionsreihe Anrufen/Text/Meet/Teilen; darunter der Duo-Kontext: „Zwischen euch\" (geteilte Fälle), „Offen zwischen euch\" mit Minuten, letzte Vereinbarung, „Miteinander\"-Bilanz → ganzer Verlauf. TelDuo (NEU): der Verlauf als Kontext des Duos — Kopf mit beiden Bildern und der Bilanz-Zeile, angeheftet was offen ist, dann die gemeinsame Zeit: Anrufe (Dauer, Zitat, Ernte-Tags, Minuten), Texte, Dokumente (mit Atomen), bis zurück zu „hier begann euer Kontext\". Beide sehen denselben Verlauf, byte-identisch. TelVerlauf: das einzelne Gespräch als Drill-down (Ernte oben, Mitschrift als Beweis darunter)."
   },
   {
    "id": "tel-momente",
