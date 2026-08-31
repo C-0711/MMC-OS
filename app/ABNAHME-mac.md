@@ -67,3 +67,56 @@ Liegt als `app/ABNAHME-mac.md` im Repo. ✓/✗/⊘-Legende: ✓ gemessen und be
 | B3 | §4-Werkzeuge (codesign/notarytool/spctl) existieren nur auf macOS direkt — weder Cloud noch Geräte-VM können signieren oder verifizieren | T14-Abnahme kann ausschließlich die Mac-IDE-Session leisten |
 
 **Nächster Messlauf:** sobald `b27d777` (oder Nachfolger) auf `origin/main` liegt — dann §1 komplett neu (frischer `npm ci`, 53/53), danach §3-Durchklick in der IDE und §4 auf dem Mac.
+
+---
+
+# MESSLAUF 2 — 2026-08-31 · Stand `abe7e00` (origin/local-merge)
+
+*Auf Anweisung aus PR #9: `git fetch && git checkout local-merge`. B1 ist damit aufgelöst — der Prüfstand liegt auf origin (alle sechs Nachtschicht-Commits per ls-remote verifiziert).*
+
+## §1 — komplett neu gemessen
+
+| Prüfung | Soll | Ist | Urteil |
+|---|---|---|---|
+| Stand | `abe7e00` | `abe7e00` ausgecheckt (enthält b27d777) | ✓ |
+| `rm -rf node_modules dist && npm ci` | läuft | läuft | ✓ |
+| typecheck | grün | grün (beide Configs) | ✓ |
+| Tests | **53/53** | **46 pass / 2 fail / 48 gemessen** — wörtlich: `# tests 48 · # suites 10 · # pass 46 · # fail 2`; zusätzlich 4 Live-Tests übersprungen (`⏭️ belegsrv not reachable, skipping live test`) | ✗ **B4** |
+
+**Die beiden roten Tests, wörtlich — beide dieselbe Wurzel:**
+
+```
+not ok 3 - T17: AnrufLive — Phasen rufend → beendet, Zeilen mit Minute
+  error: Cannot find module '../../renderer/anruf-live-renderer.js'
+not ok 6 - dist/test/test/screens.test.js
+  error (direkt ausgeführt): Cannot find module '../../renderer/router.js'
+```
+
+**Diagnose (Befund, nicht repariert):** `test/tsconfig.json` kompiliert nach `dist/test` und zählt die Quellen einzeln auf — **alle `src/main/*`-Module, aber keine einzige `src/renderer/*`-Datei**. `screens.test.js` und `anruf-live.test.js` requiren aber `../../renderer/router.js` bzw. `../../renderer/anruf-live-renderer.js` → `dist/test/renderer/` existiert nie → deterministisch MODULE_NOT_FOUND auf jedem frischen Checkout. Auf dem Coder-Mac war der Lauf vermutlich grün, weil dort ein älterer `dist/`-Stand oder ein anderer Include-Stand lag. Der Fix wäre eine Zeile im Include — **Entscheidung und Commit gehören dem Coder** (Abnahme repariert nicht).
+
+**Zur 53:** 48 gemessen + 4 übersprungene belegsrv-Live-Tests ≈ 52–53. Die 53/53-Pflicht ist also nur mit laufendem belegsrv (`127.0.0.1:8787`) messbar — Umgebungsvoraussetzung im Auftrag nachtragen.
+
+## B2 nachgemessen
+
+Unverändert auf `abe7e00`: `test-headless-ingress.js:43` hardcodet `os.homedir() + '/Downloads/Stricker/WhatsApp Image 2026-07-28 at 11.07.28.jpeg'` — auf jedem fremden Rechner rot. **B2 bleibt offen.**
+
+## §3 — headless messbar, gemessen
+
+- [x] ✓ **Backup → git clone-Gegenprobe** (T-Backup): Temp-Vault mit einem Fall (`MMC_VAULT=/tmp/abn-vault`), dann `backupJetzt()` aus `dist/test/src/main/backup.js` — wörtlich: `backupJetzt: {"faelle":1,"bundles":1}` → Bundle unter `~/MMC-Vault-Backup/testfall/testfall-2026-08-31T07-51-31-447Z.bundle` → `git clone <bundle>` → Inhalt byte-identisch (`beleg`). **GEGENPROBE=bestanden.**
+- [x] ✓ **Crash-Netz vorhanden:** `log.ts:50/61` installiert `uncaughtException`/`unhandledRejection` → stilles rotierendes Log (`userData/logs/app-YYYY-MM-DD.log`, 14-Tage-Aufräumen), kein crashReporter (Telemetrie-Verbot eingehalten); `produktionsbetrieb.test` grün. Der `kill -9`-Livetest selbst bleibt Mac-IDE (⊘ hier).
+- [ ] ⊘ Siegel-Menü-Durchklick, Ingest-Coalescing, Anruf-Live zweifensterig, 30s-Wachmann — Code liegt jetzt vor (`siegelmenue.ts`, `ingest.ts`, `anruf-live.ts` + Renderer), aber Durchklick braucht die laufende App: **Mac-IDE-Session.**
+
+## §4 — unverändert B3
+
+`release`-Skript existiert jetzt (`npm run dist && node scripts/release-notes.js`). Signieren/Verifizieren weiterhin nur auf macOS direkt möglich — Cloud und Geräte-Linux-VM können es prinzipiell nicht.
+
+## Blocker-Stand nach Messlauf 2
+
+| # | Status | Kern |
+|---|---|---|
+| B1 | ✅ aufgelöst | Prüfstand liegt auf `origin/local-merge` (abe7e00) |
+| B2 | offen | hartkodierter Stricker-Pfad in test-headless-ingress.js:43 |
+| B3 | offen (strukturell) | codesign/notarytool/spctl nur in der Mac-IDE |
+| **B4** | **neu** | 2/48 Tests rot auf frischem Checkout: `test/tsconfig.json` include kompiliert keine `src/renderer/*` nach `dist/test` → MODULE_NOT_FOUND für `router.js` und `anruf-live-renderer.js`; außerdem setzt 53/53 laufenden belegsrv voraus |
+
+**Testpflicht-Urteil Messlauf 2: NICHT grün (46/48).** Kein Weiterbauen auf dieser Basis, bis der Coder B4 entschieden hat — der Fix ist klein, aber er gehört ihm.
