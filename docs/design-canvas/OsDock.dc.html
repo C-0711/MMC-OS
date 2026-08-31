@@ -17,9 +17,10 @@
     .ampel { display: flex; gap: 8px; }
     .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
     /* Die Leiste: schwebend wie das macOS-Dock, aber Warmweiß + Haarlinien-Glyphs */
-    .dock { display: flex; align-items: flex-end; gap: 6px; padding: 10px 14px; border-radius: 20px; background: rgba(255,255,255,.72); border: 1px solid rgba(184,163,105,.25); box-shadow: 0 18px 44px -18px rgba(70,58,38,.4); backdrop-filter: blur(20px); }
+    /* EIN Schatten — er gehört der Leiste. Kacheln bleiben flach (nur Haarlinie). */
+    .dock { display: flex; align-items: flex-end; gap: 6px; padding: 10px 14px; border-radius: 20px; background: rgba(255,255,255,.72); border: 1px solid rgba(184,163,105,.25); box-shadow: 0 14px 36px -18px rgba(70,58,38,.35); backdrop-filter: blur(20px); }
     .dockfach { width: 52px; display: flex; flex-direction: column; align-items: center; gap: 5px; position: relative; }
-    .dockfach .kachel { width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: 0 4px 12px -6px rgba(70,58,38,.35), inset 0 0 0 .5px rgba(184,163,105,.25); }
+    .dockfach .kachel { width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: inset 0 0 0 .5px rgba(184,163,105,.28); }
     .punkt { width: 4px; height: 4px; border-radius: 999px; background: transparent; }
     .punkt.an { background: #B8A369; }         /* offen/aktiv: Olivgold */
     .punkt.wartet { background: #D9A6A0; }     /* etwas wartet: Rosé — Markierung, nie Alarm */
@@ -42,7 +43,7 @@
     </div>
 
     <!-- Hover-Zustand: die Karte über dem Fach — Name + echte Zustandszeile -->
-    <div style="position: absolute; left: 50%; bottom: 118px; transform: translateX(-233px); background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 12px; box-shadow: 0 10px 28px -12px rgba(70,58,38,.4); padding: 10px 16px; display: flex; flex-direction: column; gap: 3px; align-items: center">
+    <div style="position: absolute; left: 50%; bottom: 118px; transform: translateX(-233px); background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 12px; box-shadow: 0 6px 16px -10px rgba(70,58,38,.3); padding: 10px 16px; display: flex; flex-direction: column; gap: 3px; align-items: center">
       <span class="serif" style="font-size: 15px">Stapel</span>
       <span class="mono">liest still · 2.146 / 9.500</span>
     </div>
@@ -59,7 +60,7 @@
           <span class="punkt an"></span>
         </div>
         <div class="dockfach" style="transform: translateY(-4px)">
-          <div class="kachel" style="box-shadow: 0 8px 18px -8px rgba(70,58,38,.45), inset 0 0 0 .5px rgba(184,163,105,.4)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5 3.5 H19 M5 20.5 H19 M6.5 3.5 C6.5 9 10.8 11 11.7 12 C10.8 13 6.5 15 6.5 20.5 M17.5 3.5 C17.5 9 13.2 11 12.3 12 C13.2 13 17.5 15 17.5 20.5" stroke="#2a2520" stroke-width="1.05" stroke-linecap="round"/><path d="M8.7 20 C10 18.2 11.3 17.5 12 17.5 C12.7 17.5 14 18.2 15.3 20 Z" fill="rgba(184,163,105,.7)"/></svg></div>
+          <div class="kachel" style="box-shadow: inset 0 0 0 .5px rgba(184,163,105,.45)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5 3.5 H19 M5 20.5 H19 M6.5 3.5 C6.5 9 10.8 11 11.7 12 C10.8 13 6.5 15 6.5 20.5 M17.5 3.5 C17.5 9 13.2 11 12.3 12 C13.2 13 17.5 15 17.5 20.5" stroke="#2a2520" stroke-width="1.05" stroke-linecap="round"/><path d="M8.7 20 C10 18.2 11.3 17.5 12 17.5 C12.7 17.5 14 18.2 15.3 20 Z" fill="rgba(184,163,105,.7)"/></svg></div>
           <span class="punkt an"></span>
         </div>
         <div class="dockfach">
