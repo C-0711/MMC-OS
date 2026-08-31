@@ -80,6 +80,7 @@ export interface StoreDaten {
   uebersicht?: FallUebersicht;
   anrufe?: AnrufInfo[];
   anrufeAlle?: AnrufInfo[];
+  kontakte?: Array<{ slug: string; name: string; aktivitaet: number; letzterEintragIso: string | null }>;
   themen?: ThemaInfo[];
   stapel?: StapelEintrag[];
   neuesThema?: ThemaVorschlag[];
@@ -410,30 +411,69 @@ export function renderOsAnrufLaeuft(container: HTMLElement, ctx: AppCtx): void {
   container.appendChild(gr);
 }
 
-export function renderOsText(container: HTMLElement, _ctx: AppCtx): void {
+export function renderOsText(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
+  const daten = (ctx?.daten ?? {}) as StoreDaten;
+  const kontakte = daten?.kontakte ?? [];
+  const erste = kontakte[0];
+
   const b = buehne(
-    el('div', 'etikett', 'Unfall Passat'),
-    el('div', 't11 sub', 'mit Lena Weber · beide führen denselben Baum')
+    erste ? el('div', 'etikett', `Texte · ${erste.name}`)
+         : el('div', 'serif t28', 'Texte')
   );
-  const msg1 = el('div', 'karte');
-  msg1.style.cssText = 'text-align:left;width:100%;max-width:520px';
-  msg1.append(el('div', 't13', 'Lena Weber · 11:20'), el('div', 't15', 'Gutachter ist da. Er fotografiert den Kotflügel.'));
-  const msg2 = el('div', 'karte');
-  msg2.style.cssText = 'text-align:left;width:100%;max-width:520px';
-  msg2.append(
-    el('div', 't13', 'Du · 11:31'),
-    el('div', 't15', 'Danke. Nachricht = Commit, dein Zitat bleibt referenzierbar.')
-  );
-  b.append(msg1, msg2, el('div', 't11 sub', 'Nachricht = Commit · Zitat = Referenz — beides im Fall, bei beiden'));
+
+  if (!erste) {
+    b.appendChild(el('div', 't13 sub',
+      'Noch keine Texte — sie entstehen mit dem ersten Wort und bleiben im Verlauf des Kontakts.'));
+    gr.append(kopf(), b, fuss());
+    container.appendChild(gr);
+    return;
+  }
+
+  // Verlauf des ersten Kontakts: nur Text-Einträge, als Chat dargestellt
+  window.mmc.kontakte.historie(erste.slug).then((hist) => {
+    const texte = hist.filter(h => h.typ === 'text');
+    if (texte.length === 0) {
+      b.appendChild(el('div', 't13 sub',
+        'Noch nichts geschrieben — Nachricht = Commit, Zitat = Referenz.'));
+    }
+    for (const t of texte) {
+      const msg = el('div', 'karte');
+      msg.style.cssText = 'text-align:left;width:100%;max-width:520px';
+      msg.append(
+        el('div', 't13', t.zusammenfassung),
+        quelle(`kontakt-${erste.slug} · ${t.quelle} · ${new Date(t.zeitIso).toLocaleDateString('de-DE')} · Signatur ✓`)
+      );
+      b.appendChild(msg);
+    }
+
+    // Schreiben — Nachricht = Commit in den Kontakt-Verlauf
+    const senden = el('div', 'frag');
+    senden.style.cssText = 'width:100%;max-width:520px';
+    const input = el('input') as HTMLInputElement;
+    input.placeholder = 'Nachricht an den Kontakt — wird committet.';
+    input.style.cssText = 'flex:1;border:none;background:transparent;font-size:15px;outline:none';
+    const send = el('button', 'pill-salbei', 'Senden');
+    senden.append(input, send);
+    const schicken = async () => {
+      const text = input.value.trim();
+      if (!text) return;
+      await window.mmc.kontakte.commText(erste.slug, text, 'Du').catch(() => {});
+      input.value = '';
+      navigate('text', ctx); // Screen neu — neuer Commit ist sofort sichtbar
+    };
+    send.addEventListener("click", schicken);
+    input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') schicken(); });
+    b.appendChild(senden);
+    b.appendChild(el('div', 't11 sub', 'Nachricht = Commit · Zitat = Referenz — beides im Kontakt, bei euch beiden'));
+  }).catch(() => {
+    b.appendChild(el('div', 't13 sub', 'Der Verlauf ist gerade nicht erreichbar — nichts geht verloren.'));
+  });
+
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
-
-// ---------------------------------------------------------------------------
-// B13/B14/B15 · Freund / Ausgründung / Gruppe
-// ---------------------------------------------------------------------------
 
 export function renderOsFreund(container: HTMLElement, _ctx: AppCtx): void {
   const gr = el('div', 'os-grund');

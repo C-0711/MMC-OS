@@ -66,6 +66,10 @@ class App {
     this.siegelMenue = new SiegelMenue(() => this.appCtx());
     this.siegelMenue.oeffnen(document.querySelector('.siegel'));
 
+    // Für Abnahme/Dogfood: navigate global erreichbar (Screens direkt testen)
+    (window as unknown as { __mmcNav: (id: string) => void }).__mmcNav =
+      (id: string) => navigate(id as never, this.appCtx());
+
     await this.ladeVorschlaege();
     this.renderZustand();
     this.setupFragMich();

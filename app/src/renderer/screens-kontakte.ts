@@ -11,6 +11,8 @@
 
 import type { AppCtx } from './router.js';
 import { kopf } from './screens-onboarding.js';
+import { anrufLive } from './screens-os.js';
+import { navigate } from './router.js';
 
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K, klassen?: string, text?: string
@@ -118,6 +120,19 @@ async function zeigeDetail(container: HTMLElement, slug: string, name: string): 
     el('div', 'serif t28', name),
     el('div', 't11 sub', `kontakt-${slug} · alles in einem Verlauf`)
   );
+
+  // Anrufen — Klon zu Klon aus dem Verlauf heraus (Spec 21 Kreis-Schluss)
+  const rufKnopf = el('button', 'pill-salbei', 'Anrufen');
+  rufKnopf.addEventListener('click', async () => {
+    try {
+      await anrufLive.anrufen(name);
+      navigate('anruf-laeuft');
+    } catch {
+      mitte.appendChild(el('div', 't13 sub',
+        'Der Anruf kam nicht zustande — kein PAT oder die Registry antwortet nicht.'));
+    }
+  });
+  mitte.appendChild(rufKnopf);
 
   // Verlauf: Anrufe, Texte, Dateien — gemischt nach Zeit (neueste oben)
   let eintraege: Array<{ zeitIso: string; typ: string; zusammenfassung: string; quelle: string }> = [];

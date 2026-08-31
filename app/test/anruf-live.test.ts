@@ -108,6 +108,10 @@ test('T17: AnrufLive — Phasen rufend → beendet, Zeilen mit Minute', async ()
         signalSenden: async () => ({ ok: true }),
         signalEmpfangen: async () => [],
       },
+      kontakte: {
+        findeOderIssue: async () => 'testpartner',
+        commAnruf: async () => ({ slug: 'testpartner', datei: 'x', sha: 'y' }),
+      },
     },
   };
 

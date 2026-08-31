@@ -75,6 +75,13 @@ g.window = { ...((globalThis as unknown as Record<string, unknown>).window ?? {}
     ingestStatus: async () => ({ phase: 'idle', fertig: 0, total: 0, atome: 0 }),
     onIngestEvent: () => () => {},
   },
+  kontakte: {
+    list: async () => [],
+    historie: async () => [],
+    commText: async () => ({ slug: 'x', datei: 'y', sha: 'z' }),
+    create: async () => ({ slug: 'x', name: 'y', erstelltIso: '', kanäle: [], aktivitaet: 0, letzterEintragIso: null }),
+    findeOderIssue: async () => 'x',
+  },
   vault: {
     listFaelle: async () => [],
     createFall: async (id: string) => ({ id, pfad: '', offeneVorschlaege: 0, letzterCommitIso: '' }),

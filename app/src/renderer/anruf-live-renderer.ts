@@ -183,6 +183,18 @@ export class AnrufLive {
     this.pc?.close();
     this.stoppePoll();
     this.meldung('beendet');
+
+    // Der Anruf landet im Verlauf des Kontakts (Spec 21): Mitschrift als
+    // Commit in den Container — Issuing erzeugt den Kontakt beim ersten Wort.
+    const kApi = window.mmc?.kontakte;
+    if (this.zeilen.length > 0 && this.partner && kApi) {
+      const dauer = this.zeilen.length > 0 ? this.zeilen[this.zeilen.length - 1].zeit : '—';
+      kApi.findeOderIssue(this.partner)
+        .then(slug => kApi.commAnruf(slug, {
+          zeilen: this.zeilen, dauer, partner: this.partner,
+        }))
+        .catch(() => { /* still — der Verlauf wartet, nichts geht verloren */ });
+    }
   }
 
   // -------------------------------------------------------------------------

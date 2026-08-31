@@ -48,6 +48,7 @@ export class LiveStore {
   anrufe = new Map<string, AnrufInfo[]>();
   alleAnrufe: AnrufInfo[] = [];
   themen: Array<{ name: string; anzahl: number; fallId: string }> = [];
+  kontakte: Array<{ slug: string; name: string; aktivitaet: number; letzterEintragIso: string | null }> = [];
   stapel: Array<{ fallId: string; satz: string; commitZeile: string }> = [];
   neuesThema: Array<{ fallIdVorschlag: string; titel: string; quelle: string; proposalId: string }> = [];
   ingest: IngestZustand = {
@@ -107,6 +108,7 @@ export class LiveStore {
     this.alleAnrufe = [...this.anrufe.values()].flat().sort((a, b) => b.id.localeCompare(a.id));
 
     this.themen = await window.mmc.daten.themenAlle().catch(() => []);
+    this.kontakte = await window.mmc.kontakte.list().catch(() => []);
     this.stapel = await window.mmc.daten.stapel().catch(() => []);
     this.neuesThema = await window.mmc.daten.neuesThema().catch(() => []);
   }
@@ -145,6 +147,7 @@ export class LiveStore {
         uebersicht: fall ? this.uebersichten.get(fall) : undefined,
         anrufe: fall ? (this.anrufe.get(fall) ?? []) : this.alleAnrufe,
         anrufeAlle: this.alleAnrufe,
+        kontakte: this.kontakte,
         themen: this.themen,
         stapel: this.stapel,
         neuesThema: this.neuesThema,
