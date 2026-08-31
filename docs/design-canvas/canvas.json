@@ -521,6 +521,51 @@
    "h": 900,
    "page": "page-8",
    "title": "Sanduhr · Das Nicken — 300 ms, ein Ereignis"
+  },
+  {
+   "file": "ObScanBericht.dc.html",
+   "x": 0,
+   "y": 4600,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Scan-Bericht — „Darf ich?\" (Scan-First)"
+  },
+  {
+   "file": "ObBuergerKarte.dc.html",
+   "x": 1480,
+   "y": 4600,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Bürger-Karte — Rechnung mit Beweis, ein Wort"
+  },
+  {
+   "file": "ObAllesRuhig.dc.html",
+   "x": 2960,
+   "y": 4600,
+   "w": 1360,
+   "h": 900,
+   "page": "page-8",
+   "title": "Alles ruhig — ein Zustand mit Würde"
+  },
+  {
+   "file": "OsMeisterSeite.dc.html",
+   "x": 0,
+   "y": 10880,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Meister-Seite — die Quelle an/aus"
+  },
+  {
+   "file": "OsMixAntwort.dc.html",
+   "x": 1480,
+   "y": 10880,
+   "w": 1360,
+   "h": 900,
+   "page": "page-7",
+   "title": "Mix-Antwort — die Ehrlichkeitszeile"
   }
  ],
  "annotations": [
@@ -683,6 +728,22 @@
    "w": 1350,
    "page": "page-8",
    "text": "REIHE 4 — DIE SANDUHR (die stille Revolution des Wartens). Winzig (24 px), Haarlinie, Tinte auf Warmweiß; Sand fällt 3–4 Körner pro Sekunde — Olivgold, 1 px, sanfter Fade. Kein Regen, kein Feuerwerk: eine Sanduhr, die Zeit hat. Unten liegt ein Hügel, und der Hügel ist der Bericht. Fertigmelden ist kein Triumph: „4.231 Dokumente · bereit, wenn du es bist.\" — Zahlen nur als Mono-Fußnoten (Fundstellen-Register), kein Dashboard, keine Heldenzahlen. Aufnehmen statt Bestätigen: schlichter Textlink in Tinte, daneben leises „später\"; wer abnickt, unterschreibt leise — beim Nicken leuchtet die Taille einmal auf (300 ms), das einzige Ereignis. Kein Euro-Zeichen im Bürger-Wohnzimmer: fürs Auge „Verstanden: 9.500 Seiten. Was davon heute wichtig ist, liegt oben auf.\" — das Bezahlen regelt außen die Capability-Ökonomie. Alle Canvas-Tokens bindend, eine Bedeutung pro Animation."
+  },
+  {
+   "id": "buerger-alltag",
+   "x": 0,
+   "y": 4450,
+   "w": 1350,
+   "page": "page-8",
+   "text": "REIHE 5 — SCAN-FIRST & BÜRGER-ALLTAG (Specs 18/19 + Ingest-Auftrag). Der Scan-Bericht zählt nur, er zeigt keine Inhalte: jede Quelle eine ruhige Karte (Serif-Name, Mono-Zahlenzeile, Mini-Sanduhr), Einstieg „Ich habe Orte gefunden, an denen dein Leben liegt. Darf ich?\" — Aufnehmen als Textlink in Tinte, leises „später\", geschützte Dateien als stille Zeile mit Schloss-Glyph (nie rot). Die Bürger-Karte danach: eine Deutung, ein Beweis-Rechteck, ein Wort — Stimmt/Anders/Frag nicht wieder. Und „Alles ruhig.\" ist ein Zustand mit Würde: keine Queue, kein Badge-Zwang, der Hügel liegt."
+  },
+  {
+   "id": "meister-seite",
+   "x": 0,
+   "y": 10730,
+   "w": 1350,
+   "page": "page-7",
+   "text": "REIHE 11 — MEISTER-SEITE (20. Spec: die Quelle an/aus). Eine flache Liste, keine Ordner-Bäume: jede Zeile Name (Serif) · Mono-Atomzahl · Schalter (Haarlinie, Salbei an / Beige aus, kein Leuchten, 44px, 200ms). Aus ist aus — fail closed, keine Retrieval-Kontamination. Die Σ-Zeile unten in Mono wie eine Fundstellen-Fußnote. Rechts die Antwort dazu: jede Zahl mit Fundstelle, und die Ehrlichkeitszeile nennt den Quellen-Mix UND die Lücke („Aus deinen Mails weiß ich das nicht — sie sind aus\"). Der Mix ist Teil der Fassung: alte Berichte behalten ihren Stand."
   }
  ],
  "launch": {
