@@ -183,11 +183,84 @@ declare global {
     registry(): Promise<{ version: string; count: number; ids: string[] }>;
   }
 
+  // Datentypen für die Datenkanäle (Etappe A, spiegeln preload.ts)
+  interface FallUebersicht {
+    fallId: string;
+    dinge: Array<{ titel: string; frage: string; quelle: string; proposalId: string | null }>;
+    protokoll: ErzaehlSatz[];
+    beteiligte: string[];
+  }
+
+  interface AnrufInfo {
+    id: string;
+    fallId: string;
+    doc: string;
+    partner: string;
+    dauer: string;
+    zeilen: Array<{ zeit: string; sprecher: string; text: string }>;
+    minuten: string[];
+  }
+
+  interface ThemaInfo {
+    name: string;
+    anzahl: number;
+    fallId: string;
+  }
+
+  interface StapelEintrag {
+    fallId: string;
+    satz: string;
+    commitZeile: string;
+  }
+
+  interface ThemaVorschlag {
+    fallIdVorschlag: string;
+    titel: string;
+    quelle: string;
+    proposalId: string;
+  }
+
+  interface SuchErgebnis {
+    frage: string;
+    antwort: string;
+    treffer: Array<{ fall: string; doc: string; seite: number; text: string; feld: string; wert: string }>;
+    ehrlich: boolean;
+  }
+
+  interface IngestStatus {
+    phase: string;
+    fertig: number;
+    total: number;
+    atome: number;
+  }
+
+  type IngestEvent =
+    | { typ: 'dokument_fertig'; name: string; lane: string; ms: number; atome: number; fundstellen: number }
+    | { typ: 'bericht_aktualisiert'; zusammenfassung: string; namenAusDokumenten: string[] }
+    | { typ: 'fragen_bereit'; fragen: Array<{ text: string; atomRef: string }> }
+    | { typ: 'done'; totalMs: number; textSeiten: number; ocrSeiten: number }
+    | { typ: 'scan_bericht'; quellen: Array<{ name: string; dateien: number; bytes: number; aeltestes: string | null; geschuetzt: number; gelesen: boolean }> };
+
+  interface MMCDatenAPI {
+    getFallUebersicht(fallId: string): Promise<FallUebersicht>;
+    listAnrufe(fallId: string): Promise<AnrufInfo[]>;
+    themenAlle(): Promise<ThemaInfo[]>;
+    stapel(): Promise<StapelEintrag[]>;
+    neuesThema(): Promise<ThemaVorschlag[]>;
+    fragAlles(frage: string): Promise<SuchErgebnis>;
+    ingestStart(quellen: string[]): Promise<{ ok: boolean; anzahl: number; fehler?: string }>;
+    ingestScanReport(quellen: string[]): Promise<Array<{ name: string; dateien: number; bytes: number; aeltestes: string | null; geschuetzt: number; gelesen: boolean }>>;
+    ingestStatus(): Promise<IngestStatus>;
+    ingestAsk(frage: string): Promise<{ text: string; zitate: string[] } | null>;
+    onIngestEvent(cb: (ev: IngestEvent) => void): () => void;
+  }
+
   interface MMCAPI {
     vault: MMCVaultAPI;
     ocr: MMCOCR_API;
     llm: MMCLLM_API;
     gitchain: MMCGitchainAPI;
+    daten: MMCDatenAPI;
   }
 
   interface Window {

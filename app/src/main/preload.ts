@@ -173,11 +173,87 @@ export interface MMCGitchainAPI {
   registry(): Promise<{ version: string; count: number; ids: string[] }>;
 }
 
+export interface MMCUebersichtAPI {
+  getFallUebersicht(fallId: string): Promise<FallUebersicht>;
+}
+
+export interface FallUebersicht {
+  fallId: string;
+  dinge: Array<{ titel: string; frage: string; quelle: string; proposalId: string | null }>;
+  protokoll: ErzaehlSatz[];
+  beteiligte: string[];
+}
+
+export interface AnrufInfo {
+  id: string;
+  fallId: string;
+  doc: string;
+  partner: string;
+  dauer: string;
+  zeilen: Array<{ zeit: string; sprecher: string; text: string }>;
+  minuten: string[];
+}
+
+export interface ThemaInfo {
+  name: string;
+  anzahl: number;
+  fallId: string;
+}
+
+export interface StapelEintrag {
+  fallId: string;
+  satz: string;
+  commitZeile: string;
+}
+
+export interface ThemaVorschlag {
+  fallIdVorschlag: string;
+  titel: string;
+  quelle: string;
+  proposalId: string;
+}
+
+export interface SuchErgebnis {
+  frage: string;
+  antwort: string;
+  treffer: Array<{ fall: string; doc: string; seite: number; text: string; feld: string; wert: string }>;
+  ehrlich: boolean;
+}
+
+export interface IngestStatus {
+  phase: string;
+  fertig: number;
+  total: number;
+  atome: number;
+}
+
+export type IngestEvent =
+  | { typ: 'dokument_fertig'; name: string; lane: string; ms: number; atome: number; fundstellen: number }
+  | { typ: 'bericht_aktualisiert'; zusammenfassung: string; namenAusDokumenten: string[] }
+  | { typ: 'fragen_bereit'; fragen: Array<{ text: string; atomRef: string }> }
+  | { typ: 'done'; totalMs: number; textSeiten: number; ocrSeiten: number }
+  | { typ: 'scan_bericht'; quellen: Array<{ name: string; dateien: number; bytes: number; aeltestes: string | null; geschuetzt: number; gelesen: boolean }> };
+
+export interface MMCDatenAPI {
+  getFallUebersicht(fallId: string): Promise<FallUebersicht>;
+  listAnrufe(fallId: string): Promise<AnrufInfo[]>;
+  themenAlle(): Promise<ThemaInfo[]>;
+  stapel(): Promise<StapelEintrag[]>;
+  neuesThema(): Promise<ThemaVorschlag[]>;
+  fragAlles(frage: string): Promise<SuchErgebnis>;
+  ingestStart(quellen: string[]): Promise<{ ok: boolean; anzahl: number; fehler?: string }>;
+  ingestScanReport(quellen: string[]): Promise<Array<{ name: string; dateien: number; bytes: number; aeltestes: string | null; geschuetzt: number; gelesen: boolean }>>;
+  ingestStatus(): Promise<IngestStatus>;
+  ingestAsk(frage: string): Promise<{ text: string; zitate: string[] } | null>;
+  onIngestEvent(cb: (ev: IngestEvent) => void): () => void;
+}
+
 export interface MMCAPI {
   vault: MMCVaultAPI;
   ocr: MMCOCR_API;
   llm: MMCLLM_API;
   gitchain: MMCGitchainAPI;
+  daten: MMCDatenAPI;
 }
 
 // Helper: ArrayBuffer → Number-Array für IPC
@@ -228,6 +304,23 @@ const api: MMCAPI = {
     logout: () => ipcRenderer.invoke('gitchain:logout'),
     pushFall: (fallId: string) => ipcRenderer.invoke('gitchain:pushFall', fallId),
     registry: () => ipcRenderer.invoke('gitchain:registry')
+  },
+  daten: {
+    getFallUebersicht: (fallId: string) => ipcRenderer.invoke('vault:getFallUebersicht', fallId),
+    listAnrufe: (fallId: string) => ipcRenderer.invoke('anruf:list', fallId),
+    themenAlle: () => ipcRenderer.invoke('themen:alle'),
+    stapel: () => ipcRenderer.invoke('themen:stapel'),
+    neuesThema: () => ipcRenderer.invoke('themen:neuesThema'),
+    fragAlles: (frage: string) => ipcRenderer.invoke('suche:fragAlles', frage),
+    ingestStart: (quellen: string[]) => ipcRenderer.invoke('ingest:start', quellen),
+    ingestScanReport: (quellen: string[]) => ipcRenderer.invoke('ingest:scanReport', quellen),
+    ingestStatus: () => ipcRenderer.invoke('ingest:status'),
+    ingestAsk: (frage: string) => ipcRenderer.invoke('ingest:ask', frage),
+    onIngestEvent: (cb: (ev: IngestEvent) => void) => {
+      const handler = (_e: unknown, ev: IngestEvent) => cb(ev);
+      ipcRenderer.on('ingest-event', handler);
+      return () => ipcRenderer.removeListener('ingest-event', handler);
+    }
   }
 };
 

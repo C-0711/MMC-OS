@@ -226,31 +226,44 @@ export function renderObEingeladen(container: HTMLElement, _ctx: AppCtx): void {
 // ---------------------------------------------------------------------------
 
 export function renderObSanduhr(container: HTMLElement, ctx: AppCtx): void {
-  const d = (ctx.daten?.sanduhr as SanduhrDaten) ??
-    { seitenVerstanden: 9500, seitenGelesen: 2146, fallId: 'ingest' };
+  const live = (ctx.daten as { ingest?: { total: number; fertig: number; phase: string } } | undefined)?.ingest;
+  const d = (ctx.daten?.sanduhr as SanduhrDaten | undefined) ??
+    (live && live.total > 0
+      ? { seitenVerstanden: live.total, seitenGelesen: live.fertig, fallId: 'ingest' }
+      : null);
+
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
 
-  const titel = el('div', 'serif', `Verstanden: ${d.seitenVerstanden.toLocaleString('de-DE')} Seiten.`);
+  const zahl = (n: number) => n.toLocaleString('de-DE');
+  const titel = el('div', 'serif', d
+    ? `Verstanden: ${zahl(d.seitenVerstanden)} Seiten.`
+    : 'Ich lese noch nichts — wirf mir irgendetwas hin.');
   titel.style.fontSize = '22px';
   const mitte = zentriert(
     titel,
     el('div', 't13 sub', 'Was davon heute wichtig ist, liegt oben auf.')
   );
 
-  // Die Sanduhr: 24px Haarlinie, Körner fallen — kein Canvas nötig, DOM genügt.
+  // Die Sanduhr: 24px Haarlinie, Körner fallen — DOM genügt.
   const uhr = el('div', 'sanduhr');
   mitte.appendChild(uhr);
 
   const huegelText = el('div', 't13 sub',
     'Der Hügel unten ist der Bericht. Er wächst still — Themen entstehen erst, wenn du sie aufnimmst.');
-  const fuss = fusszeile(
-    `${d.seitenGelesen.toLocaleString('de-DE')} / ${d.seitenVerstanden.toLocaleString('de-DE')} gelesen · alles committet vor Deutung · fall·${d.fallId} · signatur ✓`
-  );
-  mitte.append(huegelText, fuss);
+  mitte.appendChild(huegelText);
+  if (d) {
+    mitte.appendChild(fusszeile(
+      `${zahl(d.seitenGelesen)} / ${zahl(d.seitenVerstanden)} gelesen · alles committet vor Deutung · fall·${d.fallId} · signatur ✓`
+    ));
+  } else {
+    mitte.appendChild(fusszeile('ingest bereit · scan-first · kein commit vor dem nicken'));
+  }
   gr.append(kopf(), mitte, el('div'));
   (gr.lastChild as HTMLElement).style.height = '36px';
   container.appendChild(gr);
+  // Körnerfall erst im DOM (rAF reicht, kein Timeout)
+  requestAnimationFrame(() => sanduhrStarten(container.querySelector('.sanduhr')));
 }
 
 export function renderObSanduhrFertig(container: HTMLElement, ctx: AppCtx): void {
@@ -300,7 +313,6 @@ export interface ScanQuelle {
 }
 
 export function renderObScanBericht(container: HTMLElement, ctx: AppCtx): void {
-  const quellen = (ctx.daten?.scanQuellen as ScanQuelle[]) ?? [];
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
 
@@ -309,6 +321,32 @@ export function renderObScanBericht(container: HTMLElement, ctx: AppCtx): void {
   const darf = el('div', 'serif', 'Darf ich?');
   darf.style.cssText = 'font-size:15px;color:#5c705c';
   const mitte = zentriert(titel, darf);
+  gr.append(kopf(), mitte, el('div'));
+  (gr.lastChild as HTMLElement).style.height = '36px';
+  container.appendChild(gr);
+
+  // Echte Quellen asynchron nachladen (Scan-First: nur stat())
+  window.mmc.daten.ingestScanReport((ctx.daten?.scanPfade as string[]) ?? [])
+    .then((bericht) => {
+      mitte.textContent = '';
+      zeichneQuellen(mitte, bericht.map(q => ({
+        name: q.name,
+        zahlen: `${q.dateien.toLocaleString('de-DE')} dateien · ${(q.bytes / 1e9).toFixed(1)} GB${q.aeltestes ? ' · ältestes ' + q.aeltestes : ''}`,
+        geschuetzt: q.geschuetzt,
+      })), ctx);
+    })
+    .catch(() => {
+      zeichneQuellen(mitte, [], ctx);
+    });
+}
+
+/** Interne Darstellung der Quellen-Karten (wird von renderObScanBericht genutzt). */
+function zeichneQuellen(mitte: HTMLElement, quellen: ScanQuelle[], _ctx: AppCtx): void {
+  const titel2 = el('div', 'serif', 'Ich habe Orte gefunden, an denen dein Leben liegt.');
+  titel2.style.cssText = 'font-size:22px;line-height:1.4;text-align:center';
+  const darf2 = el('div', 'serif', 'Darf ich?');
+  darf2.style.cssText = 'font-size:15px;color:#5c705c';
+  mitte.append(titel2, darf2);
 
   for (const q of quellen) {
     const karte = el('div', 'karte');
@@ -340,9 +378,6 @@ export function renderObScanBericht(container: HTMLElement, ctx: AppCtx): void {
       'Bis du nickst, wird nichts gelesen und nichts gespeichert — der Bericht zählt nur, er öffnet keine einzige Datei.'),
     fusszeile('scan-first · nur stat() und dateinamen · kein commit vor dem nicken')
   );
-  gr.append(kopf(), mitte, el('div'));
-  (gr.lastChild as HTMLElement).style.height = '36px';
-  container.appendChild(gr);
 }
 
 // ---------------------------------------------------------------------------

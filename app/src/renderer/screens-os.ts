@@ -72,33 +72,59 @@ function beweisZeile(links: string, rechts: string): HTMLElement {
   return z;
 }
 
+export interface StoreDaten {
+  uebersicht?: FallUebersicht;
+  anrufe?: AnrufInfo[];
+  themen?: ThemaInfo[];
+  stapel?: StapelEintrag[];
+  neuesThema?: ThemaVorschlag[];
+  ingest?: {
+    phase: string; fertig: number; total: number; atome: number;
+    zusammenfassung: string; namen: string[];
+    fragen: Array<{ text: string; atomRef: string }>;
+  };
+  suche?: {
+    frage: string; antwort: string; ehrlich: boolean;
+    treffer: Array<{ fall: string; doc: string; seite: number; text: string }>;
+  } | null;
+  ladeUebersicht?: (fallId: string) => Promise<FallUebersicht | undefined>;
+}
+
 // ---------------------------------------------------------------------------
-// B1 · OsHeute — die Karte
+// B1 · OsHeute — die Karte (aus dem LiveStore: echte Ding-Karten)
 // ---------------------------------------------------------------------------
 
 export function renderOsHeute(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
 
+  const d = (ctx.daten as StoreDaten | undefined)?.uebersicht;
   const stunde = new Date().getHours();
   const gruss = stunde < 12 ? 'Guten Morgen' : stunde < 18 ? 'Guten Tag' : 'Guten Abend';
-  const b = buehne(titelSerif(`${gruss}. Alles ruhig.`, 30));
+  const b = buehne(titelSerif(`${gruss}. ${d && d.dinge.length > 0 ? 'Ein Ding wartet.' : 'Alles ruhig.'}`, 30));
 
-  // Die Karte des Tages — ein Ding wartet (UeKarteTipp: Tap = 150ms tiefer, kein Ripple)
-  const karte = el('div', 'karte karte-tipp');
-  karte.style.cssText = 'text-align:left;width:100%;max-width:560px;cursor:pointer';
-  karte.append(
-    el('div', 'etikett', 'Ein Ding wartet.'),
-    el('div', 'serif t17', 'Umsatzsteuer fällig in 2 Tagen'),
-    el('div', 't13 sub', 'Voranmeldung August · 1.190,00 € · ans Finanzamt Stuttgart'),
-    quelle('fall steuern-2026 · voranmeldung-august.pdf · Seite 1 · commit 8f0f849 · Signatur ✓')
-  );
-  karte.addEventListener('click', () => navigate('leseplatz', ctx));
-  b.appendChild(karte);
+  if (d && d.dinge.length > 0) {
+    // Die Karte des Tages aus der echten Fall-Übersicht (Tipp → Leseplatz/Beweis)
+    for (const ding of d.dinge.slice(0, 3)) {
+      const karte = el('div', 'karte karte-tipp');
+      karte.style.cssText = 'text-align:left;width:100%;max-width:560px;cursor:pointer';
+      karte.append(
+        el('div', 'etikett', 'Ein Ding wartet.'),
+        el('div', 'serif t17', ding.titel),
+        el('div', 't13 sub', ding.frage)
+      );
+      karte.appendChild(quelle(ding.quelle));
+      karte.addEventListener('click', () => navigate('beweis', ctx));
+      b.appendChild(karte);
+    }
+  } else {
+    b.appendChild(el('div', 't13 sub',
+      'Keine Karte wartet. Dein Assistent liest still weiter — was wichtig wird, liegt dann oben auf.'));
+  }
 
-  if (ctx.kartenOffen && ctx.kartenOffen > 1) {
-    b.appendChild(el('div', 't11 sub',
-      `${ctx.kartenOffen - 1} weitere Karten liegen still darunter`));
+  const rest = (ctx.kartenOffen ?? 0) - (d ? Math.min(d.dinge.length, 3) : 0);
+  if (rest > 0) {
+    b.appendChild(el('div', 't11 sub', `${rest} weitere Karten liegen still darunter`));
   }
 
   gr.append(kopf(), b, fuss());
@@ -138,27 +164,38 @@ export function renderOsAnrufBeweis(container: HTMLElement, _ctx: AppCtx): void 
 export function renderOsFall(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const fallName = ctx.fallId ?? 'ctax';
-  const b = buehne(titelSerif('CTAX. Ein Ding wartet.', 28));
+  const d = (ctx.daten as StoreDaten | undefined)?.uebersicht;
+  const fallName = d?.fallId ?? ctx.fallId ?? 'fall';
+  const dinge = d?.dinge ?? [];
+  const b = buehne(titelSerif(dinge.length > 0 ? `${fallName}. Ein Ding wartet.` : `${fallName}. Alles ruhig.`, 28));
 
-  const ding = el('div', 'karte karte-tipp');
-  ding.style.cssText = 'text-align:left;width:100%;max-width:560px';
-  ding.append(
-    el('div', 'serif t17', 'Montag ohne Abnahmekriterien — Stefan erinnern?'),
-    el('div', 't13 sub', 'zugesagt im Anruf vom Donnerstag · Minute 27:50'),
-    quelle(`fall ${fallName} · mitschrift-2026-08-27.md · Minute 27:50 · commit a41c07 · Signatur ✓`)
-  );
-  ding.appendChild(knoepfe(['Ja, erinnern', 'pill-salbei'], ['Später', 'pill-still']));
-  b.appendChild(ding);
+  if (dinge.length === 0) {
+    b.appendChild(el('div', 't13 sub', 'Noch keine offenen Karten in diesem Fall — was ankommt, liegt dann oben auf.'));
+  }
+  for (const ding of dinge.slice(0, 4)) {
+    const karte = el('div', 'karte karte-tipp');
+    karte.style.cssText = 'text-align:left;width:100%;max-width:560px;cursor:pointer';
+    karte.append(
+      el('div', 'serif t17', ding.titel),
+      el('div', 't13 sub', ding.frage)
+    );
+    karte.appendChild(quelle(ding.quelle));
+    karte.addEventListener('click', () => navigate('beweis', ctx));
+    b.appendChild(karte);
+  }
 
-  const protokoll = el('div', 'karte');
-  protokoll.style.cssText = 'text-align:left;width:100%;max-width:560px';
-  protokoll.append(
-    el('div', 'serif t15', 'Anruf Review & Planning gelesen — 2 Beschlüsse, 2 Aufgaben liegen im Fall'),
-    el('div', 't13 sub', 'Abnahmeprotokoll.pdf von Stefan · seit Freitag im Fall')
-  );
-  b.appendChild(protokoll);
-  b.appendChild(el('div', 't11 sub', 'Gerd · Stefan · extern · 7 weitere'));
+  // Protokoll: die letzten Erzähl-Sätze des Falls
+  const protokoll = d?.protokoll ?? [];
+  if (protokoll.length > 0) {
+    const pk = el('div', 'karte');
+    pk.style.cssText = 'text-align:left;width:100%;max-width:560px';
+    pk.appendChild(el('div', 'trenner', 'der Verlauf'));
+    for (const s of protokoll.slice(0, 4)) {
+      pk.append(el('div', 't13 sub', s.satz), el('div', 't11 sub', s.commitZeile));
+    }
+    b.appendChild(pk);
+  }
+  b.appendChild(el('div', 't11 sub', (d?.beteiligte ?? ['extern']).join(' · ')));
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
@@ -240,40 +277,55 @@ export function renderOsUebergang(container: HTMLElement, _ctx: AppCtx): void {
 // B10/B11/B12 · Anruf kommt / läuft / Text
 // ---------------------------------------------------------------------------
 
-export function renderOsAnrufKommt(container: HTMLElement, _ctx: AppCtx): void {
+export function renderOsAnrufKommt(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const b = buehne(titelSerif('Lena Weber ruft an.', 28),
-    el('div', 't13 sub', 'über euren Fall „Unfall Passat"'),
-    el('div', 't11 sub', 'Klon zu Klon — kein Anbieter dazwischen'),
-    el('div', 't11 sub', 'Mitschrift mit Minute und Sprecher — bei euch beiden'));
-  b.append(knoepfe(['Annehmen', 'pill-salbei', () => navigate('anruf-laeuft')], ['Nicht jetzt', 'pill-rose']));
+  const anrufe = (ctx.daten as StoreDaten | undefined)?.anrufe ?? [];
+  const b = buehne(titelSerif('Anrufe', 28));
+
+  if (anrufe.length === 0) {
+    b.appendChild(el('div', 't13 sub', 'Noch keine Anrufe in diesem Fall — wenn einer kommt, liegt er hier mit Minute und Sprecher.'));
+  }
+  for (const a of anrufe.slice(0, 5)) {
+    const karte = el('div', 'karte karte-tipp');
+    karte.style.cssText = 'text-align:left;width:100%;max-width:560px;cursor:pointer';
+    karte.append(
+      el('div', 'serif t17', a.partner),
+      el('div', 't13 sub', `Mitschrift · Dauer ${a.dauer}`)
+    );
+    karte.appendChild(quelle(`fall ${a.fallId} · ${a.doc}${a.minuten.length ? ' · Minuten ' + a.minuten.join(', ') : ''} · Signatur ✓`));
+    karte.addEventListener('click', () => navigate('anruf-laeuft'));
+    b.appendChild(karte);
+  }
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
 
-export function renderOsAnrufLaeuft(container: HTMLElement, _ctx: AppCtx): void {
+export function renderOsAnrufLaeuft(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
+  const anrufe = (ctx.daten as StoreDaten | undefined)?.anrufe ?? [];
+  const a = anrufe[0];
   const b = buehne(
-    el('div', 'etikett', 'Anruf · Unfall Passat'),
-    el('div', 'serif t15', '04:26')
+    el('div', 'etikett', a ? `Anruf · ${a.partner}` : 'Anruf'),
+    a ? el('div', 'serif t15', a.dauer) : el('div', 't13 sub', 'Kein Anruf ausgewählt.')
   );
+  if (!a) {
+    b.appendChild(el('div', 't13 sub', 'Noch keine Mitschrift — wähle im Anrufe-Bereich einen Anruf.'));
+    gr.append(kopf(), b, fuss());
+    container.appendChild(gr);
+    return;
+  }
   const mitschrift = el('div', 'karte');
   mitschrift.style.cssText = 'text-align:left;width:100%;max-width:560px';
-  mitschrift.append(
-    el('div', 't13 sub', '14:09 · Lena: Der Gutachter kommt morgen.'),
-    el('div', 't13 sub', '14:11 · Du: Gut, dann Werkstatttermin Freitag.'),
-    el('div', 't13', '14:26 · Lena: Der Ersatzwagen ist organisiert.')
-  );
-  const beschluss = el('div', 'karte info');
-  beschluss.style.cssText = 'text-align:left;width:100%;max-width:560px';
-  beschluss.append(
-    el('div', 'trenner', 'als Beschluss festgehalten'),
-    el('div', 'serif t15', 'Festhalten: Werkstatttermin Freitag, 6.3.?'),
-    knoepfe(['Ja, festhalten', 'pill-salbei'], ['Nein', 'pill-still'])
-  );
-  b.append(mitschrift, beschluss);
+  for (const z of a.zeilen.slice(0, 12)) {
+    const markiert = a.minuten.includes(z.zeit);
+    const zeile = el('div', markiert ? 't13' : 't13 sub', `${z.zeit} · ${z.sprecher}: ${z.text}`);
+    if (markiert) zeile.style.cssText = 'background:rgba(217,166,160,.08);border-radius:6px;padding:3px 8px;margin:0 -8px';
+    mitschrift.appendChild(zeile);
+  }
+  mitschrift.appendChild(quelle(`fall ${a.fallId} · ${a.doc} · Signatur ✓`));
+  b.appendChild(mitschrift);
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
@@ -399,27 +451,57 @@ export function renderOsTisch(container: HTMLElement, _ctx: AppCtx): void {
 // B19 · OsSuche — Frag alles, der Brain als Bildschirm
 // ---------------------------------------------------------------------------
 
-export function renderOsSuche(container: HTMLElement, _ctx: AppCtx): void {
+export function renderOsSuche(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const b = buehne(
-    el('div', 'serif t15',
-      'Du fragst alles, was du besitzt: „Was zahle ich insgesamt im Jahr für Versicherungen?"'),
-    el('div', 'serif t17', '727,20 € im Jahr — aus zwei Policen.')
-  );
-  const treffer1 = el('div', 'karte');
-  treffer1.style.cssText = 'text-align:left;width:100%;max-width:560px';
-  treffer1.append(
-    el('div', 't15', 'Hausrat · 214,80 € — jährlich zum 01.01.'),
-    quelle('hausratversicherung.pdf · S. 4 — im Fall geprüft · Signatur ✓')
-  );
-  const treffer2 = el('div', 'karte');
-  treffer2.style.cssText = 'text-align:left;width:100%;max-width:560px';
-  treffer2.append(
-    el('div', 't15', 'Kfz-Haftpflicht · 512,40 € — Beitragsjahr 2026'),
-    quelle('kfz-haftpflicht-2026.pdf · S. 2 — im Fall geprüft · Signatur ✓')
-  );
-  b.append(treffer1, treffer2, el('div', 't11 sub', 'jeder Treffer zeigt auf seine Stelle — der Brain antwortet nie ohne Fund'));
+  const daten = (ctx.daten as StoreDaten | undefined);
+  const b = buehne(el('div', 'serif t15', 'Frag alles — dein Assistent antwortet nur mit Beleg.'));
+
+  // Frage-Feld (frag-Pille wie im Eingang)
+  const frag = el('div', 'frag');
+  frag.style.cssText = 'width:100%;max-width:560px';
+  const input = el('input') as HTMLInputElement;
+  input.placeholder = 'Was möchtest du wissen?';
+  input.style.cssText = 'flex:1;border:none;background:transparent;font-size:15px;outline:none';
+  const los = el('button', 'pill-salbei', 'Fragen');
+  frag.append(input, los);
+  b.appendChild(frag);
+
+  const ergebnis = el('div');
+  ergebnis.style.cssText = 'width:100%;max-width:560px;display:flex;flex-direction:column;gap:12px';
+  b.appendChild(ergebnis);
+
+  const stelle = async () => {
+    const frage = input.value.trim();
+    if (!frage) return;
+    ergebnis.textContent = '';
+    const warten = el('div', 't13 sub', 'Ich lese in deinen Fällen — jeden Treffer mit Fundstelle.');
+    ergebnis.appendChild(warten);
+    try {
+      const r = await window.mmc.daten.fragAlles(frage);
+      daten?.suche !== undefined || null;
+      ergebnis.textContent = '';
+      const antwort = el('div', 't15', r.antwort);
+      ergebnis.appendChild(antwort);
+      for (const t of r.treffer.slice(0, 5)) {
+        const karte = el('div', 'karte');
+        karte.style.cssText = 'text-align:left';
+        karte.append(el('div', 't13', t.text));
+        karte.appendChild(quelle(`fall ${t.fall} · ${t.doc} · Seite ${t.seite} · Signatur ✓`));
+        ergebnis.appendChild(karte);
+      }
+      if (r.ehrlich) {
+        const e = el('div', 't11 sub', 'Ehrlichkeitszeile: was fehlt oder streitet, wird gesagt — nie still entschieden.');
+        ergebnis.appendChild(e);
+      }
+    } catch {
+      ergebnis.textContent = '';
+      ergebnis.appendChild(el('div', 't13 sub', 'Das kann ich gerade nicht zeigen — dein Vault bleibt vollständig bei dir.'));
+    }
+  };
+  los.addEventListener('click', stelle);
+  input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') stelle(); });
+
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
@@ -446,39 +528,55 @@ export function renderOsRueckruf(container: HTMLElement, _ctx: AppCtx): void {
 // B21/B22 · Stapel / Neues Thema — der Ingester
 // ---------------------------------------------------------------------------
 
-export function renderOsStapel(container: HTMLElement, _ctx: AppCtx): void {
+export function renderOsStapel(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const b = buehne(titelSerif('Der Stapel ist durch.', 30),
-    el('div', 't13 sub', '23 Dinge aus „Downloads" — gelesen in 41 Sekunden, hier auf dem Gerät'));
-  const reihe = el('div');
-  reihe.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;justify-content:center';
-  for (const [name, ziel] of [['Steuern', 'fall'], ['Versicherungen', 'fall'], ['Photovoltaik', 'neues-thema']] as [string, string][]) {
-    const chip = el('button', 'pill-still', name);
-    chip.addEventListener('click', () => navigate(ziel as never));
-    reihe.appendChild(chip);
+  const daten = (ctx.daten as StoreDaten | undefined);
+  const stapel = daten?.stapel ?? [];
+  const b = buehne(titelSerif(stapel.length > 0 ? 'Der Stapel ist durch.' : 'Alles ruhig.', 30));
+  if (stapel.length === 0) {
+    b.appendChild(el('div', 't13 sub', 'Noch nichts einsortiert — wirf mir irgendetwas hin, der Ingester sortiert allein.'));
   }
-  b.append(reihe, el('div', 't11 sub', 'der Ingester sortiert allein — du siehst das Ergebnis, nicht den Vorgang'));
+  for (const e of stapel.slice(0, 6)) {
+    const karte = el('div', 'karte karte-tipp');
+    karte.style.cssText = 'text-align:left;width:100%;max-width:560px;cursor:pointer';
+    karte.append(el('div', 'serif t15', e.fallId), el('div', 't13 sub', e.satz));
+    karte.appendChild(quelle(e.commitZeile));
+    karte.addEventListener('click', () => navigate('fall', { ...ctx, fallId: e.fallId }));
+    b.appendChild(karte);
+  }
+  b.appendChild(el('div', 't11 sub', 'der Ingester sortiert allein — du siehst das Ergebnis, nicht den Vorgang'));
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }
 
-export function renderOsNeuesThema(container: HTMLElement, _ctx: AppCtx): void {
+export function renderOsNeuesThema(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const b = buehne(
-    el('div', 'serif t28', 'Da fängt etwas Neues an.'),
-    el('div', 't13 sub', 'Drei neue Dinge gehören zusammen — und zu keinem Fall, den es gibt. Ich würde einen anlegen:')
-  );
-  const vorschlag = el('div', 'karte');
-  vorschlag.style.cssText = 'text-align:left;width:100%;max-width:520px';
-  vorschlag.append(
-    el('div', 'serif t17', 'Photovoltaik'),
-    el('div', 't11 sub', 'angebot-solar.pdf · rechnung-stromspeicher.pdf · mail-planeigentum.md'),
-    quelle('3 neue Dokumente · noch kein Fall · scan-first ✓')
-  );
-  b.append(vorschlag, knoepfe(['Fall anlegen', 'pill-salbei', () => navigate('fall', { fallId: 'photovoltaik' })],
-    ['Lieber nicht', 'pill-still']));
+  const vorschlaege = (ctx.daten as StoreDaten | undefined)?.neuesThema ?? [];
+  const b = buehne(el('div', 'serif t28', 'Da fängt etwas Neues an.'));
+
+  if (vorschlaege.length === 0) {
+    b.appendChild(el('div', 't13 sub', 'Gerade deutet nichts auf einen neuen Fall — der Ingester meldet sich, wenn etwas zusammengehört.'));
+    gr.append(kopf(), b, fuss());
+    container.appendChild(gr);
+    return;
+  }
+  b.appendChild(el('div', 't13 sub', `${vorschlaege.length} ${vorschlaege.length === 1 ? 'Ding gehört' : 'Dinge gehören'} zusammen — und zu keinem Fall, den es gibt. Ich würde einen anlegen:`));
+  for (const v of vorschlaege.slice(0, 3)) {
+    const karte = el('div', 'karte');
+    karte.style.cssText = 'text-align:left;width:100%;max-width:520px';
+    karte.append(
+      el('div', 'serif t17', v.titel),
+      el('div', 't11 sub', v.quelle),
+      quelle(`vorschlag · ${v.proposalId} · scan-first ✓`)
+    );
+    karte.appendChild(knoepfe(['Fall anlegen', 'pill-salbei', async () => {
+      await window.mmc.vault.createFall(v.fallIdVorschlag).catch(() => {});
+      navigate('fall', { ...ctx, fallId: v.fallIdVorschlag });
+    }], ['Lieber nicht', 'pill-still']));
+    b.appendChild(karte);
+  }
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
 }

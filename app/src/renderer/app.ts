@@ -26,6 +26,7 @@ import { navigate, type AppCtx } from './router.js';
 import { SiegelMenue, siegelmenueCss } from './siegelmenue.js';
 import { onboardingCss, sanduhrStarten } from './screens-onboarding.js';
 import { osCss } from './screens-os.js';
+import { LiveStore } from './store.js';
 
 type AppZustand = 'ruhig' | 'fragend' | 'antwortend' | 'fall-ansicht';
 
@@ -47,6 +48,7 @@ class App {
   private dropZoneActive = false;
   private siegelMenue: SiegelMenue | null = null;
   private faelleCache: FallInfo[] = [];
+  private store = new LiveStore();
 
   constructor() {
     this.init();
@@ -60,6 +62,7 @@ class App {
     const style = document.createElement('style');
     style.textContent = siegelmenueCss() + onboardingCss() + osCss();
     document.head.appendChild(style);
+    await this.store.init(); // LiveStore: eine Quelle für Router & Menü-Zähler
     this.siegelMenue = new SiegelMenue(() => this.appCtx());
     this.siegelMenue.oeffnen(document.querySelector('.siegel'));
 
@@ -75,13 +78,14 @@ class App {
     }
   }
 
-  /** Kontext für Router & Siegel-Menü — echte Daten, wo vorhanden. */
+  /** Kontext für Router & Siegel-Menü — aus dem LiveStore, einer Quelle. */
   private appCtx(): AppCtx {
-    return {
-      faelle: this.faelleCache?.map(f => ({ id: f.id, name: f.id })),
-      kartenOffen: this.karten.length,
-      fallId: this.aktuellerFall ?? undefined,
-    };
+    return this.store.ctx(this.aktuellerFall ?? undefined);
+  }
+
+  /** Nach Aktionen (Signatur, Aufnehmen, Merge): Store neu lesen. */
+  private async storeRefresh(): Promise<void> {
+    await this.store.refresh(this.aktuellerFall ?? undefined);
   }
 
   // ============================================================================
@@ -341,6 +345,7 @@ class App {
   private async handleJa(karte: Karte): Promise<void> {
     try {
       await window.mmc.vault.mergeVorschlag(karte.fallId, karte.vorschlagId);
+      await this.storeRefresh();
 
       // Karte entfernen mit Salbei-Animation
       this.entferneKarte(karte);
@@ -361,6 +366,7 @@ class App {
   private async handleNein(karte: Karte): Promise<void> {
     try {
       await window.mmc.vault.rejectVorschlag(karte.fallId, karte.vorschlagId);
+      await this.storeRefresh();
 
       this.entferneKarte(karte);
 

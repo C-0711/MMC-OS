@@ -125,3 +125,50 @@ test('(d) Unbekannter Screen bleibt still (kein Wurf)', () => {
   router.navigate('gibt-es-nicht', ctx); // darf nicht werfen
   assert.ok(router.aktuellerScreen()); // vorheriger bleibt
 });
+
+// Live-Kontext wie ihn der LiveStore baut (StoreDaten nach T6/T7)
+const liveCtx = {
+  faelle: [{ id: 'steuern-2026', name: 'steuern-2026' }],
+  kartenOffen: 2,
+  fallId: 'steuern-2026',
+  daten: {
+    uebersicht: {
+      fallId: 'steuern-2026',
+      dinge: [
+        { titel: 'Umsatzsteuer fällig in 2 Tagen', frage: 'Voranmeldung August · 1.190,00 € — stimmt das?', quelle: 'voranmeldung.pdf · Seite 1', proposalId: 'v1' },
+      ],
+      protokoll: [
+        { satz: 'Am 31.8. kam rechnung.txt von Stadtwerke.', commitZeile: 'a1b2 · eingang · sig ✓', sha: 'a1b2c3', datumIso: '2026-08-31' },
+      ],
+      beteiligte: ['Stadtwerke Musterstadt', 'Finanzamt Stuttgart'],
+    },
+    anrufe: [
+      { id: 'mitschrift-2026-08-27', fallId: 'steuern-2026', doc: 'mitschrift-2026-08-27.json',
+        partner: 'Lena Weber', dauer: '27:50',
+        zeilen: [{ zeit: '27:50', sprecher: 'Lena Weber', text: 'Prelive bleibt eingefroren.' }],
+        minuten: ['27:50'] },
+    ],
+    themen: [{ name: 'Rechnungen', anzahl: 4, fallId: 'steuern-2026' }],
+    stapel: [{ fallId: 'steuern-2026', satz: 'Am 31.8. kam rechnung.txt von Stadtwerke.', commitZeile: 'a1b2 · eingang · sig ✓' }],
+    neuesThema: [{ fallIdVorschlag: 'photovoltaik', titel: 'Photovoltaik', quelle: 'aus Fall steuern-2026 · Vorschlag v2', proposalId: 'v2' }],
+    ingest: { phase: 'laeuft', fertig: 2146, total: 9500, atome: 30, zusammenfassung: '2.146 / 9.500 gelesen', namen: ['Stadtwerke'], fragen: [] },
+    suche: null,
+  },
+};
+
+// Leerer Kontext: Screens müssen mit Würde leer bleiben (T8)
+const leerCtx = { faelle: [], kartenOffen: 0, daten: {} };
+
+test('(e) T7: Live-Screens rendern mit echten Store-Daten', () => {
+  for (const id of ['heute', 'fall', 'anruf-kommt', 'anruf-laeuft', 'stapel', 'neues-thema', 'sanduhr']) {
+    router.navigate(id, liveCtx);
+    assert.equal(router.aktuellerScreen(), id);
+  }
+});
+
+test('(f) T8: Screens mit leerem Store zeigen Leer-Zustand, kein Wurf', () => {
+  for (const id of ALLE) {
+    router.navigate(id, leerCtx); // darf NIE werfen
+  }
+  assert.ok(router.aktuellerScreen());
+});
