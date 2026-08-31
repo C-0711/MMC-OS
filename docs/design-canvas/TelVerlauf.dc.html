@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .karte { background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; box-shadow: 0 10px 34px -18px rgba(90,75,50,.35); }
+    .tag { display: inline-flex; padding: 3px 10px; border-radius: 999px; background: rgba(143,169,143,.16); color: #5c705c; font-size: 11px; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 20px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="t13">‹ Telefon</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 0 80px">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+        <div class="serif" style="font-size: 28px">Ein Gespräch, ganz</div>
+        <div class="mono">LENA WEBER · HEUTE 14:36 · 27:50 · unfall-passat</div>
+      </div>
+
+      <div class="karte" style="width: 680px; padding: 26px 30px; display: flex; flex-direction: column; gap: 16px">
+        <!-- Was aus dem Gespräch wurde: die Ernte, nicht das Protokoll -->
+        <div class="t11 sub" style="letter-spacing: .08em; text-transform: uppercase">Was daraus wurde</div>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; align-items: baseline; gap: 12px">
+            <span class="tag">Vereinbarung</span>
+            <span class="t13" style="line-height: 1.5">Gutachten bis Freitag, Schadensmeldung wartet — beide signiert</span>
+            <span class="mono" style="margin-left: auto">Min 21:04</span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 12px">
+            <span class="tag" style="background: rgba(184,163,105,.16); color: #96824c">Atom</span>
+            <span class="t13" style="line-height: 1.5">Kennzeichen des Unfallgegners: S-KL 4711</span>
+            <span class="mono" style="margin-left: auto">Min 08:12</span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 12px">
+            <span class="tag" style="background: rgba(217,166,160,.2); color: #a8756f">Offen</span>
+            <span class="t13" style="line-height: 1.5">Werkstatt-Termin — Lena fragt nach und meldet sich</span>
+            <span class="mono" style="margin-left: auto">Min 24:40</span>
+          </div>
+        </div>
+
+        <div style="height: .5px; background: rgba(42,37,32,.12)"></div>
+
+        <!-- Die Mitschrift ist der Beweis darunter — ein Tap auf die Minute öffnet sie -->
+        <div style="display: flex; align-items: center; gap: 14px">
+          <svg width="16" height="16" viewBox="0 0 18 18"><path d="M6 3.5 v11 l9 -5.5 Z" fill="none" stroke="#2a2520" stroke-width="1"/></svg>
+          <span class="t13">Mitschrift · 27:50 — jede Minute ist eine Fundstelle</span>
+          <span class="t13 sub" style="margin-left: auto">▸ Beweis öffnen</span>
+        </div>
+      </div>
+
+      <div class="t11 sub" style="max-width: 56ch; text-align: center; line-height: 1.7">Der Verlauf zeigt nicht, wer wann klingelte — er zeigt, was aus Gesprächen wurde. Jede Zeile springt auf ihre Minute. Geld und Verträge werden nie im Gespräch unterschrieben, sondern danach im ruhigen Raum.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 26px">
+      <div class="mono">unfall-passat · anruf-2026-08-31.wav · commit 4e8a · beide signaturen ✓</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
