@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .foto { border-radius: 999px; flex: none; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.92); font-family: 'Playfair Display', Georgia, serif; box-shadow: 0 0 0 1.5px #FAF7F2, 0 0 0 2.5px #B8A369; }
+    .foto.lw { background: radial-gradient(circle at 36% 26%, #ecd0af 0 30%, #c59a6d 55%, #7a5a3c 100%); }
+    .foto.du { background: radial-gradient(circle at 36% 26%, #d8d2c4 0 30%, #a89e88 55%, #5f5748 100%); }
+    /* Sprechblasen: du rechts (leicht salbei getönt), sie links (weiß) */
+    .blase { max-width: 420px; border-radius: 14px; padding: 10px 14px; font-size: 15px; line-height: 1.5; }
+    .blase.sie { background: #fff; border: 1px solid rgba(184,163,105,.22); }
+    .blase.du { background: rgba(143,169,143,.16); }
+    /* Objekte im Strom: alles Hineingeworfene wird eine ruhige Objekt-Karte */
+    .objekt { background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 14px; max-width: 480px; }
+    .objekt .glyph { width: 30px; height: 30px; border-radius: 8px; flex: none; display: flex; align-items: center; justify-content: center; background: rgba(184,163,105,.1); }
+    .tag { display: inline-flex; padding: 2px 9px; border-radius: 999px; background: rgba(143,169,143,.16); color: #5c705c; font-size: 11px; }
+    .tag.gold { background: rgba(184,163,105,.16); color: #96824c; }
+    .zeileL { display: flex; gap: 10px; align-items: flex-end; }
+    .zeileR { display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; }
+    .lglyph { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: inset 0 0 0 .5px rgba(184,163,105,.3); flex: none; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .ref { font-family: 'SF Mono', Menlo, monospace; font-size: 11px; color: #96824c; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="serif" style="font-size: 17px">Unfall Passat</div>
+      <div class="mono">der strom · du &amp; lena · alles committet</div>
+      <div class="mono" style="margin-left: auto">▸ übersicht</div>
+    </div>
+
+    <!-- DER STROM: der Fall ist ein endloses Gespräch — und alles Hineingeworfene wird Teil davon -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 8px 90px 6px; overflow: hidden; justify-content: flex-end">
+      <div class="mono" style="text-align: center; letter-spacing: .08em">GESTERN</div>
+
+      <div class="zeileL">
+        <div class="foto lw" style="width: 30px; height: 30px; font-size: 11px">LW</div>
+        <div class="objekt">
+          <div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M5 3 h7 l3 3 v11 H5 Z M12 3 v3 h3" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <span class="t13" style="font-weight: 600">gutachten-vorab.pdf</span>
+            <span class="mono">6 seiten · eingang committet · <span class="tag gold" style="font-size:11px">3 Atome</span> · ▸ beweis</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="zeileL">
+        <div class="foto lw" style="width: 30px; height: 30px; font-size: 11px">LW</div>
+        <div class="blase sie">Wirf mal einen Blick auf Seite 4 — die Summe kommt mir niedrig vor.</div>
+      </div>
+
+      <div class="zeileR">
+        <div class="blase du">Stimmt. Ich frag den Fall selbst:</div>
+        <div class="foto du" style="width: 30px; height: 30px; font-size: 11px">Du</div>
+      </div>
+
+      <!-- Auch der Assistent antwortet IM Strom — mit Fundstellen, für beide sichtbar -->
+      <div class="zeileL">
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M3 4 h14 v9 h-8 l-3.5 3 v-3 H3 Z" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div>
+        <div class="objekt" style="max-width: 560px; align-items: flex-start">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+            <span class="t13" style="line-height: 1.6">Das Vorab-Gutachten nennt <b>4.850&nbsp;€</b> <span class="ref">[1]</span> — die Police deckt bis 15.000&nbsp;€ <span class="ref">[2]</span>, euer Anruf bestätigt Trocknung inklusive <span class="ref">[3]</span>. Fehlt: die Werkstatt-Position.</span>
+            <span class="mono">[1] gutachten-vorab.pdf S. 4 · [2] police S. 4 · [3] anruf 12.03. Min 08:12 — aus: dokumente · anrufe</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mono" style="text-align: center; letter-spacing: .08em">HEUTE</div>
+
+      <div class="zeileL">
+        <div class="foto lw" style="width: 30px; height: 30px; font-size: 11px">LW</div>
+        <div class="objekt">
+          <div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M4 3.5 C4 11 9 16 16.5 16 L16.5 12.8 L13 12 L11.5 13.5 C9.5 12.5 7.5 10.5 6.5 8.5 L8 7 L7.2 3.5 Z" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <span class="t13" style="font-weight: 600">Anruf · 27:50 <span class="tag" style="font-size:11px; margin-left: 6px">Vereinbarung ✓</span></span>
+            <span class="mono">„gutachten bis freitag" · mitschrift ✓ · beide signiert · Min 21:04</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="zeileR">
+        <div class="objekt" style="background: rgba(143,169,143,.1)">
+          <div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><rect x="8" y="3" width="4" height="9" rx="2" stroke="#2a2520" stroke-width="1.2"/><path d="M5.5 10 a4.5 4.5 0 0 0 9 0 M10 14.5 V17" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <span class="t13" style="font-weight: 600">Podcast fertig · 14:20</span>
+            <span class="mono">aus dem studio · spricht seine belege · ▸ anhören</span>
+          </div>
+        </div>
+        <div class="foto du" style="width: 30px; height: 30px; font-size: 11px">Du</div>
+      </div>
+    </div>
+
+    <!-- DIE LEISTE DES CONTAINERS: alle Handgriffe um den Wurf-Platz herum -->
+    <div style="flex: none; padding: 10px 90px 18px; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid rgba(184,163,105,.3); border-radius: 999px; padding: 6px 8px 6px 20px; box-shadow: 0 10px 30px -16px rgba(70,58,38,.35)">
+        <span class="t13 sub" style="flex: 1">Schreib — oder wirf etwas hinein. Beides wird Teil des Falls.</span>
+        <div class="lglyph" title="Hineinlegen"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M10 4 v12 M4 10 h12" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M3 4 h14 v9 h-8 l-3.5 3 v-3 H3 Z" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 3.5 C4 11 9 16 16.5 16 L16.5 12.8 L13 12 L11.5 13.5 C9.5 12.5 7.5 10.5 6.5 8.5 L8 7 L7.2 3.5 Z" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="9" height="10" rx="2" stroke="#2a2520" stroke-width="1.2"/><path d="M12 9 L17 6 v8 L12 11" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M10 3 l1.8 5.2 L17 10 l-5.2 1.8 L10 17 l-1.8 -5.2 L3 10 l5.2 -1.8 Z" stroke="#2a2520" stroke-width="1.1" fill="none" stroke-linejoin="round"/></svg></div>
+        <div style="width: .5px; height: 22px; background: rgba(42,37,32,.15); margin: 0 2px"></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M5 3 h7 l3 3 v11 H5 Z M12 3 v3 h3" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="#2a2520" stroke-width="1.2"/><path d="M13.5 13.5 L17 17" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M6.5 5.5 h6 l2.5 2.5 v8.5 H6.5 Z M12.5 5.5 v2.5 h2.5" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/><path d="M4 3.5 h7" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="10" r="2.4" stroke="#2a2520" stroke-width="1.2"/><circle cx="14.5" cy="5" r="2.4" stroke="#2a2520" stroke-width="1.2"/><circle cx="14.5" cy="15" r="2.4" stroke="#2a2520" stroke-width="1.2"/><path d="M8.2 8.8 L12.3 6 M8.2 11.2 L12.3 14" stroke="#2a2520" stroke-width="1.2"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6.5" stroke="#2a2520" stroke-width="1.2"/><path d="M10 6.5 v3.5 l2.5 2" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="lglyph"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M10 3 v9 M10 12 L6.8 8.8 M10 12 L13.2 8.8 M4 14.5 v2 h12 v-2" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="mono" style="text-align: center">hineinlegen · fragen · anrufen · meet · studio&ensp;│&ensp;lesen · suchen · bericht · teilen · zeit · mitnehmen</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

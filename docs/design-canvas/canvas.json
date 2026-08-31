@@ -800,6 +800,24 @@
    "h": 900,
    "page": "page-12",
    "title": "Der Fall · Erzeugnis mit Zitaten — Folie & Podcast"
+  },
+  {
+   "file": "FallStrom.dc.html",
+   "x": 0,
+   "y": 3540,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Der Strom — ein Gespräch mit Gedächtnis"
+  },
+  {
+   "file": "FallLeiste.dc.html",
+   "x": 1480,
+   "y": 3540,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Die Leiste des Containers — elf Griffe"
   }
  ],
  "annotations": [
@@ -1050,6 +1068,14 @@
    "w": 1350,
    "page": "page-12",
    "text": "REIHE 3 — DER FALL WIRD WERKSTATT (+ NotebookAI-Studio). FallWerkstatt: derselbe Container, mehr Hände — links fließt herein (Upload/Scanner/Mail, Teamcenter rev. 47, Versicherungs-Portal-API: jede fremde API ist ein Konnektor mit Systemzelle als Fundstelle, abgerufen → committet → erst dann gedeutet; echte Zugänge in der Keychain, nie im Container), rechts arbeiten Menschen darin (Einladen, Rolle sieht nur ihre Zeile) und der Olivgold-Schalter: NotebookAI freischalten (läuft lokal, nur an-Quellen, Mix wird Fußnote). FallStudio: sechs Erzeugnisse aus dem Fall-Kontext — Präsentation, Podcast (entsteht gerade: Mini-Sanduhr, „läuft still · 8:40 von ~14 min\"), Info-Karten, Erklärvideo, Bilder (als Illustration gekennzeichnet, nie als Beweis), Bericht (die signierte Fassung bleibt das amtliche Stück). EIN Gesetz: keine Aussage ohne Fundstelle — auf der Folie, in der Karte, im gesprochenen Wort; was nicht belegbar ist, wird „Fehlt: …\". FallErzeugnis: die Folie trägt ihre [n] IM Bild samt Quellen-Mix-Fußzeile (Tipp auf [1] → Leseplatz), und der Podcast SPRICHT seine Belege („das steht auf Seite sechs deiner Police … Minute acht\"); Kapitelmarken springen auf Seite & Minute. Jedes Erzeugnis ist ein Commit mit eingebranntem Quellen-Stand (HEAD 9d02)."
+  },
+  {
+   "id": "fall-strom",
+   "x": 0,
+   "y": 3390,
+   "w": 1350,
+   "page": "page-12",
+   "text": "REIHE 4 — DER STROM + DIE LEISTE. Der Fall IST ein endloses Gespräch mit Gedächtnis: ein chronologischer Strom, in dem Sprechblasen (du salbei-getönt rechts, sie weiß links) und OBJEKTE gleichberechtigt fließen — ein hineingeworfenes PDF wird Objekt-Karte (eingang committet · 3 atome · ▸ beweis), ein Anruf wird Objekt (27:50 · vereinbarung ✓ · Min 21:04), ein Studio-Erzeugnis (podcast fertig) ebenso; auch der ASSISTENT antwortet im Strom, mit [n]-Fundstellen, für beide sichtbar. Unten der Wurf-Platz: „Schreib — oder wirf etwas hinein. Beides wird Teil des Falls.\" — umgeben von der Leiste. DIE LEISTE: elf Griffe, fall-gebunden (jeder Griff = Commit auf DIESEN Container), links die fünf die hineinbringen (Hineinlegen, Fragen, Anrufen, Meet, Studio=der Funke — NEUES Sinnbild: vier Spitzen, Haarlinie), rechts die sechs die mit Vorhandenem arbeiten (Lesen, Suchen, Bericht, Teilen, Zeit, Mitnehmen). Wegwerfen wohnt bewusst NICHT in der Leiste (hinter Zeit) — ein Ende ist kein Alltagsgriff. Zustände wie überall: Punkte, nie Zahlen."
   }
  ],
  "launch": {
