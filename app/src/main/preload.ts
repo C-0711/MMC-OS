@@ -263,6 +263,16 @@ export interface MMCAnrufLiveAPI {
   }>>;
 }
 
+export interface MMCKontakteAPI {
+  list(): Promise<Array<{ slug: string; name: string; erstelltIso: string; kanäle: string[]; aktivitaet: number; letzterEintragIso: string | null }>>;
+  create(name: string, slug?: string): Promise<{ slug: string; name: string; erstelltIso: string; kanäle: string[]; aktivitaet: number; letzterEintragIso: string | null }>;
+  findeOderIssue(absender: string): Promise<string>;
+  historie(slug: string): Promise<Array<{ zeitIso: string; typ: string; zusammenfassung: string; quelle: string }>>;
+  commAnruf(slug: string, mitschrift: { zeilen: Array<{ zeit: string; sprecher: string; text: string }>; dauer?: string; partner?: string }): Promise<{ slug: string; datei: string; sha: string }>;
+  commText(slug: string, text: string, von: string): Promise<{ slug: string; datei: string; sha: string }>;
+  commDatei(slug: string, datei: { name: string; bytes: ArrayBuffer }): Promise<{ slug: string; datei: string; sha: string }>;
+}
+
 export interface MMCAPI {
   vault: MMCVaultAPI;
   ocr: MMCOCR_API;
@@ -271,6 +281,7 @@ export interface MMCAPI {
   daten: MMCDatenAPI;
   update: MMCUpdateAPI;
   anrufLive: MMCAnrufLiveAPI;
+  kontakte: MMCKontakteAPI;
 }
 
 // Helper: ArrayBuffer → Number-Array für IPC
@@ -281,6 +292,18 @@ function arrayBufferToNumbers(ab: ArrayBuffer): number[] {
 const api: MMCAPI = {
   update: {
     ja: () => ipcRenderer.invoke('update:ja')
+  },
+  kontakte: {
+    list: () => ipcRenderer.invoke('kontakte:list'),
+    create: (name: string, slug?: string) => ipcRenderer.invoke('kontakte:create', name, slug),
+    findeOderIssue: (absender: string) => ipcRenderer.invoke('kontakte:findeOderIssue', absender),
+    historie: (slug: string) => ipcRenderer.invoke('kontakte:historie', slug),
+    commAnruf: (slug: string, mitschrift: unknown) => ipcRenderer.invoke('kontakte:commAnruf', slug, mitschrift),
+    commText: (slug: string, text: string, von: string) => ipcRenderer.invoke('kontakte:commText', slug, text, von),
+    commDatei: (slug: string, datei: { name: string; bytes: ArrayBuffer }) => ipcRenderer.invoke('kontakte:commDatei', slug, {
+      name: datei.name,
+      bytes: Array.from(new Uint8Array(datei.bytes)),
+    }),
   },
   anrufLive: {
     signalSenden: (nachricht: unknown) => ipcRenderer.invoke('anrufLive:signalSenden', nachricht),

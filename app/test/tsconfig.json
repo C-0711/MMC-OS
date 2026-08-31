@@ -38,7 +38,9 @@
     "../src/renderer/screens-os.ts",
     "../src/renderer/siegelmenue.ts",
     "../src/renderer/anruf-live-renderer.ts",
-    "../src/renderer/types.d.ts"
+    "../src/renderer/types.d.ts",
+    "../src/main/kontakte.ts",
+    "../src/renderer/screens-kontakte.ts"
   ],
   "exclude": [
     "node_modules"

@@ -259,6 +259,16 @@ declare global {
     ja(): Promise<{ ok: boolean }>;
   }
 
+  interface MMCKontakteAPI {
+    list(): Promise<Array<{ slug: string; name: string; erstelltIso: string; kanäle: string[]; aktivitaet: number; letzterEintragIso: string | null }>>;
+    create(name: string, slug?: string): Promise<{ slug: string; name: string; erstelltIso: string; kanäle: string[]; aktivitaet: number; letzterEintragIso: string | null }>;
+    findeOderIssue(absender: string): Promise<string>;
+    historie(slug: string): Promise<Array<{ zeitIso: string; typ: string; zusammenfassung: string; quelle: string }>>;
+    commAnruf(slug: string, mitschrift: { zeilen: Array<{ zeit: string; sprecher: string; text: string }>; dauer?: string; partner?: string }): Promise<{ slug: string; datei: string; sha: string }>;
+    commText(slug: string, text: string, von: string): Promise<{ slug: string; datei: string; sha: string }>;
+    commDatei(slug: string, datei: { name: string; bytes: ArrayBuffer }): Promise<{ slug: string; datei: string; sha: string }>;
+  }
+
   interface MMCAnrufLiveAPI {
     signalSenden(nachricht: {
       von: string; an: string;
@@ -278,6 +288,7 @@ declare global {
     daten: MMCDatenAPI;
     update: MMCUpdateAPI;
     anrufLive: MMCAnrufLiveAPI;
+    kontakte: MMCKontakteAPI;
   }
 
   interface Window {

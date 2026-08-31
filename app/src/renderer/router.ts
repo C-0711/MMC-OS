@@ -20,7 +20,7 @@ export type ScreenId =
   | 'freund' | 'ausgruendung' | 'gruppe' | 'leseplatz' | 'tisch' | 'einladen'
   | 'suche' | 'rueckruf' | 'stapel' | 'neues-thema' | 'meet' | 'divergenz'
   | 'aufzeichnung' | 'widerspruch' | 'connector-beweis' | 'revision'
-  | 'meister-seite' | 'mix-antwort' | 'phone';
+  | 'meister-seite' | 'mix-antwort' | 'kontakte' | 'phone';
 
 export interface AppCtx {
   faelle?: { id: string; name: string }[];
@@ -31,7 +31,7 @@ export interface AppCtx {
 
 export type SiegelBereich =
   | 'heute' | 'faelle' | 'anrufe-texte' | 'themen' | 'leseplatz-tisch'
-  | 'leute' | 'suche' | 'meister' | 'auth';
+  | 'leute' | 'kontakte' | 'suche' | 'meister' | 'auth';
 
 export type RenderFn = (container: HTMLElement, ctx: AppCtx) => void;
 
@@ -159,6 +159,10 @@ route('revision', 'themen', os.renderOsRevision);
 route('meister-seite', 'meister', os.renderOsMeisterSeite);
 route('mix-antwort', 'suche', os.renderOsMixAntwort);
 route('phone', 'heute', os.renderOsPhone);
+
+// Kontakte (Spec 21) — Liste + Detail als fortlaufender Verlauf
+import * as sk from './screens-kontakte.js';
+route('kontakte', 'kontakte', (c: HTMLElement) => { void sk.renderKontakteListe(c); });
 
 // Bestehende screens.ts-Komponenten (geben HTMLElement zurück — Adapter).
 route('vereinbarung', 'leute', (c: HTMLElement) => c.appendChild(renderVereinbarung({

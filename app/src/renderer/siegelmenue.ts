@@ -26,6 +26,7 @@ const EINTRAEGE: MenueEintrag[] = [
   { bereich: 'themen',     ziel: 'stapel',         titel: 'Themen' },
   { bereich: 'leseplatz-tisch', ziel: 'leseplatz', titel: 'Leseplatz & Tisch' },
   { bereich: 'leute',      ziel: 'freund',         titel: 'Leute' },
+  { bereich: 'kontakte',   ziel: 'kontakte',       titel: 'Kontakte' },
   { bereich: 'suche',      ziel: 'suche',          titel: 'Frag alles' },
   { bereich: 'meister',    ziel: 'meister-seite',  titel: 'Meister-Seite' },
   { bereich: 'auth',       ziel: 'auth-anmeldung', titel: 'Anmeldung' },

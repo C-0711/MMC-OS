@@ -12,6 +12,7 @@ import * as anruf from './anruf';
 import * as themen from './themen';
 import * as suche from './suche';
 import * as ingest from './ingest';
+import * as kontakte from './kontakte';
 import * as anrufLive from './anruf-live';
 import { deutungAusOcr, deutungAusTranskript, type Transkript } from './deutung';
 import * as fs from 'node:fs/promises';
@@ -242,5 +243,38 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('anrufLive:signalEmpfangen', async (_event, meineId: string, seitIso: string | null) => {
     return await anrufLive.signalEmpfangen(meineId, seitIso);
+  });
+
+  // ============================================================================
+  // Kontakte (Spec 21) — Container-Issuing + fortlaufender Verlauf
+  // ============================================================================
+  ipcMain.handle('kontakte:list', async () => {
+    return await kontakte.listKontakte();
+  });
+
+  ipcMain.handle('kontakte:create', async (_event, name: string, slug?: string) => {
+    return await kontakte.createKontakt(name, slug);
+  });
+
+  ipcMain.handle('kontakte:findeOderIssue', async (_event, absender: string) => {
+    return await kontakte.findeOderIssue(absender);
+  });
+
+  ipcMain.handle('kontakte:historie', async (_event, slug: string) => {
+    return await kontakte.kontaktHistorie(slug);
+  });
+
+  ipcMain.handle('kontakte:commAnruf', async (_event, slug: string, mitschrift: {
+    zeilen: Array<{ zeit: string; sprecher: string; text: string }>; dauer?: string; partner?: string;
+  }) => {
+    return await kontakte.commAnruf(slug, mitschrift);
+  });
+
+  ipcMain.handle('kontakte:commText', async (_event, slug: string, text: string, von: string) => {
+    return await kontakte.commText(slug, text, von);
+  });
+
+  ipcMain.handle('kontakte:commDatei', async (_event, slug: string, datei: { name: string; bytes: number[] }) => {
+    return await kontakte.commDatei(slug, { name: datei.name, bytes: Buffer.from(datei.bytes) });
   });
 }
