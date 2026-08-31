@@ -120,3 +120,34 @@ Unverändert auf `abe7e00`: `test-headless-ingress.js:43` hardcodet `os.homedir(
 | **B4** | **neu** | 2/48 Tests rot auf frischem Checkout: `test/tsconfig.json` include kompiliert keine `src/renderer/*` nach `dist/test` → MODULE_NOT_FOUND für `router.js` und `anruf-live-renderer.js`; außerdem setzt 53/53 laufenden belegsrv voraus |
 
 **Testpflicht-Urteil Messlauf 2: NICHT grün (46/48).** Kein Weiterbauen auf dieser Basis, bis der Coder B4 entschieden hat — der Fix ist klein, aber er gehört ihm.
+
+---
+
+# MESSLAUF 3 — 2026-08-31 · Stand `1f0f82c` (origin/local-merge)
+
+*Nach den Dogfood-Fixen der Coder-Session (B4-Fix `1121be0`, Sichtbarkeits-Fix `52cfa74`, Folgefixe `1f0f82c`).*
+
+## §1 — komplett neu gemessen (frischer Checkout, `rm -rf node_modules dist && npm ci`)
+
+| Prüfung | Soll | Ist | Urteil |
+|---|---|---|---|
+| npm ci | läuft | läuft | ✓ |
+| typecheck | grün | grün (beide Configs) | ✓ |
+| Tests | **53/53** | **53/53** — wörtlich: `# tests 53 · # suites 10 · # pass 53 · # fail 0` | ✓ |
+
+**B4 ist behoben und nachgemessen:** `test/tsconfig.json` kompiliert jetzt die Renderer-Dateien mit (router, screens-onboarding, screens-os, siegelmenue, …) — der frische Checkout ist deterministisch grün, auch ohne laufenden belegsrv (die verbleibende Live-Prüfung wird sauber übersprungen und zählt nicht mehr gegen die 53).
+
+**Damit ist die §1-Testpflicht ERFÜLLT.** Erstes grünes Urteil dieser Abnahme.
+
+## Blocker-Stand nach Messlauf 3
+
+| # | Status | Kern |
+|---|---|---|
+| B1 | ✅ aufgelöst (Messlauf 2) | Prüfstand liegt auf origin |
+| B2 | offen (unverändert, nicht testpflichtig) | `test-headless-ingress.js:43` hardcodet weiter den Stricker-Pfad — läuft nicht in `npm test`, bleibt als Befund stehen |
+| B3 | offen (strukturell) | §4-Signatur/Notarize/Gatekeeper nur in der Mac-IDE messbar |
+| B4 | ✅ behoben (`1121be0`), nachgemessen | 53/53 auf frischem Checkout |
+
+## Was jetzt noch aussteht (alles Mac-IDE)
+
+§3-Durchklick am echten Fenster — die Coder-Session hat mit 19 Dogfood-Screenshots (Anrufe-Screen mit Lena-Weber-Mitschrift, Fußzeilen-Fix, Sichtbarkeits-Beweis Z0) Evidenz geliefert; formale Gegenprüfung + `kill -9`-Livetest + zweifensteriger Anruf stehen aus. Und §4: `security find-identity` → `npm run dist && npm run release` → codesign/spctl/SHA256/Gatekeeper.
