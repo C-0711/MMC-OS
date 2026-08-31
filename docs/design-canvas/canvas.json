@@ -818,6 +818,15 @@
    "h": 900,
    "page": "page-12",
    "title": "Der Fall · Die Leiste des Containers — elf Griffe"
+  },
+  {
+   "file": "FallChat.dc.html",
+   "x": 0,
+   "y": 4720,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Unfall Passat als Chat — geteilt & privat"
   }
  ],
  "annotations": [
@@ -1076,6 +1085,14 @@
    "w": 1350,
    "page": "page-12",
    "text": "REIHE 4 — DER STROM + DIE LEISTE. Der Fall IST ein endloses Gespräch mit Gedächtnis: ein chronologischer Strom, in dem Sprechblasen (du salbei-getönt rechts, sie weiß links) und OBJEKTE gleichberechtigt fließen — ein hineingeworfenes PDF wird Objekt-Karte (eingang committet · 3 atome · ▸ beweis), ein Anruf wird Objekt (27:50 · vereinbarung ✓ · Min 21:04), ein Studio-Erzeugnis (podcast fertig) ebenso; auch der ASSISTENT antwortet im Strom, mit [n]-Fundstellen, für beide sichtbar. Unten der Wurf-Platz: „Schreib — oder wirf etwas hinein. Beides wird Teil des Falls.\" — umgeben von der Leiste. DIE LEISTE: elf Griffe, fall-gebunden (jeder Griff = Commit auf DIESEN Container), links die fünf die hineinbringen (Hineinlegen, Fragen, Anrufen, Meet, Studio=der Funke — NEUES Sinnbild: vier Spitzen, Haarlinie), rechts die sechs die mit Vorhandenem arbeiten (Lesen, Suchen, Bericht, Teilen, Zeit, Mitnehmen). Wegwerfen wohnt bewusst NICHT in der Leiste (hinter Zeit) — ein Ende ist kein Alltagsgriff. Zustände wie überall: Punkte, nie Zahlen."
+  },
+  {
+   "id": "fall-chat",
+   "x": 0,
+   "y": 4570,
+   "w": 1350,
+   "page": "page-12",
+   "text": "REIHE 5 — UNFALL PASSAT ALS CHAT (die Leitform des Falls). 2/3 des Fensters ist der Chat, der ALLES trägt: Text, Foto-Upload, Dokument — jede geteilte Zeile wird Lena ZUGESTELLT wie eine Nachricht („an lena zugestellt ✓ · gelesen ✓\"), denn der Strom ist der geteilte Container selbst. NEU: die PRIVATE SPUR — eine Suche („Such mir alle Kontaktdaten aller Beteiligten\") passiert IM Chat, aber nur für dich: gestrichelte Haarlinie, „nur du siehst das\", KEIN Commit im geteilten Strom; das Ergebnis (3 Beteiligte, jede Zeile mit Fundstelle: police S. 2, gutachten S. 6) lässt sich mit einem Wort „In den Strom teilen\" — oder behalten. Über dem Wurf-Platz die Mitdenk-Chips: nächster Schritt („Werkstatt Auer anrufen?\"), Festhalten-Vorschlag („Mi 9:00 als Vereinbarung\"), nächste private Frage (⌕ gestrichelt). Rechts das schmale Drittel: Zwischen euch offen · Was hier liegt · Würde noch passen. KEIN BERICHT NÖTIG: der Strom selbst ist die Akte — committet, signiert, für beide gleich; eine Fassung entsteht nur, wenn draußen jemand eine braucht. Regel: geteilt = zugestellt; privat = gestrichelt."
   }
  ],
  "launch": {
