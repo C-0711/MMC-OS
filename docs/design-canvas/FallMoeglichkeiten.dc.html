@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .m { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: #fff; border: 1px solid rgba(184,163,105,.2); }
+    .m .glyph { width: 28px; height: 28px; border-radius: 8px; flex: none; display: flex; align-items: center; justify-content: center; background: rgba(184,163,105,.1); }
+    .m .name { font-family: 'Playfair Display', Georgia, serif; font-size: 15px; }
+    .m .was { font-size: 11px; color: rgba(42,37,32,.6); line-height: 1.55; margin-top: 2px; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; padding: 54px 80px; box-sizing: border-box; gap: 24px">
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <div class="serif" style="font-size: 30px">Was du mit einem Fall tun kannst — alles.</div>
+    <div class="t13 sub">Zwölf Möglichkeiten, ein Gesetz: jede hinterlässt einen Commit, jede Aussage eine Fundstelle.</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px">
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 4 v12 M4 10 h12" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="name">Hineinlegen</div><div class="was">Foto, PDF, Ordner, Mail — fallen lassen genügt. Eingang wird byte-identisch committet, erst dann gedeutet.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M3 4 h14 v9 h-8 l-3.5 3 v-3 H3 Z" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div><div><div class="name">Fragen</div><div class="was">„Was war der Selbstbehalt?" — Antwort nur aus diesem Fall, jede Zahl mit Rechteck, Minute oder Zelle.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M5 3 h7 l3 3 v11 H5 Z M12 3 v3 h3" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div><div><div class="name">Original ansehen</div><div class="was">Jedes Rechteck öffnet den Leseplatz: die Seite, die Minute, die Systemzelle — nie eine Nacherzählung.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M4 3.5 C4 11 9 16 16.5 16 L16.5 12.8 L13 12 L11.5 13.5 C9.5 12.5 7.5 10.5 6.5 8.5 L8 7 L7.2 3.5 Z" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg></div><div><div class="name">Darin sprechen</div><div class="was">Anruf, Text, Meet mit Fall-Kontext — Mitschrift und Vereinbarungen landen gleich hier, als Atome mit Minute.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="10" r="2.4" stroke="#2a2520" stroke-width="1.2"/><circle cx="14.5" cy="5" r="2.4" stroke="#2a2520" stroke-width="1.2"/><circle cx="14.5" cy="15" r="2.4" stroke="#2a2520" stroke-width="1.2"/><path d="M8.2 8.8 L12.3 6 M8.2 11.2 L12.3 14" stroke="#2a2520" stroke-width="1.2"/></svg></div><div><div class="name">Teilen &amp; einladen</div><div class="was">Der Fall wird geteilter Raum: wer eingeladen ist, sieht denselben Stand, byte-identisch. „Sehen darf" steht immer dabei.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><rect x="3.5" y="5" width="9" height="4.5" rx="2.25" stroke="#2a2520" stroke-width="1.2"/><circle cx="10.2" cy="7.25" r="1.4" fill="#8FA98F"/><rect x="7.5" y="11.5" width="9" height="4.5" rx="2.25" stroke="#2a2520" stroke-width="1.2"/><circle cx="9.8" cy="13.75" r="1.4" fill="#E8DFD3"/></svg></div><div><div class="name">An- und abschalten</div><div class="was">Auf der Meister-Seite ist der Fall eine Quelle: aus ist aus — und jede Antwort sagt, was sie deshalb nicht weiß.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M6.5 5.5 h6 l2.5 2.5 v8.5 H6.5 Z M12.5 5.5 v2.5 h2.5" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linejoin="round"/><path d="M4 3.5 h7" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="name">Bericht machen</div><div class="was">Eine signierte Fassung aus dem aktuellen Stand — jede Zahl trägt ihre Fundstelle, der Quellen-Mix steht als Fußnote.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6.5" stroke="#2a2520" stroke-width="1.2"/><path d="M10 6.5 v3.5 l2.5 2" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="name">In der Zeit zurück</div><div class="was">Jeder Stand bleibt: die Zeitmaschine zeigt jeden Commit — was gestern galt, ist heute noch beweisbar.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 3 v9 M10 12 L6.8 8.8 M10 12 L13.2 8.8 M4 14.5 v2 h12 v-2" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="name">Mitnehmen &amp; exportieren</div><div class="was">Klon aufs Phone, Bundle als Backup, PDF/A + container.json für Steuerberater und Behörde — mit Beweis-Anhang.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="12" rx="2" stroke="#2a2520" stroke-width="1.2"/><path d="M10 4 v12" stroke="#2a2520" stroke-width="1.2"/></svg></div><div><div class="name">Ausgründen</div><div class="was">Ein Thema wächst heraus und wird eigener Fall — mit seiner Geschichte, die Herkunft bleibt verbunden.</div></div></div>
+    <div class="m"><div class="glyph"><span style="width: 14px; height: 14px; border-radius: 999px; background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c)"></span></div><div><div class="name">Unterschreiben</div><div class="was">Vereinbarungen und Fassungen tragen Signaturen. Geld, Abgaben, Verträge: erst Face ID, nie im Gespräch.</div></div></div>
+    <div class="m"><div class="glyph"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M4 6 h12 M8 6 V4.5 h4 V6 M6 6 l.8 10 h6.4 L14 6" stroke="#2a2520" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="name">Wegwerfen</div><div class="was">Löschen ist ein Commit: der Container geht wirklich, das Brain baut sich neu — und der Rest bleibt heil.</div></div></div>
+  </div>
+
+  <div class="mono" style="text-align: center; padding-top: 4px">kein menü versteckt etwas davon — die häufigsten fünf liegen als handgriffe am fall, der rest wohnt eine ebene tiefer</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
