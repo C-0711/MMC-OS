@@ -70,6 +70,30 @@ export function navigate(id: ScreenId, ctx: AppCtx = {}, container?: HTMLElement
   aktuelle = id;
   history.push(id);
   if (history.length > 40) history.shift();
+
+  // Bühne sichtbar machen, App-Shell-Zustände still beiseite — der
+  // Router-Screen IST jetzt die Ansicht. (Zurück-Kontext bleibt im
+  // history-Array; der Shell-Zustand wird von app.ts bei 'heute' gehebelt.)
+  ziel.style.display = 'block';
+  for (const shellId of ['gruss', 'gruss-klein', 'alles-ruhig', 'karten-container', 'dialog-container', 'fall-ansicht-container']) {
+    const e = document.getElementById(shellId);
+    if (e) e.style.display = 'none';
+  }
+  if (id === 'heute') {
+    // Heute ist der Alltag: Shell-Karten gehören DORTHIN — der
+    // Router-Heute-Screen zeigt sie zusätzlich aus AppCtx. Wir lassen
+    // die Shell sichtbar und verstecken die Bühne wieder:
+    ziel.style.display = 'none';
+    const grussEl = document.getElementById('gruss');
+    if (grussEl) grussEl.style.display = 'block';
+    const grussKlein = document.getElementById('gruss-klein');
+    if (grussKlein) grussKlein.style.display = 'block';
+    const karten = document.getElementById('karten-container');
+    if (karten) karten.style.display = 'block';
+    const zustand = document.getElementById('alles-ruhig');
+    if (zustand) zustand.style.display = 'block';
+  }
+
   ziel.textContent = '';
   r.render(ziel, ctx);
 }
