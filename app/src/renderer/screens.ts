@@ -169,7 +169,7 @@ export function renderVereinbarung(opts: VereinbarungOptions): HTMLElement {
   const fussnote = document.createElement('div');
   fussnote.className = 't11 sub';
   fussnote.style.marginTop = '-14px';
-  fussnote.textContent = 'Danach ist der Stand versiegelt — ein Zeitpunkt, den ein Gericht anerkennt.';
+  fussnote.textContent = 'Danach ist der Stand unterschrieben — ein Zeitpunkt, den ein Gericht anerkennt.';
   container.appendChild(fussnote);
 
   return container;
@@ -819,13 +819,13 @@ export function renderObSiegel(onPraegen: () => void): HTMLElement {
   const titel = document.createElement('div');
   titel.className = 'serif';
   titel.style.fontSize = '34px';
-  titel.textContent = 'Das ist dein Siegel.';
+  titel.textContent = 'Das ist deine Unterschrift.';
   kopf.appendChild(titel);
   const sub = document.createElement('div');
   sub.className = 't13 sub';
   sub.style.cssText = 'max-width: 52ch; text-align: center; line-height: 1.6;';
   sub.textContent =
-    'Es entsteht jetzt, auf diesem Gerät, und verlässt es nie. Alles, was du ablegst oder zusagst, trägt ab heute dieses Siegel — deshalb glaubt man dir.';
+    'Es entsteht jetzt, auf diesem Gerät, und verlässt es nie. Alles, was du ablegst oder zusagst, trägt ab heute deine Unterschrift — deshalb glaubt man dir.';
   kopf.appendChild(sub);
   buehne.appendChild(kopf);
 
@@ -861,14 +861,14 @@ export function renderObSiegel(onPraegen: () => void): HTMLElement {
   warnText.className = 't13';
   warnText.style.cssText = 'line-height: 1.55; color: #6b4540;';
   warnText.textContent =
-    'Ehrlich gesagt: Verlierst du alle Geräte, kann dir niemand das Siegel zurückholen — auch wir nicht. Morgen zeige ich dir zwei Wege, es zu sichern. Fünf Minuten, versprochen.';
+    'Ehrlich gesagt: Verlierst du alle Geräte, kann dir niemand deine Unterschrift zurückgeben — auch wir nicht. Morgen zeige ich dir zwei Wege, es zu sichern. Fünf Minuten, versprochen.';
   warnung.appendChild(warnText);
   buehne.appendChild(warnung);
 
   const btn = document.createElement('button');
   btn.className = 'pill-salbei';
   btn.style.padding = '0 40px';
-  btn.textContent = 'Siegel prägen';
+  btn.textContent = 'Unterschrift anlegen';
   btn.onclick = onPraegen;
   buehne.appendChild(btn);
   flaeche.appendChild(buehne);
@@ -893,7 +893,7 @@ export function renderObRettung(opts: {
   const titel = document.createElement('div');
   titel.className = 'serif';
   titel.style.cssText = 'font-size: 28px; line-height: 1.3;';
-  titel.innerHTML = 'Guten Morgen.<br>Wie versprochen: dein Siegel sichern.';
+  titel.innerHTML = 'Guten Morgen.<br>Wie versprochen: deine Unterschrift sichern.';
   spalte.appendChild(titel);
 
   const karte = document.createElement('div');
@@ -905,7 +905,7 @@ export function renderObRettung(opts: {
   intro.className = 't13';
   intro.style.lineHeight = '1.55';
   intro.textContent =
-    'Im Moment trägt nur dieses Gerät dein Siegel. Zwei Wege, das zu ändern — such dir einen aus, fünf Minuten:';
+    'Im Moment trägt nur dieses Gerät deine Unterschrift. Zwei Wege, das zu ändern — such dir einen aus, fünf Minuten:';
   karte.appendChild(intro);
 
   const wege = document.createElement('div');

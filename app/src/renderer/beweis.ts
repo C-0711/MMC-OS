@@ -227,7 +227,7 @@ export interface AnrufBeweisOptions {
   header: string; // z. B. "ANRUF · REVIEW & PLANNING · DONNERSTAG · 42 MIN"
   zeilen: TranskriptAnzeigeZeile[];
   minute: string; // Fundstellen-Minute für den Anhören-Button
-  quellzeile: string; // Fall · anruf-*.wav · Minute 04:12 · Commit · Signatur ✓
+  quellzeile: string; // Fall · anruf-*.wav · Minute 04:12 · Commit · unterschrift ✓
   onStimmt: () => void;
   onAnhoeren: () => void;
   onFalsch: () => void;
@@ -353,7 +353,7 @@ export function renderAnrufBeweis(opts: AnrufBeweisOptions): HTMLElement {
 
   container.appendChild(karte);
 
-  // Quellzeile (Mono 11px): Fall · anruf-*.wav · Minute · Commit · Signatur ✓
+  // Quellzeile (Mono 11px): Fall · anruf-*.wav · Minute · Commit · unterschrift ✓
   const quelle = document.createElement('div');
   quelle.className = 'quelle';
   quelle.textContent = opts.quellzeile;

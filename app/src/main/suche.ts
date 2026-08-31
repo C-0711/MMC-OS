@@ -57,11 +57,33 @@ async function sammleKontext(frage: string): Promise<SuchTreffer[]> {
     }
   }
 
-  // Relevante zuerst, dann Duckdalbe — max 40 Fundstellen für den Prompt.
-  return treffer
-    .sort((x, y) => y.score - x.score)
-    .slice(0, 40)
-    .map(({ score: _s, ...t }) => t);
+  // B4 — Kontext-Deckelung: Top-k nach Relevanz + Token-Budget.
+  // Hunderte Betrag-Atoms aus einem Katalog reißen den 30s-Timeout —
+  // Fundstellen mit Score 0 (kein Fragen-Overlap) fliegen zuerst raus,
+  // dann kürzt das Token-Budget von hinten (niedrigste Relevanz zuerst).
+  const MAX_TREFFER = 25;
+  const MAX_TOKEN_SCHAETZ = 6000; // ~4 Zeichen/Token, großzügig gegen Prompt-Limit
+  const gereiht = treffer.sort((x, y) => y.score - x.score);
+
+  // 1. Ohne Überlappung raus (außer ganz wenige als Kontext-Farbe)
+  const relevante = gereiht.filter(t => t.score > 0);
+  const rest = gereiht.filter(t => t.score === 0);
+
+  // 2. Top-k der relevanten, Rest als maximal 5 stille Beigaben
+  const top = relevante.slice(0, MAX_TREFFER);
+  const beigaben = rest.slice(0, Math.max(0, MAX_TREFFER - top.length));
+
+  // 3. Token-Budget von hinten abschneiden (niedrigste Relevanz zuerst weg)
+  const ausgewaehlt: Array<SuchTreffer & { score: number }> = [];
+  let budget = MAX_TOKEN_SCHAETZ;
+  for (const t of [...top, ...beigaben]) {
+    const kosten = Math.ceil((t.text.length + t.doc.length + 20) / 4);
+    if (kosten > budget && ausgewaehlt.length >= 8) break; // Mindest-Kontext behalten
+    ausgewaehlt.push(t);
+    budget -= kosten;
+  }
+
+  return ausgewaehlt.map(({ score: _s, ...t }) => t);
 }
 
 /** Frag alles — über alle Fälle, mit Zitat-Pflicht. */

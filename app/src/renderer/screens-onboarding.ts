@@ -129,9 +129,9 @@ export function renderObRettung(container: HTMLElement, _ctx: AppCtx): void {
   gr.style.cssText = grundCss();
   const titel = el('div', 'serif', 'Guten Morgen.');
   titel.style.fontSize = '30px';
-  const unter = el('div', 't15', 'Wie versprochen: dein Siegel sichern.');
+  const unter = el('div', 't15', 'Wie versprochen: deine Unterschrift sichern.');
   const einleitung = el('div', 't13 sub',
-    'Im Moment trägt nur dieses Gerät dein Siegel. Zwei Wege, das zu ändern — such dir einen aus, fünf Minuten:');
+    'Im Moment trägt nur dieses Gerät deine Unterschrift. Zwei Wege, das zu ändern — such dir einen aus, fünf Minuten:');
   const mitte = zentriert(titel, unter, einleitung);
 
   const weg1 = el('div', 'karte');
@@ -204,7 +204,7 @@ export function renderObEingeladen(container: HTMLElement, _ctx: AppCtx): void {
   titel.style.fontSize = '28px';
   const mitte = zentriert(titel);
   mitte.append(
-    el('div', 't13 sub', 'Dein Siegel ist geprägt.'),
+    el('div', 't13 sub', 'Deine Unterschrift ist angelegt.'),
     el('div', 't13 sub', 'Es hat gerade dein „Annehmen" signiert — Lena sieht: das warst wirklich du.'),
     el('div', 't15', 'Wo soll dein Klon des Falls wohnen?')
   );
@@ -414,7 +414,7 @@ export function renderObBuergerKarte(container: HTMLElement, _ctx: AppCtx): void
   betrag.append(mark, links, rechts);
   blatt.appendChild(betrag);
 
-  const quelle = fusszeile('post · stadtwerke-2026-09.pdf · Seite 1 · commit 7b3e · Signatur ✓');
+  const quelle = fusszeile('post · stadtwerke-2026-09.pdf · Seite 1 · commit 7b3e · unterschrift ✓');
   const knoepfe = el('div');
   knoepfe.style.cssText = 'display:flex;gap:10px';
   knoepfe.append(

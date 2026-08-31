@@ -137,8 +137,8 @@ class App {
           // Fussnote: dokument → Seite, anruf → wav + Minute
           const commitKurz = v.branch.substring(0, 8);
           const fussnote = erstesAtom?.fundstelle.art === 'anruf'
-            ? `fall: ${fall.id} · ${erstesAtom.fundstelle.wav ?? beweisDoc} · Minute ${erstesAtom.fundstelle.minute ?? '?'} · ${commitKurz} · sig ✓`
-            : `fall: ${fall.id} · ${beweisDoc || '?'} · Seite ${beweisSeite || '?'} · ${commitKurz} · sig ✓`;
+            ? `fall: ${fall.id} · ${erstesAtom.fundstelle.wav ?? beweisDoc} · Minute ${erstesAtom.fundstelle.minute ?? '?'} · ${commitKurz} · unterschrift ✓`
+            : `fall: ${fall.id} · ${beweisDoc || '?'} · Seite ${beweisSeite || '?'} · ${commitKurz} · unterschrift ✓`;
 
           // Zweifel: prüfen, ob niedrige Konfidenz
           const minConf = v.atoms.length > 0 ? Math.min(...v.atoms.map(a => a.conf)) : 1.0;
@@ -432,7 +432,7 @@ class App {
         }));
 
       // Quellzeile (Muster OsBeweis.dc.html)
-      const quellzeile = `Fall ${karte.fallId} · ${karte.beweisDoc} · Seite ${karte.beweisSeite} · Commit ${commitKurz} · Signatur ✓`;
+      const quellzeile = `Fall ${karte.fallId} · ${karte.beweisDoc} · Seite ${karte.beweisSeite} · Commit ${commitKurz} · unterschrift ✓`;
 
       const opts: BeweisOptions = {
         bildUrl,
@@ -500,7 +500,7 @@ class App {
     if (dauer) headerTeile.push(`${parseInt(dauer, 10)} MIN`);
     const header = headerTeile.join(' · ');
 
-    const quellzeile = `Fall ${karte.fallId} · ${wav} · Minute ${minute} · Commit ${commitKurz} · Signatur ✓`;
+    const quellzeile = `Fall ${karte.fallId} · ${wav} · Minute ${minute} · Commit ${commitKurz} · unterschrift ✓`;
 
     container.appendChild(
       renderAnrufBeweis({
@@ -733,11 +733,27 @@ class App {
       fehlerEl.className = 'antwort';
       fehlerEl.style.color = '#9c6a63';
 
-      if ((err as Error).message?.includes('vLLM failed')) {
-        fehlerEl.textContent = 'Ich erreiche meinen Denker gerade nicht.';
-      } else {
-        fehlerEl.textContent = `Fehler: ${(err as Error).message || err}`;
-      }
+      // B4 — DoD 6: ein technischer Fehler-String mit Methodennamen darf
+      // den Nutzer NIE erreichen. Ruhige Karte in OS-Sprache, Mono-Zeile
+      // als Fundstelle des Problems, Rosé-Wort, kein Stacktrace, kein Alarm.
+      const meldung = String((err as Error).message || err);
+      const istTimeout = /abort/i.test(meldung) || /zeit/i.test(meldung);
+      const istDienstWeg = /vLLM failed|fetch failed|ECONNREFUSED|not reachable/i.test(meldung);
+
+      const satz = document.createElement('div');
+      satz.textContent = 'Der Denker antwortet gerade nicht.';
+      satz.style.fontSize = '15px';
+      fehlerEl.appendChild(satz);
+
+      const monoZeile = document.createElement('div');
+      monoZeile.className = 'quelle';
+      monoZeile.style.marginTop = '6px';
+      monoZeile.textContent = istTimeout
+        ? 'vllm · zeitüberschreitung nach 30 s · nochmal versuchen'
+        : istDienstWeg
+          ? 'vllm · nicht erreichbar · verbindung prüfen'
+          : 'antwort-dienst · unerwartet still · nochmal versuchen';
+      fehlerEl.appendChild(monoZeile);
 
       log.appendChild(fehlerEl);
       log.scrollTop = log.scrollHeight;
@@ -1195,7 +1211,7 @@ class App {
       ['Gruppe — vier Klone, ein Baum', () => this.zeigeGruppe()],
       ['Einladen — eine Erlaubnis, nie der Besitz', () => this.zeigeEinladen()],
       ['Rückruf — Erlaubnis entziehen', () => this.zeigeRueckruf()],
-      ['Onboarding — Siegel prägen', () => this.zeigeOnboarding(1)]
+      ['Onboarding — Unterschrift anlegen', () => this.zeigeOnboarding(1)]
     ];
 
     for (const [text, aktion] of eintraege) {
@@ -1525,7 +1541,7 @@ class App {
       const fehlerEl = document.createElement('div');
       fehlerEl.className = 't13';
       fehlerEl.style.color = '#9c6a63';
-      fehlerEl.textContent = `Fehler: ${(err as Error).message || err}`;
+      fehlerEl.textContent = 'Der Verlauf ist gerade nicht erreichbar — nichts geht verloren.';
       container.appendChild(fehlerEl);
     }
   }
@@ -1586,7 +1602,7 @@ class App {
       const fehlerEl = document.createElement('div');
       fehlerEl.className = 't13';
       fehlerEl.style.color = '#9c6a63';
-      fehlerEl.textContent = `Fehler: ${(err as Error).message || err}`;
+      fehlerEl.textContent = 'Die Vereinbarung ist gerade nicht erreichbar — nichts geht verloren.';
       container.appendChild(fehlerEl);
     }
   }

@@ -1,5 +1,5 @@
 /**
- * siegelmenue.ts — Das Siegel als einziger Menü-Eingang.
+ * siegelmenue.ts — Die Unterschrift oben rechts ist der Menü-Eingang.
  *
  * Klick auf das runde Olivgold-Siegel (oben rechts) öffnet ein
  * stilles Overlay: weiße Karte, Serifen-Einträge, Untertitel in
@@ -20,7 +20,7 @@ interface MenueEintrag {
 /** Die Bereiche — Reihenfolge = Lesefluss, Anrufe & Themen wie gewünscht vom Siegel aus. */
 const EINTRAEGE: MenueEintrag[] = [
   { bereich: 'heute',      ziel: 'heute',          titel: 'Heute' },
-  { bereich: 'faelle',     ziel: 'fall',           titel: 'Fälle',
+  { bereich: 'faelle',     ziel: 'fall-strom',     titel: 'Fälle',
     untertitel: (c) => c.faelle?.length ? `${c.faelle.length} Fall${c.faelle.length === 1 ? '' : 'fälle'}` : '' },
   { bereich: 'anrufe-texte', ziel: 'anruf-kommt',  titel: 'Anrufe & Texte' },
   { bereich: 'themen',     ziel: 'stapel',         titel: 'Themen' },
@@ -83,7 +83,7 @@ export class SiegelMenue {
 
     const titel = document.createElement('div');
     titel.className = 'siegel-menue-titel serif';
-    titel.textContent = 'Du';
+    titel.textContent = 'Menü';
     karte.appendChild(titel);
 
     for (const e of EINTRAEGE) {

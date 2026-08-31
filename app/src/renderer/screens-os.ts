@@ -156,7 +156,7 @@ export function renderOsAnrufBeweis(container: HTMLElement, _ctx: AppCtx): void 
   );
   const minute = beweisZeile('Minute 27:50 — Stefan:', '„…bleibt eingefroren."');
   blatt.appendChild(minute);
-  b.append(blatt, quelle('fall ctax · mitschrift-2026-08-27.md · Minute 27:50 · commit a41c07 · Signatur ✓'),
+  b.append(blatt, quelle('fall ctax · mitschrift-2026-08-27.md · Minute 27:50 · commit a41c07 · unterschrift ✓'),
     knoepfe(['Stimmt', 'pill-salbei'], ['Original öffnen', 'pill-still'],
       ['Falsch zugeordnet', 'pill-still']));
   gr.append(kopf(), b, fuss());
@@ -225,7 +225,7 @@ export function renderOsKatalog(container: HTMLElement, _ctx: AppCtx): void {
   );
   blatt.appendChild(beweisZeile('Einbau:', 'Vertikaler Einbau in Falleitungen.'));
   b.append(blatt,
-    quelle('fall kataloge · buderus-2024.pdf · Seite 212 · commit 3fd2 · Signatur ✓'),
+    quelle('fall kataloge · buderus-2024.pdf · Seite 212 · commit 3fd2 · unterschrift ✓'),
     el('div', 't15', 'Vertikaler Einbau in Falleitungen.'));
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
@@ -325,7 +325,7 @@ export function renderOsAnrufKommt(container: HTMLElement, ctx: AppCtx): void {
       el('div', 'serif t17', a.partner),
       el('div', 't13 sub', `Mitschrift · Dauer ${a.dauer}`)
     );
-    karte.appendChild(quelle(`fall ${a.fallId} · ${a.doc}${a.minuten.length ? ' · Minuten ' + a.minuten.join(', ') : ''} · Signatur ✓`));
+    karte.appendChild(quelle(`fall ${a.fallId} · ${a.doc}${a.minuten.length ? ' · Minuten ' + a.minuten.join(', ') : ''} · unterschrift ✓`));
     karte.addEventListener('click', () => navigate('anruf-laeuft'));
     b.appendChild(karte);
   }
@@ -402,7 +402,7 @@ export function renderOsAnrufLaeuft(container: HTMLElement, ctx: AppCtx): void {
       if (markiert) zeile.style.cssText = 'background:rgba(217,166,160,.08);border-radius:6px;padding:3px 8px;margin:0 -8px';
       mitschrift.appendChild(zeile);
     }
-    mitschrift.appendChild(quelle(`fall ${a.fallId} · ${a.doc} · Signatur ✓`));
+    mitschrift.appendChild(quelle(`fall ${a.fallId} · ${a.doc} · unterschrift ✓`));
     b.appendChild(mitschrift);
   } else {
     b.appendChild(el('div', 't13 sub', 'Noch keine Mitschrift — rufe jemanden an oder wähle im Anrufe-Bereich.'));
@@ -443,7 +443,7 @@ export function renderOsText(container: HTMLElement, ctx: AppCtx): void {
       msg.style.cssText = 'text-align:left;width:100%;max-width:520px';
       msg.append(
         el('div', 't13', t.zusammenfassung),
-        quelle(`kontakt-${erste.slug} · ${t.quelle} · ${new Date(t.zeitIso).toLocaleDateString('de-DE')} · Signatur ✓`)
+        quelle(`kontakt-${erste.slug} · ${t.quelle} · ${new Date(t.zeitIso).toLocaleDateString('de-DE')} · unterschrift ✓`)
       );
       b.appendChild(msg);
     }
@@ -485,7 +485,7 @@ export function renderOsFreund(container: HTMLElement, _ctx: AppCtx): void {
   karte.append(
     el('div', 'serif t17', 'Anna schlägt vor: 6.–8. März für die Hütte.'),
     el('div', 't13 sub', 'drei Preise, zwei Zitate aus dem Verlauf'),
-    quelle('fall huettenwochenende · mail-verlauf.md · commit 9d21 · Signatur ✓')
+    quelle('fall huettenwochenende · mail-verlauf.md · commit 9d21 · unterschrift ✓')
   );
   karte.addEventListener('click', () => navigate('gruppe'));
   b.append(karte, knoepfe(['Zusagen', 'pill-salbei'], ['Anders', 'pill-still']));
@@ -534,7 +534,7 @@ export function renderOsLeseplatz(container: HTMLElement, _ctx: AppCtx): void {
   blatt.appendChild(folie);
   // C3: das Rechteck steht — nichts slidet herein.
   b.append(blatt,
-    quelle('fall versicherungen · hausratversicherung.pdf · Seite 4 · commit 7f3a · Signatur ✓'),
+    quelle('fall versicherungen · hausratversicherung.pdf · Seite 4 · commit 7f3a · unterschrift ✓'),
     knoepfe(['Original öffnen', 'pill-still'], ['Zurück', 'pill-still']));
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
@@ -607,7 +607,7 @@ export function renderOsSuche(container: HTMLElement, ctx: AppCtx): void {
         const karte = el('div', 'karte');
         karte.style.cssText = 'text-align:left';
         karte.append(el('div', 't13', t.text));
-        karte.appendChild(quelle(`fall ${t.fall} · ${t.doc} · Seite ${t.seite} · Signatur ✓`));
+        karte.appendChild(quelle(`fall ${t.fall} · ${t.doc} · Seite ${t.seite} · unterschrift ✓`));
         ergebnis.appendChild(karte);
       }
       if (r.ehrlich) {
@@ -815,7 +815,7 @@ export function renderOsConnectorBeweis(container: HTMLElement, _ctx: AppCtx): v
   );
   zelle.appendChild(beweisZeile('Wanddicke:', '2,1 mm'));
   b.append(zelle,
-    quelle('connector · teamcenter · M-4711 · Rev C · abgerufen 29.08. · Signatur ✓'),
+    quelle('connector · teamcenter · M-4711 · Rev C · abgerufen 29.08. · unterschrift ✓'),
     knoepfe(['Stimmt', 'pill-salbei'], ['Original öffnen', 'pill-still']));
   gr.append(kopf(), b, fuss());
   container.appendChild(gr);
@@ -927,7 +927,7 @@ export function renderOsBeweisScreen(container: HTMLElement, _ctx: AppCtx): void
   sum.append(el('span', 'sub', 'Rechnungsbetrag'), el('span', '7.453,16 €'));
   blatt.appendChild(sum);
   b.append(blatt,
-    quelle('fall steuern-2026 · rechnung-2026-118.pdf · Seite 1 · Commit 8f0f849 · Signatur ✓'),
+    quelle('fall steuern-2026 · rechnung-2026-118.pdf · Seite 1 · Commit 8f0f849 · unterschrift ✓'),
     knoepfe(['Stimmt', 'pill-salbei'], ['Original öffnen', 'pill-still'],
       ['Falsch zugeordnet', 'pill-still']));
   gr.append(kopf(), b, fuss());

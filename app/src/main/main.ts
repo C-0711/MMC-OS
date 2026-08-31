@@ -1,6 +1,26 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
+import * as fs from 'node:fs';
 import { registerIpcHandlers } from './ipc';
+
+// B4 — .env beim Start laden (Env-Hygiene hatte VLLM_URL ohne Datei zum
+// localhost-Mock gemacht). Kein dotenv-Paket: Datei lesen, KEY=WERT-Zeilen
+// setzen, NUR wenn der Schlüssel noch nicht in der Umgebung steht (Env
+// gewinnt immer über Datei — nie committen, nur lesen).
+(function ladeEnv(): void {
+  const envPfad = path.join(__dirname, '..', '..', '.env');
+  try {
+    const inhalt = fs.readFileSync(envPfad, 'utf8');
+    for (const zeile of inhalt.split('\n')) {
+      const m = zeile.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
+      if (!m) continue;
+      const [, schluessel, wert] = m;
+      if (process.env[schluessel] === undefined) {
+        process.env[schluessel] = wert.replace(/^["']|["']$/g, '');
+      }
+    }
+  } catch { /* keine .env — Defaults gelten, still */ }
+})();
 import { log, logAufräumen, installiereCrashNetz } from './log';
 import { starteBackupJob, backupJetzt } from './backup';
 import { starteUpdatePruefung, registriereUpdateIpc } from './update';
