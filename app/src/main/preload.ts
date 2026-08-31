@@ -96,7 +96,7 @@ export interface MMCVaultAPI {
     fallId: string,
     proposalId: string,
     atoms: Atom[],
-    kartentext: { titel: string; frage: string }
+    kartentext: { titel: string; frage: string; deutungV?: number }
   ): Promise<{ branch: string; sha: string }>;
   listVorschlaege(fallId: string): Promise<Vorschlag[]>;
   listAtomsMain(fallId: string): Promise<Array<{ titel: string; atoms: Atom[] }>>;
@@ -273,6 +273,17 @@ export interface MMCKontakteAPI {
   commDatei(slug: string, datei: { name: string; bytes: ArrayBuffer }): Promise<{ slug: string; datei: string; sha: string }>;
 }
 
+export interface MMCStromAPI {
+  eintrag(fallId: string, eintrag: { typ: string; inhalt: string; von: string; payload?: Record<string, unknown> }): Promise<{ nummer: number; sha: string; datei: string }>;
+  liste(fallId: string): Promise<Array<{ nummer: number; typ: string; inhalt: string; von: string; zeitIso: string; sha: string }>>;
+}
+
+export interface MMCPrivatAPI {
+  eintrag(did: string, fallId: string, eintrag: { art: string; inhalt: string; ergebnis?: string }): Promise<{ sha: string }>;
+  liste(did: string, fallId: string): Promise<Array<{ art: string; inhalt: string; zeitIso: string; sha: string }>>;
+  teilen(did: string, fallId: string, sha: string): Promise<{ nummer: number; sha: string; geteiltIso: string }>;
+}
+
 export interface MMCAPI {
   vault: MMCVaultAPI;
   ocr: MMCOCR_API;
@@ -282,6 +293,8 @@ export interface MMCAPI {
   update: MMCUpdateAPI;
   anrufLive: MMCAnrufLiveAPI;
   kontakte: MMCKontakteAPI;
+  strom: MMCStromAPI;
+  privat: MMCPrivatAPI;
 }
 
 // Helper: ArrayBuffer → Number-Array für IPC
@@ -292,6 +305,15 @@ function arrayBufferToNumbers(ab: ArrayBuffer): number[] {
 const api: MMCAPI = {
   update: {
     ja: () => ipcRenderer.invoke('update:ja')
+  },
+  strom: {
+    eintrag: (fallId: string, eintrag: unknown) => ipcRenderer.invoke('strom:eintrag', fallId, eintrag),
+    liste: (fallId: string) => ipcRenderer.invoke('strom:liste', fallId),
+  },
+  privat: {
+    eintrag: (did: string, fallId: string, eintrag: unknown) => ipcRenderer.invoke('privat:eintrag', did, fallId, eintrag),
+    liste: (did: string, fallId: string) => ipcRenderer.invoke('privat:liste', did, fallId),
+    teilen: (did: string, fallId: string, sha: string) => ipcRenderer.invoke('privat:teilen', did, fallId, sha),
   },
   kontakte: {
     list: () => ipcRenderer.invoke('kontakte:list'),
@@ -318,7 +340,7 @@ const api: MMCAPI = {
         name: datei.name,
         bytes: arrayBufferToNumbers(datei.bytes)
       }),
-    proposeDeutung: (fallId: string, proposalId: string, atoms: Atom[], kartentext: { titel: string; frage: string }) =>
+    proposeDeutung: (fallId: string, proposalId: string, atoms: Atom[], kartentext: { titel: string; frage: string; deutungV?: number }) =>
       ipcRenderer.invoke('vault:proposeDeutung', fallId, proposalId, atoms, kartentext),
     listVorschlaege: (fallId: string) => ipcRenderer.invoke('vault:listVorschlaege', fallId),
     listAtomsMain: (fallId: string) => ipcRenderer.invoke('vault:listAtomsMain', fallId),

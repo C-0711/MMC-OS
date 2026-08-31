@@ -237,6 +237,17 @@
       z-index: 10;
     }
 
+    /* B5.6: Fußzeile — eigene schwebende Ebene: Grund, Schatten, Raum.
+       Karten brauchen padding-bottom in Fußzeilen-Höhe, nie transparent
+       über Inhalt. */
+    .fussleiste {
+      z-index: 40;
+      background: var(--os-grund);
+      box-shadow: 0 -8px 24px -18px rgba(70,58,38,.35);
+      padding-bottom: 6px;
+    }
+    main { padding-bottom: 92px; }
+
     /* Beweis-Overlay */
     #beweis-overlay {
       position: fixed;

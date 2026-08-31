@@ -233,7 +233,7 @@ describe('Integration: Ende-zu-Ende-Pfad (Vault)', () => {
       'test-fall',
       'deutung-1',
       testAtoms,
-      { titel: 'Test-Deutung', frage: 'Passt das?' }
+      { titel: 'Test-Deutung', frage: 'Passt das?', deutungV: 2 }
     );
 
     assert.equal(branch, 'agent/deutung-1');

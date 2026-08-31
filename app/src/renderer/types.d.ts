@@ -81,7 +81,10 @@ declare global {
     kartentext: {
       titel: string;
       frage: string;
+      deutungV?: number;
     };
+    /** B5.2: beleg = Frage-Karte erlaubt · werkstoff = still, nie fragen */
+    gattung: 'beleg' | 'werkstoff';
     zweifel: boolean;
   }
 
@@ -106,7 +109,7 @@ declare global {
       fallId: string,
       proposalId: string,
       atoms: Atom[],
-      kartentext: { titel: string; frage: string }
+      kartentext: { titel: string; frage: string; deutungV?: number }
     ): Promise<{ branch: string; sha: string }>;
     listVorschlaege(fallId: string): Promise<Vorschlag[]>;
     listAtomsMain(fallId: string): Promise<Array<{ titel: string; atoms: Atom[] }>>;
@@ -280,6 +283,17 @@ declare global {
     }>>;
   }
 
+  interface MMCStromAPI {
+    eintrag(fallId: string, eintrag: { typ: string; inhalt: string; von: string; payload?: Record<string, unknown> }): Promise<{ nummer: number; sha: string; datei: string }>;
+    liste(fallId: string): Promise<Array<{ nummer: number; typ: string; inhalt: string; von: string; zeitIso: string; sha: string }>>;
+  }
+
+  interface MMCPrivatAPI {
+    eintrag(did: string, fallId: string, eintrag: { art: string; inhalt: string; ergebnis?: string }): Promise<{ sha: string }>;
+    liste(did: string, fallId: string): Promise<Array<{ art: string; inhalt: string; zeitIso: string; sha: string }>>;
+    teilen(did: string, fallId: string, sha: string): Promise<{ nummer: number; sha: string; geteiltIso: string }>;
+  }
+
   interface MMCAPI {
     vault: MMCVaultAPI;
     ocr: MMCOCR_API;
@@ -289,6 +303,8 @@ declare global {
     update: MMCUpdateAPI;
     anrufLive: MMCAnrufLiveAPI;
     kontakte: MMCKontakteAPI;
+    strom: MMCStromAPI;
+    privat: MMCPrivatAPI;
   }
 
   interface Window {

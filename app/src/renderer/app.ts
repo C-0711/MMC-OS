@@ -898,8 +898,22 @@ class App {
         deutung = await window.mmc.ocr.deutungAusOcr(ocr, verwahrterName);
       }
 
-      // 4. Vorschlag erstellen
+      // 4. Vorschlag erstellen — B5.2: Werkstoff NIE als Frage-Karte.
+      //    Beträge dürfen als Atome existieren (abfragbar), aber sie
+      //    kommen nicht als „passt das?" ins Heute.
       const proposalId = `deutung-${Date.now()}`;
+      if (deutung.gattung === 'werkstoff') {
+        await window.mmc.vault.proposeDeutung(fallId, proposalId, [], {
+          titel: deutung.kartentext.titel,
+          frage: 'Ich lese das still ein — richtig so?',
+          deutungV: 2,
+        });
+        this.versteckeSanduhr();
+        this.showToast(`${deutung.kartentext.titel} — still ins Regal, nichts fragt dich.`);
+        await this.ladeVorschlaege();
+        this.renderZustand();
+        return;
+      }
       await window.mmc.vault.proposeDeutung(fallId, proposalId, deutung.atoms, deutung.kartentext);
 
       // 5. Vorschläge neu laden

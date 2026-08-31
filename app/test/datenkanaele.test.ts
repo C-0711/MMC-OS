@@ -70,7 +70,7 @@ before(async () => {
   await vault.proposeDeutung(testFall, 'vorschlag-1', [
     { id: 'a1', feld: 'betrag', wert: '89,00 €', fundstelle: { art: 'dokument', doc: 'rechnung.txt', seite: 1 }, conf: 0.9 },
     { id: 'a2', feld: 'absender', wert: 'Stadtwerke Musterstadt', fundstelle: { art: 'dokument', doc: 'rechnung.txt', seite: 1 }, conf: 0.9 },
-  ], { titel: 'Rechnung Stadtwerke', frage: 'Rechnung Stadtwerke, 89 € — stimmt das?' });
+  ], { titel: 'Rechnung Stadtwerke', frage: 'Rechnung Stadtwerke, 89 € — stimmt das?', deutungV: 2 });
 
   await vault.commitEingang(testFall, { absender: 'Lena Weber', kanal: 'anruf' }, {
     name: 'mitschrift-2026-08-27.json',
@@ -88,7 +88,7 @@ before(async () => {
   // Zweiter offener Vorschlag — T1 braucht eine offene Ding-Karte.
   await vault.proposeDeutung(testFall, 'vorschlag-2', [
     { id: 'a3', feld: 'betrag', wert: '89,00 €', fundstelle: { art: 'dokument', doc: 'rechnung.txt', seite: 1 }, conf: 0.9 },
-  ], { titel: 'Rechnung Stadtwerke', frage: 'Rechnung Stadtwerke, 89 € — stimmt das?' });
+  ], { titel: 'Rechnung Stadtwerke', frage: 'Rechnung Stadtwerke, 89 € — stimmt das?', deutungV: 2 });
 });
 
 after(async () => {

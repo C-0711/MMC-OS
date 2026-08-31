@@ -7,6 +7,10 @@ import * as crypto from 'node:crypto';
 
 const execFileAsync = promisify(execFile);
 
+// B5.1: aktuelle Deutungs-Version — Vorschläge darunter sind Tunnelblick-
+// Relikte und werden beim Listen still übersprungen.
+export const AKTUELLE_DEUTUNG_VERSION = 2;
+
 function getVaultRoot(): string {
   return process.env.MMC_VAULT ?? path.join(os.homedir(), 'MMC-Vault');
 }
@@ -46,6 +50,10 @@ export interface Vorschlag {
   kartentext: {
     titel: string;
     frage: string;
+    /** B5.1: Deutungs-Version — fehlt = Version 1 (Betrags-Tunnelblick),
+     * wird von listVorschlaege gefiltert (Renderer sieht nie wieder
+     * „N Beträge erkannt") */
+    deutungV?: number;
   };
   atoms: Atom[];
   branch: string;
@@ -101,6 +109,11 @@ export async function listFaelle(): Promise<FallInfo[]> {
 
     for (const entry of entries) {
       if (entry.isDirectory()) {
+        // Namensraum-Trennung: kontakt-*, mmc-signal-* sind KEINE Fälle.
+        // (Spec 21 + Anruf-Live: eigene Container-Welten im selben Vault.)
+        if (entry.name.startsWith('kontakt-') || entry.name.startsWith('mmc-signal-')) {
+          continue;
+        }
         const fallPfad = path.join(vaultRoot, entry.name);
         if (await isGitRepo(fallPfad)) {
           const offeneVorschlaege = await countBranches(fallPfad, 'agent/*');
@@ -220,7 +233,7 @@ export async function proposeDeutung(
   fallId: string,
   proposalId: string,
   atoms: Atom[],
-  kartentext: { titel: string; frage: string }
+  kartentext: { titel: string; frage: string; deutungV?: number }
 ): Promise<{ branch: string; sha: string }> {
   const vaultRoot = getVaultRoot();
   const fallPfad = path.join(vaultRoot, fallId);
@@ -322,6 +335,15 @@ export async function listVorschlaege(fallId: string): Promise<Vorschlag[]> {
       // Read the file from the branch
       const content = await gitExec(fallPfad, ['show', `${branch}:${atomsPath}`]);
       const data = JSON.parse(content);
+      const deutungV = typeof data.kartentext?.deutungV === 'number' ? data.kartentext.deutungV : 1;
+
+      // B5.1 — Deutungs-Rebellion: Vorschläge alter Deutungs-Versionen
+      // (der Betrags-Tunnelblick „N Beträge erkannt") erreichen den
+      // Renderer nie wieder. Der Branch bleibt im Vault (Original ist
+      // verwahrt, Commit vor Deutung zahlt sich aus) — still übersprungen.
+      if (deutungV < AKTUELLE_DEUTUNG_VERSION) {
+        continue;
+      }
 
       vorschlaege.push({
         id: proposalId,

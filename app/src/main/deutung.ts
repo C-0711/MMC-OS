@@ -30,20 +30,25 @@ function normalisiereBetrag(t: string): string {
 // Datum: 15.09.2026 oder 15.09.26
 const DATUM_REGEX = /\b(\d{1,2})\.(\d{1,2})\.(\d{2,4})\b/g;
 
-// Absender-Zeilen: „Von: X", „Absender: X", „Von X" — wer schreibt mir?
-const ABSENDER_REGEX = /^\s*(?:von|absender|absender:in|from)\s*[:\s]\s*(.+)$/i;
+// Absender-Zeilen — B5.3: DOPPELPUNKT pflicht. Ein nacktes „von " frisst
+// deutschen Fließtext („von Ausdehnungsgefäßen ohne Entleerung der Anlage…").
+const ABSENDER_REGEX = /^\s*(?:von|absender|from)\s*:\s*(.+)$/i;
 
-// Dokument-Arten — die Karte benennt, WAS es ist, nicht „Beleg"
-const ART_MUSTER: Array<[RegExp, string]> = [
-  [/rechnung|rechnungs?nr|kostenstelle|leistungszeitraum/i, 'Rechnung'],
-  [/vertrag|mietvertrag|versicherungs(schein|vertrag)|laufzeit/i, 'Vertrag'],
-  [/bescheid|finanzamt|steuer|vorauszahlung/i, 'Bescheid'],
-  [/mahnu?ng|zahlungserinnerung/i, 'Mahnung'],
-  [/angebot|kostenvoranschlag/i, 'Angebot'],
-  [/police|versicherungsschein|beitrag/i, 'Police'],
-  [/katalog|artikel-nr|materialnummer/i, 'Katalog'],
-  [/termin|einladung|besprechung/i, 'Termin'],
-  [/brief|sehr geehrte|r?und freundlichen gr/i, 'Brief'],
+// Dokument-Arten — B5.2: GEWICHTET statt first-match. Trefferzahl je
+// Muster zählt; Werkstoff-Signale wiegen schwerer — ein einzelnes
+// „Rechnung"-Wort in den Bestellhinweisen eines Katalogs verliert
+// gegen die Artikel-Nummern-Serie.
+const ART_MUSTER: Array<[RegExp, string, number]> = [
+  [/rechnung|rechnungs?nr|kostenstelle|leistungszeitraum/i, 'Rechnung', 1],
+  [/vertrag|mietvertrag|versicherungs(schein|vertrag)|laufzeit/i, 'Vertrag', 1],
+  [/bescheid|finanzamt|steuer|vorauszahlung/i, 'Bescheid', 1],
+  [/mahnu?ng|zahlungserinnerung/i, 'Mahnung', 1],
+  [/angebot|kostenvoranschlag/i, 'Angebot', 1],
+  [/police|versicherungsschein|beitrag/i, 'Police', 1],
+  [/termin|einladung|besprechung/i, 'Termin', 1],
+  [/brief|sehr geehrte|r?und freundlichen gr/i, 'Brief', 1],
+  [/katalog|artikel-?nr|artikelnummer|materialnummer|\bart\.?-?nr/i, 'Katalog', 3],
+  [/datenblatt|handbuch|brosch(ü|ue)re|technische daten/i, 'Datenblatt', 3],
 ];
 
 export interface DeutungErgebnis {
@@ -51,17 +56,55 @@ export interface DeutungErgebnis {
   kartentext: {
     titel: string;
     frage: string;
+    /** B5.1: Deutungs-Version — alte Vorschläge werden neu gedeutet */
+    deutungV?: number;
   };
+  /** B5.2: Werkstoff erzeugt KEINE Frage-Karte (frühestens eine leise
+   * Bestätigung) — der Renderer filtert daran. */
+  gattung: Gattung;
   zweifel: boolean;
 }
 
-/** Dokument-Art aus dem Gesamttext schätzen (erste getroffene Zeile gewinnt). */
+/**
+ * B5.2 — die ZWEI Gattungen (B3-Tabelle): Beleg (an dich gerichtet) vs.
+ * Werkstoff (über die Welt: Katalog, Handbuch, Datenblatt, Broschüre).
+ * Werkstoff → Sanduhr: still committen, NULL „passt das?"-Fragen.
+ */
+export type Gattung = 'beleg' | 'werkstoff';
+
+/** Heuristik (aus dem B3-Befund): viele Seiten · Preislisten in Serie ·
+ * Artikel-Nummern-Serien · kein Adressat → Werkstoff. */
+export function erkenneGattung(ocr: OcrErgebnis, zeilen: string[]): Gattung {
+  const alles = zeilen.join('\n');
+  const hatAdressat = /sehr geehrte|an\s+herrn|an\s+frau|kunden-?nr/i.test(alles);
+
+  const artikelSerien = (alles.match(/(?:artikel|art|mat|material)[-\s.]*(?:nr|nummer)?[-\s.]?\d{3,}/gi) || []).length;
+  const preisZeilen = zeilen.filter(z => /\d{1,3}(?:\.\d{3})*,\d{2}/.test(z)).length;
+
+  if (!hatAdressat && (ocr.pagesTotal >= 8 || artikelSerien >= 5 || preisZeilen >= 15)) {
+    return 'werkstoff';
+  }
+  return 'beleg';
+}
+
+/** Aktuelle Deutungs-Version (B5.1): Vorschläge tragen sie im kartentext
+ * mit; beim Laden werden ältere still zurückgezogen und neu gedeutet. */
+export const DEUTUNG_VERSION = 2;
+
+/** Dokument-Art aus dem Gesamttext — gewichtet (B5.2): Treffer × Gewicht. */
 function erkenneArt(zeilenText: string[]): string {
   const alles = zeilenText.join('\n');
-  for (const [muster, art] of ART_MUSTER) {
-    if (muster.test(alles)) return art;
+  let beste: string | null = null;
+  let bestePunkte = 0;
+  for (const [muster, art, gewicht] of ART_MUSTER) {
+    const treffer = (alles.match(new RegExp(muster.source, 'gi')) || []).length;
+    const punkte = treffer * gewicht;
+    if (punkte > bestePunkte) {
+      beste = art;
+      bestePunkte = punkte;
+    }
   }
-  return 'Dokument';
+  return beste ?? 'Dokument';
 }
 
 /** Das semantisch beste Atom als Karten-Titel — Name > Betrag > Datum. */
@@ -131,22 +174,50 @@ export function deutungAusOcr(ocr: OcrErgebnis, docName: string): DeutungErgebni
     }
   }
 
-  // Dokument-Art statt pauschal „Beleg"
-  const art = erkenneArt(alleZeilen);
-  const titel = kartenTitel(art, atoms);
+  // B5.4 — Dedupe: derselbe Wert (Datum) nur EIN Atom, egal wie oft er
+  // im Text steht („Datum: 31.12.2026 · bis zum: 31.12.2026 · …")
+  const gesehen = new Set<string>();
+  const deduped = atoms.filter(a => {
+    const schluessel = `${a.feld}|${a.wert}`;
+    if (gesehen.has(schluessel)) return false;
+    gesehen.add(schluessel);
+    return true;
+  });
 
-  let frage: string;
-  if (atoms.length === 0) {
-    frage = `Ich habe ${art === 'Dokument' ? 'das Dokument' : 'die ' + art} gelesen — nichts Verbindliches gefunden. Magst du selbst schauen?`;
-  } else if (atoms.length === 1) {
-    frage = `${atoms[0].feld}: ${atoms[0].wert} — stimmt das?`;
-  } else {
-    const beispiel = atoms.slice(0, 3).map(a => `${a.feld}: ${a.wert}`).join(' · ');
-    frage = `${beispiel}${atoms.length > 3 ? ' …' : ''} — stimmt das?`;
+  // B5.2 — Gattung VOR der Frage: Werkstoff bekommt NIE „passt das?"
+  const gattung = erkenneGattung(ocr, alleZeilen);
+  const art = erkenneArt(alleZeilen);
+
+  if (gattung === 'werkstoff') {
+    // Werkstoff: still einsortiert — Beträge dürfen als abfragbare Atome
+    // existieren (Frag-mich: „was kostet die GB192?"), aber NIE als
+    // Frage-Karte. Höchstens die EINE leise Karte (B3: im Zweifel).
+    return {
+      atoms: deduped,
+      kartentext: {
+        titel: `${art} als Nachschlagewerk einsortiert`,
+        frage: `Ich lese das still ein — richtig so?`, // leise, ja/beleg-draus-machen
+        deutungV: DEUTUNG_VERSION,
+      },
+      gattung,
+      zweifel: false,
+    };
   }
 
-  const zweifel = minConf < 0.7 || atoms.length === 0;
-  return { atoms, kartentext: { titel, frage }, zweifel };
+  const titel = kartenTitel(art, deduped);
+
+  let frage: string;
+  if (deduped.length === 0) {
+    frage = `Ich habe ${art === 'Dokument' ? 'das Dokument' : 'die ' + art} gelesen — nichts Verbindliches gefunden. Magst du selbst schauen?`;
+  } else if (deduped.length === 1) {
+    frage = `${deduped[0].feld}: ${deduped[0].wert} — stimmt das?`;
+  } else {
+    const beispiel = deduped.slice(0, 3).map(a => `${a.feld}: ${a.wert}`).join(' · ');
+    frage = `${beispiel}${deduped.length > 3 ? ' …' : ''} — stimmt das?`;
+  }
+
+  const zweifel = minConf < 0.7 || deduped.length === 0;
+  return { atoms: deduped, kartentext: { titel, frage, deutungV: DEUTUNG_VERSION }, gattung, zweifel };
 }
 
 // ============================================================================
@@ -257,7 +328,8 @@ export function deutungAusTranskript(t: Transkript, docName: string): DeutungErg
 
   return {
     atoms,
-    kartentext: { titel, frage },
+    kartentext: { titel, frage, deutungV: DEUTUNG_VERSION },
+    gattung: 'beleg', // ein Gespräch, in dem du warst, ist dir gerichtet
     zweifel: atoms.length === 0
   };
 }

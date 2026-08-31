@@ -129,7 +129,7 @@ describe('Vault Lifecycle Tests', () => {
       },
     ];
 
-    const proposal = await proposeDeutung('deutung-test', 'rechnung-150', atoms, { titel: 'Rechnung über 150 EUR', frage: 'Ist das korrekt?' });
+    const proposal = await proposeDeutung('deutung-test', 'rechnung-150', atoms, { titel: 'Rechnung über 150 EUR', frage: 'Ist das korrekt?', deutungV: 2 });
 
     assert.strictEqual(proposal.branch, 'agent/rechnung-150');
     assert.ok(proposal.sha);
@@ -172,8 +172,8 @@ describe('Vault Lifecycle Tests', () => {
       },
     ];
 
-    await proposeDeutung('multi-proposal', 'proposal-1', atoms1, { titel: 'Betrag', frage: 'Passt?' });
-    await proposeDeutung('multi-proposal', 'proposal-2', atoms2, { titel: 'Datum', frage: 'Korrekt?' });
+    await proposeDeutung('multi-proposal', 'proposal-1', atoms1, { titel: 'Betrag', frage: 'Passt?', deutungV: 2 });
+    await proposeDeutung('multi-proposal', 'proposal-2', atoms2, { titel: 'Datum', frage: 'Korrekt?', deutungV: 2 });
 
     const vorschlaege = await listVorschlaege('multi-proposal');
     assert.strictEqual(vorschlaege.length, 2);
@@ -197,7 +197,7 @@ describe('Vault Lifecycle Tests', () => {
       },
     ];
 
-    await proposeDeutung('merge-test', 'to-merge', atoms, { titel: 'Test', frage: 'OK?' });
+    await proposeDeutung('merge-test', 'to-merge', atoms, { titel: 'Test', frage: 'OK?', deutungV: 2 });
 
     // Verify proposal exists
     const vorschlaegeBefore = await listVorschlaege('merge-test');
@@ -238,7 +238,7 @@ describe('Vault Lifecycle Tests', () => {
       },
     ];
 
-    await proposeDeutung('reject-test', 'to-reject', atoms, { titel: 'Falsch', frage: 'Stimmt das?' });
+    await proposeDeutung('reject-test', 'to-reject', atoms, { titel: 'Falsch', frage: 'Stimmt das?', deutungV: 2 });
 
     // Reject with reason
     await rejectVorschlag('reject-test', 'to-reject', 'Wert ist falsch');
@@ -269,7 +269,7 @@ describe('Vault Lifecycle Tests', () => {
       },
     ];
 
-    await proposeDeutung('erzaehlung-test', 'rechnung-200', atoms, { titel: 'Rechnung über 200 EUR', frage: 'OK?' });
+    await proposeDeutung('erzaehlung-test', 'rechnung-200', atoms, { titel: 'Rechnung über 200 EUR', frage: 'OK?', deutungV: 2 });
     await mergeVorschlag('erzaehlung-test', 'rechnung-200');
 
     // Second proposal that gets rejected
@@ -282,7 +282,7 @@ describe('Vault Lifecycle Tests', () => {
         conf: 0.3,
       },
     ];
-    await proposeDeutung('erzaehlung-test', 'falsches-datum', atoms2, { titel: 'Datum', frage: '?' });
+    await proposeDeutung('erzaehlung-test', 'falsches-datum', atoms2, { titel: 'Datum', frage: '?', deutungV: 2 });
     await rejectVorschlag('erzaehlung-test', 'falsches-datum');
 
     // Get narrative
@@ -340,7 +340,7 @@ describe('Vault Lifecycle Tests', () => {
           conf: 0.98,
         },
       ],
-      { titel: 'Betrag 100,50 EUR', frage: 'Stimmt das?' }
+      { titel: 'Betrag 100,50 EUR', frage: 'Stimmt das?', deutungV: 2 }
     );
 
     // Verify proposal exists but main unchanged
@@ -373,7 +373,7 @@ describe('Vault Lifecycle Tests', () => {
           conf: 0.2,
         },
       ],
-      { titel: 'Ungültiges Datum', frage: 'Passt das?' }
+      { titel: 'Ungültiges Datum', frage: 'Passt das?', deutungV: 2 }
     );
 
     await rejectVorschlag('complete-test', 'wrong-date', 'Datum ist offensichtlich falsch');
