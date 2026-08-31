@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .schalter { width: 36px; height: 20px; border-radius: 999px; border: 1px solid rgba(42,37,32,.35); flex: none; position: relative; }
+    .schalter i { position: absolute; top: 2px; width: 14px; height: 14px; border-radius: 999px; display: block; }
+    .schalter.an i  { right: 2px; background: #8FA98F; }
+    .schalter.aus i { left: 2px;  background: #E8DFD3; }
+    /* Mitten im Umschalten: der Knopf auf halbem Weg, halb Salbei */
+    .schalter.mitte i { left: 10px; background: #b3c2ac; }
+    .zeile { height: 44px; display: flex; align-items: center; gap: 18px; border-bottom: .5px solid rgba(42,37,32,.12); }
+    .zeile .name { font-family: 'Playfair Display', Georgia, serif; font-size: 15px; flex: 1; }
+    .zeile.aus .name { color: rgba(42,37,32,.45); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 0 80px">
+      <div class="t13 sub">Der Moment des Umschaltens — Mails gehen an</div>
+
+      <div style="width: 640px; display: flex; flex-direction: column">
+        <div class="zeile"><span class="name">Dokumente</span><span class="mono">12.400 atome</span><span class="schalter an"><i></i></span></div>
+        <div class="zeile"><span class="name">Bilder</span><span class="mono">3.100 atome</span><span class="schalter an"><i></i></span></div>
+        <div class="zeile" style="background: rgba(184,163,105,.06); border-radius: 8px"><span class="name">Mails</span><span class="mono">wird gezählt …</span><span class="schalter mitte"><i></i></span></div>
+        <div class="zeile"><span class="name">Anrufe</span><span class="mono">412 atome</span><span class="schalter an"><i></i></span></div>
+        <div class="zeile" style="border-bottom: none"><span class="name">USB „Bosch 2019"</span><span class="mono">9.500 seiten</span><span class="schalter an"><i></i></span></div>
+      </div>
+
+      <!-- Die Sanduhr erscheint EIN Mal kurz (600 ms) — dann ist sie weg. Kein Spinner. -->
+      <div style="display: flex; align-items: center; gap: 12px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M4.5 2.5 H19.5 M4.5 21.5 H19.5 M6 2.5 C6 8 10.5 10.5 11.6 12 C10.5 13.5 6 16 6 21.5 M18 2.5 C18 8 13.5 10.5 12.4 12 C13.5 13.5 18 16 18 21.5" stroke="#2a2520" stroke-width="1" stroke-linecap="round"/>
+          <path d="M8.4 7.5 C9.4 9.4 11 10.6 11.6 11.4 L12.4 11.4 C13 10.6 14.6 9.4 15.6 7.5 Z" fill="rgba(184,163,105,.55)"/>
+        </svg>
+        <div class="mono">Σ an: 6 quellen · das universum formt sich neu</div>
+      </div>
+
+      <div class="t11 sub" style="max-width: 54ch; text-align: center; line-height: 1.7">Umschalten: 200 ms, ein weiches Klick-Gefühl, kein Leuchten. Die kleine Sanduhr erscheint genau einmal für 600 ms neben der Σ-Zeile — dann ist sie weg. Kein Spinner, kein Puls.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 26px">
+      <div class="mono">ab jetzt antwortet der assistent auch aus mails — und sagt es in der ehrlichkeitszeile</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

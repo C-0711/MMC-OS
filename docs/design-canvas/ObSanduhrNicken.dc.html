@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    /* OS-Sprache: #FAF7F2 / Salbei #8FA98F / Rosé #D9A6A0 / Olivgold #B8A369 */
+    body { margin: 0; }
+    .os-grund {
+      overflow: hidden; position: relative; display: flex; flex-direction: column;
+      background: #FAF7F2; color: #2a2520;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      font-size: 15px; -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; }
+    .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    /* Das einzige Ereignis: die Taille leuchtet einmal auf — 300 ms, dann Ruhe */
+    @keyframes taille {
+      0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; }
+    }
+    .taille-glut { animation: taille 300ms ease-out 1 forwards; animation-delay: .6s; opacity: 0; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; padding: 0 80px">
+      <div class="serif" style="font-size: 22px">Aufgenommen.</div>
+
+      <!-- Beim Nicken leuchtet die Taille einmal auf (300 ms) — das einzige Ereignis -->
+      <div style="position: relative; width: 24px; height: 130px">
+        <div class="taille-glut" style="position: absolute; left: 50%; top: 12px; width: 26px; height: 26px; transform: translate(-50%,-50%); border-radius: 999px; background: radial-gradient(circle, rgba(184,163,105,.55), rgba(184,163,105,0) 70%)"></div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:block; position: relative">
+          <path d="M4.5 2.5 H19.5 M4.5 21.5 H19.5 M6 2.5 C6 8 10.5 10.5 11.6 12 C10.5 13.5 6 16 6 21.5 M18 2.5 C18 8 13.5 10.5 12.4 12 C13.5 13.5 18 16 18 21.5"
+                stroke="#2a2520" stroke-width="0.75" stroke-linecap="round"/>
+          <path d="M6.9 21 C8.6 17.8 11 16.8 12 16.8 C13 16.8 15.4 17.8 17.1 21 Z" fill="rgba(184,163,105,.8)"/>
+        </svg>
+        <svg width="220" height="52" viewBox="0 0 220 52" style="position: absolute; left: 50%; bottom: 0; transform: translateX(-50%)">
+          <path d="M4 50 C58 50 80 12 110 12 C140 12 162 50 216 50 Z" fill="rgba(184,163,105,.28)"/>
+          <path d="M34 50 C74 50 92 22 110 22 C128 22 146 50 186 50 Z" fill="rgba(184,163,105,.36)"/>
+          <path d="M68 50 C90 50 100 32 110 32 C120 32 130 50 152 50 Z" fill="rgba(184,163,105,.46)"/>
+        </svg>
+      </div>
+
+      <div class="t11 sub" style="max-width: 42ch; text-align: center; line-height: 1.7">Wer abnickt, unterschreibt leise. Der Bericht liegt in deinem Fall — nichts blinkt, nichts feiert.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 26px">
+      <div class="mono">fall·ingest · bericht v1 · commit 9d02 · signatur ✓</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

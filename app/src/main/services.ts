@@ -4,7 +4,8 @@
  */
 
 const BELEGSRV_URL = process.env.BELEGSRV_URL || 'http://127.0.0.1:8787';
-const VLLM_URL = process.env.VLLM_URL || 'http://192.168.145.10:11435';
+// Echte Netz-Adresse kommt aus .env (siehe .env.example) — Default ist localhost-Mock.
+const VLLM_URL = process.env.VLLM_URL || 'http://127.0.0.1:11435';
 const VLLM_MODEL = process.env.VLLM_MODEL || 'gemma4-mm';
 
 // ============================================================================
