@@ -22,6 +22,10 @@ import {
   renderObErfolg,
   type VereinbarungPosition
 } from './screens.js';
+import { navigate, type AppCtx } from './router.js';
+import { SiegelMenue, siegelmenueCss } from './siegelmenue.js';
+import { onboardingCss, sanduhrStarten } from './screens-onboarding.js';
+import { osCss } from './screens-os.js';
 
 type AppZustand = 'ruhig' | 'fragend' | 'antwortend' | 'fall-ansicht';
 
@@ -41,6 +45,8 @@ class App {
   private karten: Karte[] = [];
   private aktuellerFall: string | null = null;
   private dropZoneActive = false;
+  private siegelMenue: SiegelMenue | null = null;
+  private faelleCache: FallInfo[] = [];
 
   constructor() {
     this.init();
@@ -48,6 +54,15 @@ class App {
 
   private async init(): Promise<void> {
     this.renderBegruessung();
+
+    // Siegel-Menü (der fehlende Menübereich): Siegel oben rechts wird
+    // zum Eingang für alle Bereiche — Anrufe, Themen, Fälle, Suche …
+    const style = document.createElement('style');
+    style.textContent = siegelmenueCss() + onboardingCss() + osCss();
+    document.head.appendChild(style);
+    this.siegelMenue = new SiegelMenue(() => this.appCtx());
+    this.siegelMenue.oeffnen(document.querySelector('.siegel'));
+
     await this.ladeVorschlaege();
     this.renderZustand();
     this.setupFragMich();
@@ -58,6 +73,15 @@ class App {
     if (localStorage.getItem('mmc-onboarding') !== 'done') {
       this.zeigeOnboarding(1);
     }
+  }
+
+  /** Kontext für Router & Siegel-Menü — echte Daten, wo vorhanden. */
+  private appCtx(): AppCtx {
+    return {
+      faelle: this.faelleCache?.map(f => ({ id: f.id, name: f.id })),
+      kartenOffen: this.karten.length,
+      fallId: this.aktuellerFall ?? undefined,
+    };
   }
 
   // ============================================================================
@@ -83,6 +107,7 @@ class App {
   private async ladeVorschlaege(): Promise<void> {
     try {
       const faelle = await window.mmc.vault.listFaelle();
+      this.faelleCache = faelle;
       this.renderFussleiste(faelle);
 
       this.karten = [];
