@@ -701,6 +701,24 @@
    "h": 844,
    "page": "page-11",
    "title": "Startschirm · Ein Ding wartet"
+  },
+  {
+   "file": "OsDock.dc.html",
+   "x": 0,
+   "y": 3480,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Desktop · Die Leiste — Dock in OS-Sprache"
+  },
+  {
+   "file": "OsIconSprache.dc.html",
+   "x": 1480,
+   "y": 3480,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Die Icon-Sprache — ein Sinnbild pro Rubrik"
   }
  ],
  "annotations": [
@@ -919,6 +937,14 @@
    "w": 1350,
    "page": "page-11",
    "text": "REIHE 3 — DER STARTSCHIRM (iPhone-Form, aber kein nachgemaltes Springboard). Statt Icon-Gitter mit Badges: Rubriken als ruhige Kacheln — Haarlinien-Glyph, Serif-Name, eine Mono-Zustandszeile mit ECHTEN Zählern (wie das Siegel-Menü am Desktop): Telefon „lena · heute 14:36\", Stapel „liest still · 2.146/9.500\", Quellen „5 an · 22.212 atome\", Siegel „✓ · backup 03:00\". Rubriken zeigen Zustand, nie die Zahl der Pflichten — kein Badge, nirgends. Was wartet, kommt als Karte OBEN AUF den Startschirm (zweiter Screen: „Ein Ding wartet.\" mit Marc-Rückruf samt Foto-Siegel und Fundstelle); in der Rubrik selbst steht es als Wort in Rosé („marc wartet\"), nie als rote Zahl. Unten das Dock: drei Handgriffe — anrufen · fragen · hineinlegen. Tippen auf eine Rubrik öffnet den jeweiligen Bereich (Telefon → TelBereich, Stapel → Sanduhr, Quellen → Meister-Seite, Leseplatz → OsLeseplatz)."
+  },
+  {
+   "id": "dock-icons",
+   "x": 0,
+   "y": 3330,
+   "w": 1350,
+   "page": "page-11",
+   "text": "REIHE 4 — DIE LEISTE (Desktop-Dock) + ICON-SPRACHE. Das Dock schwebt wie am Mac, aber in Warmweiß: weiße Kacheln (46px, Radius 13) mit Haarlinien-Glyphs in Tinte — dieselben Sinnbilder wie auf dem Phone-Startschirm, eins pro Rubrik. Zustände ohne Badge: kleiner Punkt unter dem Fach — Olivgold = Bereich offen/aktiv, Rosé = etwas wartet (Markierung, nie Alarm), nichts = Ruhe; NIEMALS eine Zahl am Icon. Hover hebt das Fach 4px und zeigt eine Mini-Karte mit Name (Serif) + echter Zustandszeile (Mono) — dieselben Zähler wie Kachel und Siegel-Menü. Rechts vom Trenner die zwei Handgriffe: Fragen (Salbei-Kachel) und Hineinlegen (+). Das Icon-Blatt daneben ist der Vertrag: Strichstärken je Größe (21px Dock / 15px Kachel / 28px Blatt → 1,05–1,3px), Tinte auf Warmweiß, einzige volle Form ist das Siegel, einzige Farben Sand-Olivgold und die Quellen-Schalterpunkte. Pixel-Vergleich gegen dieses Blatt ist das Review-Gate für jedes neue Icon."
   }
  ],
  "launch": {
