@@ -2,12 +2,12 @@
  * gitchain.ts — Anbindung an den 0711-GitChain-Backend.
  *
  * Verträge (docs/backend-stand-h200v.md, live sondiert 2026-08-30):
- *   GITCHAIN_API_URL  (default https://api-gitchain.0711.io)
+ *   GITCHAIN_API_URL  (aus .env — siehe .env.example; kein Default im Repo)
  *     - git smart HTTP:  /git/<typ>/<ns>/<id>.git   (HTTP Basic, PAT im Passwortfeld)
  *     - PAT-Introspection: GET /v1/user             (anonym → 401, das ist der Vertrag)
  *     - OCP v1:          /api/ocp/v1/registry …
  *     - Health:          /api/v2/health
- *   GITCHAIN_AUTH_URL (default https://gitchain.de)
+ *   GITCHAIN_AUTH_URL (aus .env — siehe .env.example; kein Default im Repo)
  *     - Device-Login: POST /auth/device/start → {user_code, device_code, verify_url, interval, expires_in}
  *                     POST /auth/device/poll  {device_code}
  *
@@ -27,8 +27,14 @@ import { spawn } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-const API_URL = (process.env.GITCHAIN_API_URL || 'https://api-gitchain.0711.io').replace(/\/+$/, '');
-const AUTH_URL = (process.env.GITCHAIN_AUTH_URL || 'https://gitchain.de').replace(/\/+$/, '');
+// Review-Gate „echte URLs niemals committen": Endpunkte kommen ausschließlich
+// aus der Umgebung (.env, gitignored — Vorlage: .env.example). Ohne Wert bleibt
+// die App fail-closed offline; jede Funktion meldet das in ihrer eigenen Form.
+const API_URL = (process.env.GITCHAIN_API_URL || '').replace(/\/+$/, '');
+const AUTH_URL = (process.env.GITCHAIN_AUTH_URL || '').replace(/\/+$/, '');
+
+const OHNE_URL = (name: string) =>
+  `${name} nicht gesetzt — echte Endpunkte gehören in .env (Vorlage: .env.example), nie ins Repo.`;
 const GIT_TYP = process.env.GITCHAIN_TYP || 'fall';
 const GIT_NS = process.env.GITCHAIN_NS || 'mmc';
 
@@ -81,7 +87,7 @@ export function vergissPat(): void {
 }
 
 // ============================================================================
-// Device-Login (gitchain.de)
+// Device-Login (GITCHAIN_AUTH_URL)
 // ============================================================================
 
 export interface DeviceStart {
@@ -93,6 +99,7 @@ export interface DeviceStart {
 }
 
 export async function deviceStart(): Promise<DeviceStart> {
+  if (!AUTH_URL) throw new Error(OHNE_URL('GITCHAIN_AUTH_URL'));
   const res = await fetchMitBackoff(`${AUTH_URL}/auth/device/start`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -125,6 +132,7 @@ export type PollErgebnis =
 
 /** Ein einzelner Poll-Schritt. Der Renderer ruft ihn im Intervall auf. */
 export async function devicePoll(deviceCode: string): Promise<PollErgebnis> {
+  if (!AUTH_URL) return { status: 'fehler', meldung: OHNE_URL('GITCHAIN_AUTH_URL') };
   const res = await fetchMitBackoff(`${AUTH_URL}/auth/device/poll`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -161,6 +169,7 @@ export type WhoamiErgebnis =
 export async function whoami(): Promise<WhoamiErgebnis> {
   const pat = lesePat();
   if (!pat) return { ok: false, meldung: 'Kein PAT verwahrt — erst anmelden.' };
+  if (!API_URL) return { ok: false, meldung: OHNE_URL('GITCHAIN_API_URL') };
 
   // Erst Bearer, dann Basic (PAT im Passwortfeld — so will es der git-Vertrag).
   for (const auth of [
@@ -185,6 +194,7 @@ export async function whoami(): Promise<WhoamiErgebnis> {
 // ============================================================================
 
 export async function registry(): Promise<{ version: string; count: number; ids: string[] }> {
+  if (!API_URL) throw new Error(OHNE_URL('GITCHAIN_API_URL'));
   const pat = lesePat();
   const res = await fetchMitBackoff(`${API_URL}/api/ocp/v1/registry`, {
     headers: pat ? { Authorization: `Bearer ${pat}` } : {}
@@ -252,6 +262,9 @@ export async function pushFall(fallId: string): Promise<PushErgebnis> {
   const pat = lesePat();
   if (!pat) return { ok: false, remoteUrl: '', meldung: 'Kein PAT verwahrt — erst anmelden.', remoteRefs: [] };
 
+  if (!API_URL) {
+    return { ok: false, remoteUrl: '', meldung: OHNE_URL('GITCHAIN_API_URL'), remoteRefs: [] };
+  }
   if (!/^[A-Za-z0-9._-]+$/.test(fallId)) {
     return { ok: false, remoteUrl: '', meldung: `Unzulässige Fall-ID: ${fallId}`, remoteRefs: [] };
   }

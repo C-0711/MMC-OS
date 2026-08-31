@@ -5,3 +5,4 @@ app/.env
 app/secrets.env
 docs/gitchain-ref/vault/
 docs/gitchain-ref/brain/
+app/.env

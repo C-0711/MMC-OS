@@ -2,7 +2,7 @@
  * gateway.ts — Gateway-Stub für Außenverkehr
  *
  * Laut technical-spec-v0.1.md ist :7906 der einzige Außen-Endpunkt.
- * vLLM 192.168.145.10:11435 ist die dokumentierte lokale Route (:11435-Klasse).
+ * vLLM (Adresse aus VLLM_URL, siehe .env.example) ist die lokale Route (:11435-Klasse).
  *
  * In v0.1 ist dies ein Platzhalter-Modul, das nur festhält (Kommentar + no-op),
  * dass Außenverkehr ausschließlich über :7906 ginge.
@@ -15,7 +15,7 @@
  *
  * - Außenverkehr (Internet, nicht vertrauenswürdige Hosts) geht AUSSCHLIESSLICH
  *   über :7906 (Gateway-Prozess, nicht Teil dieser App).
- * - Lokale Dienste (belegsrv 127.0.0.1:8787, vLLM 192.168.145.10:11435) sind
+ * - Lokale Dienste (belegsrv 127.0.0.1:8787, vLLM aus VLLM_URL) sind
  *   trusted local routes — kein Gateway nötig.
  * - Default-deny für den KI-Kern: tcpdump sollte zero outbound zeigen (außer
  *   zu den lokalen Routen).
