@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .mark-beweis { background: rgba(217,166,160,.28); outline: 2px solid #D9A6A0; border-radius: 2px; padding: 0 3px; }
+    .ref { font-family: 'SF Mono', Menlo, monospace; font-size: 11px; color: #96824c; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 20px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="t13">‹ Studio</div>
+    </div>
+
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 34px; padding: 0 80px">
+      <!-- Die Folie: Zitate stehen IM Erzeugnis -->
+      <div style="width: 620px; display: flex; flex-direction: column; gap: 12px">
+        <div class="t11 sub" style="letter-spacing: .08em; text-transform: uppercase">Folie 4 von 12 — Präsentation „Übergabe Werkstatt"</div>
+        <div style="aspect-ratio: 16/9; background: #fff; border: 1px solid rgba(184,163,105,.35); border-radius: 8px; box-shadow: 0 18px 44px -20px rgba(70,58,38,.45); padding: 34px 40px; display: flex; flex-direction: column; gap: 16px">
+          <div class="serif" style="font-size: 24px">Was die Versicherung trägt</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; justify-content: center">
+            <div class="t13" style="line-height: 1.6; font-size: 15px">Gedeckt bis <span class="mark-beweis">15.000&nbsp;€</span> je Schadensfall <span class="ref">[1]</span></div>
+            <div class="t13" style="line-height: 1.6; font-size: 15px">Selbstbehalt <span class="mark-beweis">500&nbsp;€</span> <span class="ref">[2]</span> — telefonisch bestätigt <span class="ref">[3]</span></div>
+            <div class="t13" style="line-height: 1.6; font-size: 15px">Trocknung inklusive <span class="ref">[3]</span></div>
+          </div>
+          <div class="mono" style="border-top: .5px solid rgba(42,37,32,.12); padding-top: 10px">[1] police-2024.pdf · S. 4 &nbsp; [2] S. 6 &nbsp; [3] anruf 12.03. · Min 08:12 &nbsp;·&nbsp; aus: dokumente · anrufe — mails aus</div>
+        </div>
+        <div class="t11 sub" style="line-height: 1.6">Die Fundstellen stehen auf der Folie, nicht im Anhang — und der Quellen-Mix gleich daneben. Ein Tipp auf [1] öffnet den Leseplatz.</div>
+      </div>
+
+      <!-- Daneben: der Podcast spricht seine Belege -->
+      <div style="width: 340px; display: flex; flex-direction: column; gap: 12px">
+        <div class="t11 sub" style="letter-spacing: .08em; text-transform: uppercase">Derselbe Kontext, gesprochen</div>
+        <div style="background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <svg width="16" height="16" viewBox="0 0 18 18"><path d="M6 3.5 v11 l9 -5.5 Z" fill="none" stroke="#2a2520" stroke-width="1"/></svg>
+            <div class="mono">PODCAST · UNFALL PASSAT · 14:20</div>
+          </div>
+          <div class="t13" style="line-height: 1.7; font-style: italic">„… und wichtig für dich: der Selbstbehalt liegt bei fünfhundert Euro — das steht auf Seite sechs deiner Police, und Frau Berger hat es dir am zwölften März in Minute acht bestätigt …"</div>
+          <div class="mono">gesprochene fundstellen · kapitelmarken springen auf seite &amp; minute</div>
+        </div>
+        <div class="t11 sub" style="line-height: 1.7">Auch das gesprochene Wort zitiert. Und was der Fall nicht hergibt, sagt der Podcast offen: „dazu liegt hier nichts vor."</div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 22px">
+      <div class="mono">erzeugnis = commit · entstanden aus HEAD 9d02 · quellen-stand eingebrannt · teilen nur, was du selbst siehst</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

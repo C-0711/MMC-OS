@@ -773,6 +773,33 @@
    "h": 900,
    "page": "page-12",
    "title": "Der Fall · Wegwerfen — Vergessen als Handgriff"
+  },
+  {
+   "file": "FallWerkstatt.dc.html",
+   "x": 0,
+   "y": 2360,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Werkstatt — Quellen, Menschen, NotebookAI"
+  },
+  {
+   "file": "FallStudio.dc.html",
+   "x": 1480,
+   "y": 2360,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Das Studio — sechs Erzeugnisse, ein Gesetz"
+  },
+  {
+   "file": "FallErzeugnis.dc.html",
+   "x": 2960,
+   "y": 2360,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Erzeugnis mit Zitaten — Folie & Podcast"
   }
  ],
  "annotations": [
@@ -1015,6 +1042,14 @@
    "w": 1350,
    "page": "page-12",
    "text": "REIHE 2 — ZUTRITT, WEGE, ENDE. FallTeilen („Sehen darf\"): Zutritte als Capabilities am Fall, nie Konten in einer Cloud — Du/Lena sehen alles und unterschreiben, Frau Berger als Rolle Sachbearbeitung sieht NUR gutachten + fassungen (keine anrufe, keine texte), befristet bis fall-ende; jede Änderung an der Liste ist selbst ein Commit. FallMitnehmen: drei Wege hinaus, keiner verliert eine Fundstelle — voller Klon aufs Phone (Mac aus, Phone antwortet trotzdem), stündliches Bundle mit git-clone-Gegenprobe, Export PDF/A + container.json als Beweis-Anhang (DATEV/WISO). FallEnde: Wegwerfen ist ein Handgriff und R3 — Face ID, dann ein bezeugter Commit; der Container geht wirklich (auch Klon + Chiffre-Spiegel), das Brain baut sich neu, die anderen Fälle bleiben heil; Lena behält ihren eigenen Stand. Rosé heißt Beenden, nicht Alarm — kein 30-Tage-Papierkorb-Theater."
+  },
+  {
+   "id": "fall-werkstatt",
+   "x": 0,
+   "y": 2210,
+   "w": 1350,
+   "page": "page-12",
+   "text": "REIHE 3 — DER FALL WIRD WERKSTATT (+ NotebookAI-Studio). FallWerkstatt: derselbe Container, mehr Hände — links fließt herein (Upload/Scanner/Mail, Teamcenter rev. 47, Versicherungs-Portal-API: jede fremde API ist ein Konnektor mit Systemzelle als Fundstelle, abgerufen → committet → erst dann gedeutet; echte Zugänge in der Keychain, nie im Container), rechts arbeiten Menschen darin (Einladen, Rolle sieht nur ihre Zeile) und der Olivgold-Schalter: NotebookAI freischalten (läuft lokal, nur an-Quellen, Mix wird Fußnote). FallStudio: sechs Erzeugnisse aus dem Fall-Kontext — Präsentation, Podcast (entsteht gerade: Mini-Sanduhr, „läuft still · 8:40 von ~14 min\"), Info-Karten, Erklärvideo, Bilder (als Illustration gekennzeichnet, nie als Beweis), Bericht (die signierte Fassung bleibt das amtliche Stück). EIN Gesetz: keine Aussage ohne Fundstelle — auf der Folie, in der Karte, im gesprochenen Wort; was nicht belegbar ist, wird „Fehlt: …\". FallErzeugnis: die Folie trägt ihre [n] IM Bild samt Quellen-Mix-Fußzeile (Tipp auf [1] → Leseplatz), und der Podcast SPRICHT seine Belege („das steht auf Seite sechs deiner Police … Minute acht\"); Kapitelmarken springen auf Seite & Minute. Jedes Erzeugnis ist ein Commit mit eingebranntem Quellen-Stand (HEAD 9d02)."
   }
  ],
  "launch": {
