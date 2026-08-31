@@ -84,7 +84,7 @@ g.window = { ...((globalThis as unknown as Record<string, unknown>).window ?? {}
 
 // Router importieren (registriert automatisch alle Screens)
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const router = require('../../renderer/router.js') as {
+const router = require('../src/renderer/router.js') as {
   navigate(id: string, ctx?: unknown, container?: unknown): void;
   aktuellerScreen(): string | null;
   letzterScreen(): string | null;

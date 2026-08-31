@@ -112,7 +112,7 @@ test('T17: AnrufLive — Phasen rufend → beendet, Zeilen mit Minute', async ()
   };
 
   // Renderer-dist laden (kompiliert nach dist/renderer/)
-  const { AnrufLive } = require('../../renderer/anruf-live-renderer.js') as {
+  const { AnrufLive } = require('../src/renderer/anruf-live-renderer.js') as {
     AnrufLive: new () => { phase: string; zeilen: Array<{ zeit: string; sprecher: string; text: string }>; beimAendern(cb: () => void): void; anrufen(p: string): Promise<void>; sage(t: string): void; auflegen(): void };
   };
 

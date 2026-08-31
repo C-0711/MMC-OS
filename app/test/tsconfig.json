@@ -3,7 +3,8 @@
     "target": "ES2022",
     "module": "CommonJS",
     "lib": [
-      "ES2022"
+      "ES2022",
+      "DOM"
     ],
     "outDir": "../dist/test",
     "rootDir": "..",
@@ -31,7 +32,13 @@
     "../src/main/backup.ts",
     "../src/main/update.ts",
     "../src/main/gitchain.ts",
-    "../src/main/anruf-live.ts"
+    "../src/main/anruf-live.ts",
+    "../src/renderer/router.ts",
+    "../src/renderer/screens-onboarding.ts",
+    "../src/renderer/screens-os.ts",
+    "../src/renderer/siegelmenue.ts",
+    "../src/renderer/anruf-live-renderer.ts",
+    "../src/renderer/types.d.ts"
   ],
   "exclude": [
     "node_modules"
