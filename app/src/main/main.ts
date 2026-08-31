@@ -1,6 +1,9 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { registerIpcHandlers } from './ipc';
+import { log, logAufräumen, installiereCrashNetz } from './log';
+import { starteBackupJob, backupJetzt } from './backup';
+import { starteUpdatePruefung, registriereUpdateIpc } from './update';
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -32,11 +35,24 @@ function createWindow(): void {
   }
 }
 
+// Crash-Netz VOR allem anderen (T9): Fehler fangen, loggen, still weiter.
+installiereCrashNetz(() => createWindow());
+logAufräumen();
+log('info', `MMC-OS startet · version ${app.getVersion()}`);
+
 app.whenReady().then(() => {
   // IPC-Handler registrieren
   registerIpcHandlers();
 
   createWindow();
+
+  // Backup-Job (T10): stündlich, git bundle je Fall
+  starteBackupJob();
+
+  // Update-Prüfung (T12): still, Frage im OS-Ton — nie Auto-Install
+  registriereUpdateIpc();
+  starteUpdatePruefung();
+  backupJetzt().catch((e) => log('warn', `Erst-Backup fehlgeschlagen: ${String(e)}`));
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

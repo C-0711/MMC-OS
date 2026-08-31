@@ -8,15 +8,53 @@
     "build": "tsc && tsc -p tsconfig.renderer.json && cp src/renderer/index.html dist/renderer/ && cp src/renderer/tokens.css dist/renderer/",
     "start": "npm run build && electron .",
     "test": "rm -rf dist/test && tsc -p test/tsconfig.json && node --test 'dist/test/test/*.test.js'",
-    "dist": "npm run build && electron-packager . MMC-OS --platform=darwin --arch=arm64 --out=release --overwrite --ignore='^/src' --ignore='^/test' --ignore='^/release' --ignore='^/tsconfig' --ignore='^/dist/test'"
+    "dist": "npm run build && electron-builder --mac --arm64",
+    "release": "npm run dist && node scripts/release-notes.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "0711 GmbH",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@electron/notarize": "^3.1.1",
     "@electron/packager": "^20.3.0",
     "@types/node": "^22.0.0",
     "electron": "^32.0.0",
+    "electron-builder": "^25.0.0",
+    "electron-updater": "^6.8.9",
     "typescript": "^5.5.0"
+  },
+  "build": {
+    "appId": "io.gl0711.mmc-os",
+    "productName": "MMC-OS",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "package.json",
+      "!dist/test/**"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "notarize": {
+        "teamId": "${env.MM_NOTARIZE_TEAM_ID}"
+      }
+    },
+    "afterSign": "scripts/notarize.js",
+    "publish": {
+      "provider": "generic",
+      "url": "https://registry.gl.0711.io/updates/mmc-os/"
+    }
   }
 }

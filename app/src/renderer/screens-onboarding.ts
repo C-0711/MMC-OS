@@ -226,8 +226,8 @@ export function renderObEingeladen(container: HTMLElement, _ctx: AppCtx): void {
 // ---------------------------------------------------------------------------
 
 export function renderObSanduhr(container: HTMLElement, ctx: AppCtx): void {
-  const live = (ctx.daten as { ingest?: { total: number; fertig: number; phase: string } } | undefined)?.ingest;
-  const d = (ctx.daten?.sanduhr as SanduhrDaten | undefined) ??
+  const live = ((ctx?.daten ?? {}) as { ingest?: { total: number; fertig: number; phase: string } }).ingest;
+  const d = ((ctx?.daten ?? {}) as { sanduhr?: SanduhrDaten }).sanduhr ??
     (live && live.total > 0
       ? { seitenVerstanden: live.total, seitenGelesen: live.fertig, fallId: 'ingest' }
       : null);
@@ -267,7 +267,7 @@ export function renderObSanduhr(container: HTMLElement, ctx: AppCtx): void {
 }
 
 export function renderObSanduhrFertig(container: HTMLElement, ctx: AppCtx): void {
-  const d = (ctx.daten?.sanduhr as SanduhrDaten) ??
+  const d = ((ctx?.daten ?? {}) as { sanduhr?: SanduhrDaten }).sanduhr ??
     { seitenVerstanden: 9500, seitenGelesen: 4231, fallId: 'ingest' };
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
@@ -326,7 +326,9 @@ export function renderObScanBericht(container: HTMLElement, ctx: AppCtx): void {
   container.appendChild(gr);
 
   // Echte Quellen asynchron nachladen (Scan-First: nur stat())
-  window.mmc.daten.ingestScanReport((ctx.daten?.scanPfade as string[]) ?? [])
+  const daten = (ctx?.daten ?? {}) as Record<string, unknown>;
+  const pfade = (daten.scanPfade as string[] | undefined) ?? [];
+  window.mmc.daten.ingestScanReport(pfade)
     .then((bericht) => {
       mitte.textContent = '';
       zeichneQuellen(mitte, bericht.map(q => ({

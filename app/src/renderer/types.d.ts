@@ -255,12 +255,17 @@ declare global {
     onIngestEvent(cb: (ev: IngestEvent) => void): () => void;
   }
 
+  interface MMCUpdateAPI {
+    ja(): Promise<{ ok: boolean }>;
+  }
+
   interface MMCAPI {
     vault: MMCVaultAPI;
     ocr: MMCOCR_API;
     llm: MMCLLM_API;
     gitchain: MMCGitchainAPI;
     daten: MMCDatenAPI;
+    update: MMCUpdateAPI;
   }
 
   interface Window {

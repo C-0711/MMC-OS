@@ -248,12 +248,17 @@ export interface MMCDatenAPI {
   onIngestEvent(cb: (ev: IngestEvent) => void): () => void;
 }
 
+export interface MMCUpdateAPI {
+  ja(): Promise<{ ok: boolean }>;
+}
+
 export interface MMCAPI {
   vault: MMCVaultAPI;
   ocr: MMCOCR_API;
   llm: MMCLLM_API;
   gitchain: MMCGitchainAPI;
   daten: MMCDatenAPI;
+  update: MMCUpdateAPI;
 }
 
 // Helper: ArrayBuffer → Number-Array für IPC
@@ -262,6 +267,9 @@ function arrayBufferToNumbers(ab: ArrayBuffer): number[] {
 }
 
 const api: MMCAPI = {
+  update: {
+    ja: () => ipcRenderer.invoke('update:ja')
+  },
   vault: {
     listFaelle: () => ipcRenderer.invoke('vault:listFaelle'),
     createFall: (id: string) => ipcRenderer.invoke('vault:createFall', id),

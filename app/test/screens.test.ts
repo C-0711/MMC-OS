@@ -68,7 +68,19 @@ g.document = {
 };
 g.requestAnimationFrame = (fn: () => void) => { fn(); return 0; };
 g.localStorage = { getItem: () => 'done', setItem: (): void => {} };
-g.window = globalThis;
+g.window = { ...((globalThis as unknown as Record<string, unknown>).window ?? {}), mmc: {
+  daten: {
+    ingestScanReport: async () => [],
+    fragAlles: async () => ({ frage: '', antwort: '', treffer: [], ehrlich: true }),
+    ingestStatus: async () => ({ phase: 'idle', fertig: 0, total: 0, atome: 0 }),
+    onIngestEvent: () => () => {},
+  },
+  vault: {
+    listFaelle: async () => [],
+    createFall: async (id: string) => ({ id, pfad: '', offeneVorschlaege: 0, letzterCommitIso: '' }),
+    listVorschlaege: async () => [],
+  },
+} };
 
 // Router importieren (registriert automatisch alle Screens)
 // eslint-disable-next-line @typescript-eslint/no-var-requires

@@ -98,7 +98,7 @@ export function renderOsHeute(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
 
-  const d = (ctx.daten as StoreDaten | undefined)?.uebersicht;
+  const d = ((ctx?.daten ?? {}) as StoreDaten)?.uebersicht;
   const stunde = new Date().getHours();
   const gruss = stunde < 12 ? 'Guten Morgen' : stunde < 18 ? 'Guten Tag' : 'Guten Abend';
   const b = buehne(titelSerif(`${gruss}. ${d && d.dinge.length > 0 ? 'Ein Ding wartet.' : 'Alles ruhig.'}`, 30));
@@ -164,7 +164,7 @@ export function renderOsAnrufBeweis(container: HTMLElement, _ctx: AppCtx): void 
 export function renderOsFall(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const d = (ctx.daten as StoreDaten | undefined)?.uebersicht;
+  const d = ((ctx?.daten ?? {}) as StoreDaten)?.uebersicht;
   const fallName = d?.fallId ?? ctx.fallId ?? 'fall';
   const dinge = d?.dinge ?? [];
   const b = buehne(titelSerif(dinge.length > 0 ? `${fallName}. Ein Ding wartet.` : `${fallName}. Alles ruhig.`, 28));
@@ -280,7 +280,7 @@ export function renderOsUebergang(container: HTMLElement, _ctx: AppCtx): void {
 export function renderOsAnrufKommt(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const anrufe = (ctx.daten as StoreDaten | undefined)?.anrufe ?? [];
+  const anrufe = ((ctx?.daten ?? {}) as StoreDaten)?.anrufe ?? [];
   const b = buehne(titelSerif('Anrufe', 28));
 
   if (anrufe.length === 0) {
@@ -304,7 +304,7 @@ export function renderOsAnrufKommt(container: HTMLElement, ctx: AppCtx): void {
 export function renderOsAnrufLaeuft(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const anrufe = (ctx.daten as StoreDaten | undefined)?.anrufe ?? [];
+  const anrufe = ((ctx?.daten ?? {}) as StoreDaten)?.anrufe ?? [];
   const a = anrufe[0];
   const b = buehne(
     el('div', 'etikett', a ? `Anruf · ${a.partner}` : 'Anruf'),
@@ -454,7 +454,7 @@ export function renderOsTisch(container: HTMLElement, _ctx: AppCtx): void {
 export function renderOsSuche(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const daten = (ctx.daten as StoreDaten | undefined);
+  const daten = ((ctx?.daten ?? {}) as StoreDaten);
   const b = buehne(el('div', 'serif t15', 'Frag alles — dein Assistent antwortet nur mit Beleg.'));
 
   // Frage-Feld (frag-Pille wie im Eingang)
@@ -531,7 +531,7 @@ export function renderOsRueckruf(container: HTMLElement, _ctx: AppCtx): void {
 export function renderOsStapel(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const daten = (ctx.daten as StoreDaten | undefined);
+  const daten = ((ctx?.daten ?? {}) as StoreDaten);
   const stapel = daten?.stapel ?? [];
   const b = buehne(titelSerif(stapel.length > 0 ? 'Der Stapel ist durch.' : 'Alles ruhig.', 30));
   if (stapel.length === 0) {
@@ -553,7 +553,7 @@ export function renderOsStapel(container: HTMLElement, ctx: AppCtx): void {
 export function renderOsNeuesThema(container: HTMLElement, ctx: AppCtx): void {
   const gr = el('div', 'os-grund');
   gr.style.cssText = grundCss();
-  const vorschlaege = (ctx.daten as StoreDaten | undefined)?.neuesThema ?? [];
+  const vorschlaege = ((ctx?.daten ?? {}) as StoreDaten)?.neuesThema ?? [];
   const b = buehne(el('div', 'serif t28', 'Da fängt etwas Neues an.'));
 
   if (vorschlaege.length === 0) {

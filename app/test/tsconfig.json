@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "CommonJS",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "outDir": "../dist/test",
     "rootDir": "..",
     "strict": true,
@@ -11,8 +13,25 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
-  "include": ["**/*.ts", "../src/main/vault.ts", "../src/main/services.ts", "../src/main/deutung.ts", "../src/main/uebersicht.ts", "../src/main/anruf.ts", "../src/main/themen.ts", "../src/main/suche.ts", "../src/main/ingest.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*.ts",
+    "../src/main/vault.ts",
+    "../src/main/services.ts",
+    "../src/main/deutung.ts",
+    "../src/main/uebersicht.ts",
+    "../src/main/anruf.ts",
+    "../src/main/themen.ts",
+    "../src/main/suche.ts",
+    "../src/main/ingest.ts",
+    "../src/main/log.ts",
+    "../src/main/backup.ts",
+    "../src/main/update.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
