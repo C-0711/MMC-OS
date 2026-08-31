@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .pill-salbei { display: flex; align-items: center; justify-content: center; height: 40px; padding: 0 22px; border-radius: 999px; background: #8FA98F; color: #fff; font-size: 15px; font-weight: 600; box-shadow: 0 8px 22px -10px rgba(110,140,110,.7); }
+    .pill-still { display: flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px; border-radius: 999px; background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500; }
+    /* Foto-Avatar: Porträt-Wärme + Unterschrift-Ring in Olivgold */
+    .foto { border-radius: 999px; flex: none; position: relative; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.92); font-family: 'Playfair Display', Georgia, serif; box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 3.5px #B8A369, 0 6px 14px -6px rgba(70,58,38,.45); }
+    .foto.lw { background: radial-gradient(circle at 36% 26%, #ecd0af 0 30%, #c59a6d 55%, #7a5a3c 100%); }
+    .foto.mb { background: radial-gradient(circle at 36% 26%, #cfd8c8 0 30%, #93a98c 55%, #55684f 100%); }
+    .foto.fb { background: radial-gradient(circle at 36% 26%, #e8c4bd 0 30%, #c2938c 55%, #7d5a55 100%); }
+    .rose { color: #b3837d; }
+    .tag { display: inline-flex; padding: 2px 9px; border-radius: 999px; background: rgba(143,169,143,.16); color: #5c705c; font-size: 11px; }
+    .tag.gold { background: rgba(184,163,105,.16); color: #96824c; }
+    .zeile { display: flex; align-items: flex-start; gap: 16px; padding: 13px 14px; border-radius: 12px; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+    .trenner { height: .5px; background: rgba(42,37,32,.1); margin: 0 14px; }
+    /* Poster: das Kontaktbild als Karte, Name im Bild */
+    .poster { width: 128px; height: 160px; border-radius: 16px; position: relative; overflow: hidden; box-shadow: 0 10px 28px -14px rgba(70,58,38,.5); display: flex; align-items: flex-end; }
+    .poster .pname { position: relative; width: 100%; padding: 10px 12px 10px; color: #fff; text-shadow: 0 1px 8px rgba(40,30,20,.5); display: flex; flex-direction: column; gap: 2px; background: linear-gradient(transparent, rgba(40,32,22,.45)); }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; padding: 0 70px 20px; gap: 20px; overflow: hidden">
+      <div style="display: flex; align-items: baseline; gap: 20px">
+        <div class="serif" style="font-size: 30px">Gespräche</div>
+        <div class="t13 sub">Anruf, Text, Meet — ein Ort, ein Verlauf</div>
+        <div style="display: flex; gap: 10px; margin-left: auto">
+          <div class="pill-salbei">Anrufen</div>
+          <div class="pill-still">Meet</div>
+          <div class="pill-still">Text</div>
+        </div>
+      </div>
+
+      <!-- Deine Menschen: Poster wie auf dem iPhone — Bild, Name, und darunter der Kontext -->
+      <div style="display: flex; gap: 16px">
+        <div class="poster" style="background: radial-gradient(circle at 40% 22%, #ecd0af 0 26%, #c59a6d 48%, #6d5138 100%)">
+          <div class="pname"><span class="serif" style="font-size: 16px">Lena</span><span class="mono" style="color: rgba(255,255,255,.85)">2 fälle · 1 offen</span></div>
+        </div>
+        <div class="poster" style="background: radial-gradient(circle at 40% 22%, #cfd8c8 0 26%, #93a98c 48%, #4a5c44 100%)">
+          <div class="pname"><span class="serif" style="font-size: 16px">Marc</span><span class="mono" style="color: rgba(255,255,255,.85)">familie · ruft an</span></div>
+        </div>
+        <div class="poster" style="background: radial-gradient(circle at 40% 22%, #e8c4bd 0 26%, #c2938c 48%, #6b4b46 100%)">
+          <div class="pname"><span class="serif" style="font-size: 16px">Frau Berger</span><span class="mono" style="color: rgba(255,255,255,.85)">versicherung</span></div>
+        </div>
+        <div class="t11 sub" style="align-self: flex-end; padding: 0 0 12px 10px; line-height: 1.6; max-width: 30ch">Deine Menschen — jedes Bild trägt den Unterschrift-Ring. Kontakte entstehen aus Gesprächen, niemand pflegt sie.</div>
+      </div>
+
+      <!-- EIN Verlauf: Anrufe, Texte, Notizen — jede Zeile sagt, was geschah UND was daraus wurde -->
+      <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden">
+        <div class="mono" style="padding: 4px 14px; letter-spacing: .08em">HEUTE</div>
+        <div class="zeile">
+          <div class="foto lw" style="width: 44px; height: 44px; font-size: 14px">LW</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="serif" style="font-size: 15px">Lena Weber</span>
+              <span class="tag">Vereinbarung ✓</span>
+              <span class="mono" style="margin-left: auto">14:36 · 27:50 ▸</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">„Gutachten bis Freitag — du wartest mit der Schadensmeldung."</div>
+            <div class="mono">unfall-passat · mitschrift ✓ · beide unterschrieben ✓ · Min 21:04</div>
+          </div>
+        </div>
+        <div class="trenner"></div>
+        <div class="zeile">
+          <div class="foto mb" style="width: 44px; height: 44px; font-size: 14px">MB</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="serif" style="font-size: 15px">Marc Bertsch</span>
+              <span class="t13 rose">hat angerufen</span>
+              <span class="mono" style="margin-left: auto">gestern 19:12 ▸</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">Dein Assistent hat abgenommen: <span class="serif">„Wegen Samstag — nichts Dringendes."</span></div>
+            <div class="mono">familie · abnahme committet · rückruf liegt als karte</div>
+          </div>
+        </div>
+        <div class="trenner"></div>
+        <div class="zeile">
+          <div class="foto lw" style="width: 44px; height: 44px; font-size: 14px">LW</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="serif" style="font-size: 15px">Lena Weber</span>
+              <span class="tag">Text</span>
+              <span class="mono" style="margin-left: auto">15:02 · gelesen ✓</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">„Gutachter kommt Mittwoch, ich schick dir den Termin."</div>
+          </div>
+        </div>
+        <div class="trenner"></div>
+        <div class="mono" style="padding: 10px 14px 4px; letter-spacing: .08em">DIESE WOCHE</div>
+        <div class="zeile">
+          <div class="foto lw" style="width: 44px; height: 44px; font-size: 14px">LW</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="serif" style="font-size: 15px">Lena Weber</span>
+              <span class="tag gold">Meet</span>
+              <span class="tag">1 Divergenz geklärt</span>
+              <span class="mono" style="margin-left: auto">Di 14:00 · 48:00 ▸</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">Video mit geteiltem Leseplatz — das Gutachten lag zwischen euch auf dem Tisch.</div>
+            <div class="mono">unfall-passat · aufzeichnung ✓ · beide unterschrieben ✓ · Min 32:10</div>
+          </div>
+        </div>
+        <div class="trenner"></div>
+        <div class="zeile">
+          <div class="foto fb" style="width: 44px; height: 44px; font-size: 14px">FB</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="serif" style="font-size: 15px">Frau Berger</span>
+              <span class="tag gold">2 Atome</span>
+              <span class="mono" style="margin-left: auto">Mo 08:04 · 42:00 ▸</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">„Selbstbehalt 500 €, gedeckt bis 15.000 je Schadensfall."</div>
+            <div class="mono">versicherung · mitschrift ✓ · unterschrift ✓ · Min 08:12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 22px">
+      <div class="mono">anruf · text · meet — ein verlauf, ein ort · tippen öffnet den menschen, nie versehentlich einen anruf · verpasst = karte, nie rote zahl</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

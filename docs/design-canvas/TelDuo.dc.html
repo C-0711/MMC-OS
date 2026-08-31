@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .karte { background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; box-shadow: 0 10px 34px -18px rgba(90,75,50,.35); }
+    .foto { border-radius: 999px; flex: none; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.92); font-family: 'Playfair Display', Georgia, serif; box-shadow: 0 0 0 2px #FAF7F2, 0 0 0 3.5px #B8A369, 0 6px 14px -6px rgba(70,58,38,.45); }
+    .foto.lw { background: radial-gradient(circle at 36% 26%, #ecd0af 0 30%, #c59a6d 55%, #7a5a3c 100%); }
+    .foto.du { background: radial-gradient(circle at 36% 26%, #d8d2c4 0 30%, #a89e88 55%, #5f5748 100%); }
+    .tag { display: inline-flex; padding: 2px 9px; border-radius: 999px; background: rgba(143,169,143,.16); color: #5c705c; font-size: 11px; }
+    .tag.gold { background: rgba(184,163,105,.16); color: #96824c; }
+    .tag.rose { background: rgba(217,166,160,.2); color: #a8756f; }
+    .glyph { width: 30px; height: 30px; border-radius: 999px; flex: none; display: flex; align-items: center; justify-content: center; background: rgba(184,163,105,.12); }
+    .eintrag { display: flex; gap: 14px; padding: 11px 0; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 20px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="t13">‹ Lena Weber</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; padding: 6px 90px 16px; gap: 14px; overflow: hidden">
+      <!-- Duo-Kopf: zwei Bilder, ein Kontext -->
+      <div style="display: flex; align-items: center; gap: 18px">
+        <div style="display: flex">
+          <div class="foto du" style="width: 46px; height: 46px; font-size: 14px">Du</div>
+          <div class="foto lw" style="width: 46px; height: 46px; font-size: 14px; margin-left: -12px">LW</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <div class="serif" style="font-size: 26px">Du &amp; Lena — euer Kontext</div>
+          <div class="mono">seit märz 2026 · 2 fälle · 14 anrufe (6:12 h) · 31 texte · 2 dokumente · 3 vereinbarungen (2 ✓, 1 offen)</div>
+        </div>
+      </div>
+
+      <!-- Angeheftet: was zwischen euch offen ist -->
+      <div class="karte" style="padding: 12px 20px; display: flex; align-items: baseline; gap: 18px; border-color: rgba(184,163,105,.4)">
+        <span class="t11 sub" style="letter-spacing: .08em; text-transform: uppercase; flex: none">Offen</span>
+        <span class="t13">Gutachten bis Freitag — sie liefert</span><span class="mono">Min 21:04</span>
+        <span class="t13" style="margin-left: 14px">Werkstatt-Termin — sie fragt nach</span><span class="mono">Min 24:40</span>
+      </div>
+
+      <!-- Der Verlauf: alles zwischen euch, in einer Zeit — jede Zeile mit Ernte + Fundstelle -->
+      <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden">
+        <div class="mono" style="letter-spacing: .08em; padding: 2px 0">HEUTE</div>
+
+        <div class="eintrag">
+          <div class="glyph"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M4 3.5 C4 11 9 16 16.5 16 L16.5 12.8 L13 12 L11.5 13.5 C9.5 12.5 7.5 10.5 6.5 8.5 L8 7 L7.2 3.5 Z" stroke="#96824c" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="t13" style="font-weight: 600">Anruf · 27:50</span>
+              <span class="tag">Vereinbarung ✓</span><span class="tag gold">1 Atom</span><span class="tag rose">1 offen</span>
+              <span class="mono" style="margin-left: auto">14:36 ▸</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">„Gutachten bis Freitag — du wartest mit der Schadensmeldung." <span class="sub">— beide unterschrieben</span></div>
+            <div class="mono">unfall-passat · mitschrift ✓ · Min 08:12 / 21:04 / 24:40</div>
+          </div>
+        </div>
+
+        <div class="eintrag">
+          <div class="glyph"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M3 4 h14 v9 h-8 l-3.5 3 v-3 H3 Z" stroke="#96824c" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="t13" style="font-weight: 600">Text von ihr</span>
+              <span class="mono" style="margin-left: auto">15:02 · gelesen ✓</span>
+            </div>
+            <div class="t13" style="line-height: 1.5">„Gutachter kommt Mittwoch, ich schick dir den Termin."</div>
+          </div>
+        </div>
+
+        <div class="mono" style="letter-spacing: .08em; padding: 8px 0 2px">GESTERN</div>
+        <div class="eintrag">
+          <div class="glyph"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M5 3 h7 l3 3 v11 H5 Z M12 3 v3 h3" stroke="#96824c" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="t13" style="font-weight: 600">Dokument von ihr · gutachten-vorab.pdf</span>
+              <span class="tag gold">3 Atome</span>
+              <span class="mono" style="margin-left: auto">18:44 ▸ Beweis</span>
+            </div>
+            <div class="mono">unfall-passat · 6 seiten · eingang committet · unterschrift ✓</div>
+          </div>
+        </div>
+
+        <div class="mono" style="letter-spacing: .08em; padding: 8px 0 2px">12. MÄRZ — HIER BEGANN EUER KONTEXT</div>
+        <div class="eintrag" style="opacity: .75">
+          <div class="glyph"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6.5" stroke="#96824c" stroke-width="1.3"/><path d="M10 6.5 v3.5 l2.5 2" stroke="#96824c" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span class="t13" style="font-weight: 600">Erster Anruf · 08:19</span>
+              <span class="tag">Kontakt entstanden</span>
+              <span class="mono" style="margin-left: auto">11:07 ▸</span>
+            </div>
+            <div class="mono">unfall-passat wurde geteilt · ihre unterschrift bestätigt sich seither mit jedem gespräch</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 22px">
+      <div class="mono">ihr seht beide denselben verlauf, byte-identisch aus den geteilten fällen · jede zeile springt auf minute oder seite</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

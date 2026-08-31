@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .karte { background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; box-shadow: 0 10px 34px -18px rgba(90,75,50,.35); }
+    .siegel { width: 44px; height: 44px; border-radius: 999px; flex: none; background: radial-gradient(circle at 34% 30%, #d9b6b0, #D9A6A0 58%, #b3837d); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px -4px rgba(179,131,125,.6), inset 0 1px 2px rgba(255,255,255,.4); font-size: 14px; }
+    .pill-still { display: flex; align-items: center; justify-content: center; height: 44px; padding: 0 22px; border-radius: 999px; background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500; }
+    .quellzeile { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 0 80px">
+      <div class="t13 sub">Nach deinem ersten Gespräch mit der Versicherung</div>
+
+      <div class="karte" style="width: 560px; padding: 28px 32px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; align-items: center; gap: 16px">
+          <div class="siegel">FB</div>
+          <div style="display: flex; flex-direction: column; gap: 3px">
+            <div class="serif" style="font-size: 21px">Frau Berger ist jetzt ein Mensch hier.</div>
+            <div class="mono">aus dem anruf vom 12.03. entstanden · rolle: sachbearbeitung</div>
+          </div>
+        </div>
+
+        <div class="t13" style="line-height: 1.7">Entstanden aus dem Gespräch — nicht aus einem Formular. Sie sieht nur den Fall <span class="serif">versicherung</span>, nichts sonst. Ihre Unterschrift bestätigt sich mit jedem weiteren Gespräch.</div>
+
+        <div class="quellzeile">versicherung · anruf 12.03. · Minute 00:00–42:00 · commit 5a1d ✓</div>
+
+        <div style="display: flex; align-items: center; gap: 14px; padding-top: 4px">
+          <div class="pill-still">Ansehen</div>
+          <div class="t13 sub" style="margin-left: auto">Wieder entfernen</div>
+        </div>
+      </div>
+
+      <div class="t11 sub" style="max-width: 54ch; text-align: center; line-height: 1.7">Einsortieren geschieht still — aber ein neuer Mensch in deinem Telefon ist nie still: diese eine Karte sagt es dir, einmal. Kein Kontakte-Import, kein Adressbuch-Abgleich, kein Upload deiner Kontakte irgendwohin.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 26px">
+      <div class="mono">einsortieren still · anlegen nie still · deine kontakte verlassen das gerät nicht</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
