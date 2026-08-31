@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .form { display: flex; flex-direction: column; gap: 8px; }
+    .form .etikett { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(42,37,32,.45); }
+    .karte { background: #fff; border: 1px solid rgba(184,163,105,.25); border-radius: 12px; }
+    .rose { color: #a8756f; }
+    .zeile { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-top: .5px solid rgba(42,37,32,.08); font-size: 13px; }
+    .knopf { display: inline-flex; align-items: center; justify-content: center; height: 30px; padding: 0 14px; border-radius: 999px; background: rgba(143,169,143,.14); color: #5c705c; font-size: 13px; font-weight: 500; flex: none; }
+    .glyphlein { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: rgba(184,163,105,.1); flex: none; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; padding: 50px 80px; box-sizing: border-box; gap: 20px">
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <div class="serif" style="font-size: 30px">Die Formen des Stroms</div>
+    <div class="t13 sub" style="max-width: 80ch; line-height: 1.7">Der Strom fließt wie ein Dokument von oben nach unten — Neues schafft sich unten Platz, zur Geschichte scrollt man hoch. Nicht alles ist eine Blase: sieben Formen, jede für eine Art von Inhalt.</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; flex: 1">
+    <!-- 1: Aufklapp-Arbeit -->
+    <div class="form">
+      <span class="etikett">Stille Arbeit, aufklappbar</span>
+      <div class="karte">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px">
+          <span class="t13">Still einsortiert: 7 Schritte <span class="sub">(2 warten auf dich)</span></span>
+          <span class="mono" style="margin-left: auto">⌄</span>
+        </div>
+        <div class="zeile"><span class="glyphlein"><svg width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="M20 6 9 17l-5-5" transform="scale(.8)" stroke="#8FA98F" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>Stromrechnung → Haus &amp; Wohnen<span class="mono" style="margin-left: auto">09:12 ›</span></div>
+        <div class="zeile"><span class="glyphlein"></span><span class="rose">Unbekannter Absender — wohin damit?</span><span class="mono" style="margin-left: auto">›</span></div>
+      </div>
+      <span class="mono">viele leise schritte = EINE zeile, aufklappbar · offenes in rosé-text, nie rot</span>
+    </div>
+
+    <!-- 2: Frage & Antwort-Paar -->
+    <div class="form">
+      <span class="etikett">Frage &amp; Antwort, gepaart</span>
+      <div class="karte" style="padding: 14px 18px; display: flex; flex-direction: column; gap: 10px">
+        <div><div class="t13 sub">Was war der Selbstbehalt?</div><div class="t13" style="margin-top: 2px">500 € — Police S. 6, telefonisch bestätigt Min 08:12</div></div>
+        <div><div class="t13 sub">Wer ist der Gutachter?</div><div class="t13" style="margin-top: 2px">Büro Hartmann, kommt Mittwoch 9:00 — Text von Lena, 15:02</div></div>
+      </div>
+      <span class="mono">frage in sub-grau, antwort in tinte — paare bleiben zusammen, jede antwort mit fundstelle</span>
+    </div>
+
+    <!-- 3: Vorschlags-Zeilen -->
+    <div class="form">
+      <span class="etikett">Vorschläge mit Handgriff</span>
+      <div class="karte">
+        <div class="zeile" style="border-top: none"><span class="glyphlein"><svg width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="M4 3.5 C4 11 9 16 16.5 16 L16.5 12.8 L13 12 L11.5 13.5 C9.5 12.5 7.5 10.5 6.5 8.5 L8 7 L7.2 3.5 Z" stroke="#2a2520" stroke-width="1.2" fill="none"/></svg></span><span style="flex:1">Werkstatt Auer anrufen — wegen des Termins</span><span class="knopf">Machen</span></div>
+        <div class="zeile"><span class="glyphlein"><svg width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="M10 4 v12 M4 10 h12" stroke="#2a2520" stroke-width="1.2" stroke-linecap="round"/></svg></span><span style="flex:1">Mi 9:00 als Vereinbarung festhalten</span><span class="knopf">Machen</span></div>
+        <div style="padding: 8px 14px; border-top: .5px solid rgba(42,37,32,.08)"><span class="t13 sub" style="text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: .5px">mehr zeigen</span></div>
+      </div>
+      <span class="mono">zeile = glyph + ein satz + stiller machen-knopf · max 2 sichtbar, rest hinter „mehr zeigen"</span>
+    </div>
+
+    <!-- 4: Erzeugnis mit Öffnen -->
+    <div class="form">
+      <span class="etikett">Ding mit Handgriff</span>
+      <div class="karte" style="padding: 12px 16px; display: flex; align-items: center; gap: 14px">
+        <div style="width: 40px; height: 50px; border-radius: 6px; flex: none; background: #fff; box-shadow: inset 0 0 0 .5px rgba(184,163,105,.4); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M5 3 h7 l3 3 v11 H5 Z M12 3 v3 h3" stroke="#2a2520" stroke-width="1.1" fill="none" stroke-linejoin="round"/></svg></div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span class="t13" style="font-weight: 600">gutachten-vorab.pdf</span><span class="mono">6 seiten · 3 atome · signatur ✓</span></div>
+        <span class="knopf" style="background: #8FA98F; color: #fff">Öffnen</span>
+        <span class="mono">⌄</span>
+      </div>
+      <span class="mono">ein ding, EIN knopf — der zweite weg (teilen, beweis, verlauf) wohnt hinter ⌄</span>
+    </div>
+
+    <!-- 5: Zeit + stille Aktionen -->
+    <div class="form">
+      <span class="etikett">Die stille Fußzeile jedes Eintrags</span>
+      <div class="karte" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px">
+        <div class="t13" style="line-height: 1.5">„Gutachten bis Freitag — du wartest mit der Schadensmeldung."</div>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><path d="M5 3 h7 l3 3 v11 H5 Z" stroke="rgba(42,37,32,.45)" stroke-width="1.1" fill="none"/></svg>
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="10" r="2" stroke="rgba(42,37,32,.45)" stroke-width="1.1"/><circle cx="14" cy="5.5" r="2" stroke="rgba(42,37,32,.45)" stroke-width="1.1"/><circle cx="14" cy="14.5" r="2" stroke="rgba(42,37,32,.45)" stroke-width="1.1"/><path d="M7.8 9 L12.2 6.4 M7.8 11 L12.2 13.6" stroke="rgba(42,37,32,.45)" stroke-width="1.1"/></svg>
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><path d="M6 3.5 v11 l9 -5.5 Z" stroke="rgba(42,37,32,.45)" stroke-width="1.1" fill="none"/></svg>
+          <span class="mono" style="margin-left: auto">heute 14:36 · Min 21:04 ✓</span>
+        </div>
+      </div>
+      <span class="mono">beweis öffnen · teilen · vorlesen — haarlinien-glyphs in 45 % tinte, sichtbar erst beim verweilen</span>
+    </div>
+
+    <!-- 6: Zitat mit Bildern -->
+    <div class="form">
+      <span class="etikett">Wurf mit Vorschau</span>
+      <div class="karte" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; gap: 8px">
+          <div style="width: 74px; height: 56px; border-radius: 8px; background: linear-gradient(135deg, #b9a68c, #8a7660 60%, #5f5041)"></div>
+          <div style="width: 74px; height: 56px; border-radius: 8px; background: linear-gradient(135deg, #a8b0a0, #77826f 60%, #4d564a)"></div>
+        </div>
+        <div class="t13" style="line-height: 1.5">Die zwei vom Kofferraum — reicht das dem Gutachter?</div>
+        <div class="mono">2 fotos · eingang committet · an lena zugestellt ✓</div>
+      </div>
+      <span class="mono">bilder VOR dem satz, klein und ruhig — der wurf und das wort sind ein eintrag</span>
+    </div>
+  </div>
+
+  <div class="mono" style="border-top: .5px solid rgba(42,37,32,.15); padding-top: 14px">GESETZ FÜR ALLE FORMEN: eine bedeutung pro form · zahlen und fundstellen in mono · offenes in rosé-text · aufklappen statt zweiter seite · geteilt = zugestellt, privat = gestrichelt</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
