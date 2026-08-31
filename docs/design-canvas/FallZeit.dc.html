@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .schritt { display: flex; gap: 16px; }
+    .schritt .spur { width: 24px; flex: none; display: flex; flex-direction: column; align-items: center; }
+    .schritt .knoten { width: 9px; height: 9px; border-radius: 999px; border: 1.2px solid #2a2520; background: #FAF7F2; flex: none; margin-top: 4px; }
+    .schritt .knoten.fassung { background: radial-gradient(circle at 34% 30%, #c9b57e, #B8A369 58%, #96824c); border-color: transparent; width: 11px; height: 11px; }
+    .schritt .linie { width: 1px; flex: 1; background: rgba(42,37,32,.25); }
+    .schritt .inhalt { flex: 1; padding-bottom: 18px; display: flex; flex-direction: column; gap: 3px; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 20px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="t13">‹ Unfall Passat</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; padding: 4px 110px 10px; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <div class="serif" style="font-size: 28px">Die Zeit dieses Falls</div>
+        <div class="t13 sub">Jeder Stand bleibt. Du kannst jeden ansehen — verändert wird nie rückwärts.</div>
+      </div>
+
+      <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden">
+        <div class="schritt">
+          <div class="spur"><div class="knoten fassung"></div><div class="linie"></div></div>
+          <div class="inhalt">
+            <div style="display: flex; align-items: baseline; gap: 12px"><span class="serif" style="font-size: 17px">Fassung 3 — nach dem Meet</span><span class="mono" style="margin-left: auto">heute 15:10 · HEAD 9d02</span></div>
+            <div class="mono">beide signiert ✓ · quellen-stand als fußnote · so gilt es jetzt</div>
+          </div>
+        </div>
+        <div class="schritt">
+          <div class="spur"><div class="knoten"></div><div class="linie"></div></div>
+          <div class="inhalt">
+            <div style="display: flex; align-items: baseline; gap: 12px"><span class="t13">Anruf mit Lena — Vereinbarung, 1 Atom, 1 Offenes</span><span class="mono" style="margin-left: auto">heute 14:36 · 7b3e</span></div>
+            <div class="mono">mitschrift committet vor deutung · Min 08:12 / 21:04 / 24:40</div>
+          </div>
+        </div>
+        <div class="schritt">
+          <div class="spur"><div class="knoten"></div><div class="linie"></div></div>
+          <div class="inhalt">
+            <div style="display: flex; align-items: baseline; gap: 12px"><span class="t13">gutachten-vorab.pdf hineingelegt — 3 Atome entstanden</span><span class="mono" style="margin-left: auto">gestern 18:44 · 5c11</span></div>
+            <div class="mono">eingang byte-identisch · deutung als eigener commit danach</div>
+          </div>
+        </div>
+        <div class="schritt">
+          <div class="spur"><div class="knoten"></div><div class="linie"></div></div>
+          <div class="inhalt">
+            <div style="display: flex; align-items: baseline; gap: 12px"><span class="t13">Teamcenter-Stand rev. 47 abgerufen — 1 Widerspruch zu rev. 46 wurde Karte</span><span class="mono" style="margin-left: auto">Mo 09:00 · 2e90</span></div>
+            <div class="mono">connector-fundstelle: system · objekt · revision · attributpfad</div>
+          </div>
+        </div>
+        <div class="schritt">
+          <div class="spur"><div class="knoten"></div><div class="linie" style="background: transparent"></div></div>
+          <div class="inhalt">
+            <div style="display: flex; align-items: baseline; gap: 12px"><span class="t13">Fall entstanden — aus deinem ersten Anruf mit Lena</span><span class="mono" style="margin-left: auto">12.03. · a1f0</span></div>
+            <div class="mono">geteilt seit tag eins · „sehen darf: ihr zwei"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="t11 sub" style="text-align: center; line-height: 1.7">Kein „Speichern", kein „Papierkorb-Risiko": der Fall ist ein Git-Baum. Ein alter Bericht zitiert für immer genau den Stand, aus dem er entstand.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 22px">
+      <div class="mono">148 commits · jeder prüfbar (verify ✓) · nichts davon löscht sich still</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

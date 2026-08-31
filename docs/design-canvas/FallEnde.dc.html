@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .karte { background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; box-shadow: 0 10px 34px -18px rgba(90,75,50,.35); }
+    /* Rosé = Markierung/Beenden — genau hier gehört es hin, ruhig, nicht rot */
+    .pill-rose { display: flex; align-items: center; justify-content: center; height: 48px; padding: 0 26px; border-radius: 999px; background: #D9A6A0; color: #fff; font-size: 15px; font-weight: 600; }
+    .pill-still { display: flex; align-items: center; justify-content: center; height: 48px; padding: 0 22px; border-radius: 999px; background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500; }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 20px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="t13">‹ Unfall Passat</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding: 0 80px">
+      <div class="karte" style="width: 600px; padding: 30px 34px; display: flex; flex-direction: column; gap: 18px">
+        <div class="serif" style="font-size: 24px; line-height: 1.4">Diesen Fall wegwerfen?</div>
+        <div class="t13" style="line-height: 1.7">Er geht dann wirklich: alle 48 Eingänge, alle Mitschriften, alle Fassungen — auch aus dem Phone-Klon und dem Chiffre-Spiegel. Das Brain baut sich ohne ihn neu auf; deine anderen elf Fälle bleiben heil.</div>
+        <div class="t13" style="line-height: 1.7">Lena behält ihren eigenen Stand des geteilten Falls — deiner verschwindet, ihrer gehört ihr.</div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(184,163,105,.07); border-radius: 12px; padding: 14px 16px">
+          <div class="t11 sub" style="letter-spacing: .08em; text-transform: uppercase">Bevor er geht</div>
+          <div class="t13">Letzte Fassung als PDF/A behalten? <span class="sub">— empfohlen, sie ist unterschrieben</span></div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px; padding-top: 4px">
+          <div class="pill-rose">Wegwerfen — mit Face ID</div>
+          <div class="pill-still">Behalten</div>
+        </div>
+        <div class="mono">löschen ist R3: gerät entsperren, dann ein commit — bezeugt, unumkehrbar, ehrlich</div>
+      </div>
+
+      <div class="t11 sub" style="max-width: 56ch; text-align: center; line-height: 1.7">Vergessen ist ein Recht und hier ein Handgriff: kein Support-Ticket, kein „30 Tage im Papierkorb", kein stilles Behalten. Rosé heißt Beenden — und Beenden ist kein Alarm.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 22px">
+      <div class="mono">dsgvo-pfad · container weg = brain-rebuild · der rest bleibt beweisbar</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

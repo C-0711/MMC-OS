@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; }
+    .os-grund { overflow: hidden; position: relative; display: flex; flex-direction: column; background: #FAF7F2; color: #2a2520; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+    .t13 { font-size: 13px; } .t11 { font-size: 11px; }
+    .sub { color: rgba(42,37,32,.55); }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, monospace; font-size: 11px; color: rgba(42,37,32,.6); }
+    .karte { background: #fff; border: 1px solid rgba(184,163,105,.22); border-radius: 16px; }
+    .foto { border-radius: 999px; flex: none; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.92); font-family: 'Playfair Display', Georgia, serif; box-shadow: 0 0 0 2px #fff, 0 0 0 3px #B8A369; }
+    .foto.lw { background: radial-gradient(circle at 36% 26%, #ecd0af 0 30%, #c59a6d 55%, #7a5a3c 100%); }
+    .foto.du { background: radial-gradient(circle at 36% 26%, #d8d2c4 0 30%, #a89e88 55%, #5f5748 100%); }
+    .foto.fb { background: radial-gradient(circle at 36% 26%, #e8c4bd 0 30%, #c2938c 55%, #7d5a55 100%); }
+    .pill-still { display: flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px; border-radius: 999px; background: rgba(143,169,143,.14); color: #5c705c; font-size: 15px; font-weight: 500; }
+    .zeile { height: 56px; display: flex; align-items: center; gap: 16px; border-bottom: .5px solid rgba(42,37,32,.1); }
+    .ampel { display: flex; gap: 8px; }
+    .ampel span { width: 12px; height: 12px; border-radius: 999px; display: block; }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+</helmet>
+
+<div class="os-grund" style="width: 1360px; height: 900px; align-items: center; justify-content: center; background: linear-gradient(165deg, #f2ece1, #e9e0d0)">
+  <div style="width: 1180px; height: 780px; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #FAF7F2; box-shadow: 0 30px 80px -24px rgba(70,58,38,.45), 0 0 0 .5px rgba(70,58,38,.2)">
+    <div style="flex: none; height: 52px; display: flex; align-items: center; padding: 0 16px; gap: 20px">
+      <div class="ampel"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+      <div class="t13">‹ Unfall Passat</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding: 0 80px">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+        <div class="serif" style="font-size: 28px">Sehen darf</div>
+        <div class="t13 sub">Der Fall ist der Raum — wer drin ist, sieht denselben Stand. Byte-identisch, nicht „ungefähr".</div>
+      </div>
+
+      <div class="karte" style="width: 640px; padding: 10px 26px 16px; display: flex; flex-direction: column">
+        <div class="zeile">
+          <div class="foto du" style="width: 38px; height: 38px; font-size: 12px">Du</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+            <span class="serif" style="font-size: 15px">Du</span>
+            <span class="mono">alles · unterschreibt · lädt ein</span>
+          </div>
+          <span class="mono">siegel ✓</span>
+        </div>
+        <div class="zeile">
+          <div class="foto lw" style="width: 38px; height: 38px; font-size: 12px">LW</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+            <span class="serif" style="font-size: 15px">Lena Weber</span>
+            <span class="mono">alles · unterschreibt · seit 12.03.</span>
+          </div>
+          <span class="mono">siegel ✓</span>
+        </div>
+        <div class="zeile" style="border-bottom: none">
+          <div class="foto fb" style="width: 38px; height: 38px; font-size: 12px">FB</div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+            <span class="serif" style="font-size: 15px">Frau Berger <span class="t11 sub">· Rolle: Sachbearbeitung</span></span>
+            <span class="mono">sieht nur: gutachten + fassungen · keine anrufe, keine texte</span>
+          </div>
+          <span class="mono">bis fall-ende</span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 16px">
+        <div class="pill-still">Jemanden einladen</div>
+        <div class="t13 sub">Einladen ist ein Commit — und rückholbar: Zutritt endet, Geschichte bleibt ehrlich.</div>
+      </div>
+
+      <div class="t11 sub" style="max-width: 58ch; text-align: center; line-height: 1.7">Rechte sind Capabilities am Fall, nie Konten in einer Cloud: eine Rolle sieht genau das, was ihre Zeile sagt — und jede Zeile hier ist selbst committet und beweisbar.</div>
+    </div>
+
+    <div style="flex: none; display: flex; justify-content: center; padding: 0 0 22px">
+      <div class="mono">fall unfall-passat · 3 zutritte · jede änderung an dieser liste = commit + signatur</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1360,"height":900}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

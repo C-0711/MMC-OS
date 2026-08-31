@@ -620,6 +620,159 @@
    "h": 900,
    "page": "page-10",
    "title": "Übergang 4 · Nach dem Nicken — läuft still"
+  },
+  {
+   "file": "TelBereich.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Menschen & Verlauf"
+  },
+  {
+   "file": "TelKontakt.dc.html",
+   "x": 1480,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Der Mensch — gemeinsamer Kontext"
+  },
+  {
+   "file": "TelVerlauf.dc.html",
+   "x": 2960,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Ein Gespräch, ganz"
+  },
+  {
+   "file": "TelAnrufen.dc.html",
+   "x": 0,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Wen — und worum geht es?"
+  },
+  {
+   "file": "TelVerpasst.dc.html",
+   "x": 1480,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Verpasst — ohne Drängen"
+  },
+  {
+   "file": "TelKontaktNeu.dc.html",
+   "x": 2960,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Ein Mensch entsteht"
+  },
+  {
+   "file": "TelDuo.dc.html",
+   "x": 4440,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Telefon · Du & Lena — euer Kontext"
+  },
+  {
+   "file": "OsStartschirm.dc.html",
+   "x": 0,
+   "y": 2360,
+   "w": 390,
+   "h": 844,
+   "page": "page-11",
+   "title": "Startschirm · Alles ruhig — die Rubriken"
+  },
+  {
+   "file": "OsStartWartet.dc.html",
+   "x": 520,
+   "y": 2360,
+   "w": 390,
+   "h": 844,
+   "page": "page-11",
+   "title": "Startschirm · Ein Ding wartet"
+  },
+  {
+   "file": "OsDock.dc.html",
+   "x": 0,
+   "y": 3480,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Desktop · Die Leiste — Dock in OS-Sprache"
+  },
+  {
+   "file": "OsIconSprache.dc.html",
+   "x": 1480,
+   "y": 3480,
+   "w": 1360,
+   "h": 900,
+   "page": "page-11",
+   "title": "Die Icon-Sprache — ein Sinnbild pro Rubrik"
+  },
+  {
+   "file": "FallUebersicht.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Übersicht — ein Stapel, ein Container"
+  },
+  {
+   "file": "FallMoeglichkeiten.dc.html",
+   "x": 1480,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Zwölf Möglichkeiten, ein Gesetz"
+  },
+  {
+   "file": "FallZeit.dc.html",
+   "x": 2960,
+   "y": 0,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Die Zeitmaschine"
+  },
+  {
+   "file": "FallTeilen.dc.html",
+   "x": 0,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Sehen darf — Zutritte als Capabilities"
+  },
+  {
+   "file": "FallMitnehmen.dc.html",
+   "x": 1480,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Mitnehmen — Phone, Sicherung, Export"
+  },
+  {
+   "file": "FallEnde.dc.html",
+   "x": 2960,
+   "y": 1180,
+   "w": 1360,
+   "h": 900,
+   "page": "page-12",
+   "title": "Der Fall · Wegwerfen — Vergessen als Handgriff"
   }
  ],
  "annotations": [
@@ -814,11 +967,59 @@
    "w": 1350,
    "page": "page-10",
    "text": "REIHE 2 — DREI WEITERE ZWISCHENSEQUENZEN. Minuten-Sprung: [n] aus einer Antwort landet auf der Minute (08:12), nie am Anfang der Aufnahme — die Fundstellen-Zeile trägt das Rosé-Rechteck, Nachbarzeilen bleiben auf 50 %, Play spielt ab der Minute. Schalter-Moment (Meister-Seite): 200 ms Umschalten, ein weiches Klick-Gefühl; die kleine Sanduhr erscheint genau EINMAL für 600 ms neben der Σ-Zeile („das universum formt sich neu\") — dann weg, kein Spinner. Nach dem Nicken (Scan-Bericht): Taille leuchtet 300 ms, der Textlink „Aufnehmen\" wird zur Mono-Zeile „läuft still\", Fortschritt als Zustand („gelesen 3.120 / 4.231\"), kein Balken — die übrigen Karten bleiben unverändert und drängen nicht."
+  },
+  {
+   "id": "tel-bereich",
+   "x": 0,
+   "y": -150,
+   "w": 1350,
+   "page": "page-11",
+   "text": "REIHE 1 — GESPRÄCHE (die eine Kommunikations-Rubrik: Anruf, Text, Meet — WhatsApp/Teams/FaceTime ersetzt EIN Ort) (nach iPhone-Studie überarbeitet: Contact-Poster, Foto-Avatare mit Siegel-Ring, vereinheitlichter Verlauf). TelBereich: oben Poster deiner Menschen (Bild trägt Name + Kontext-Zeile), darunter EIN Verlauf für alles — jede Zeile zeigt Foto, Namen, ein wörtliches Zitat aus der Mitschrift, Ernte-Tags (Vereinbarung ✓ / Atome / offen) und die Fundstellen-Zeile; Verpasstes in Rosé-Text, nie als rote Zahl; die Assistent-Abnahme steht als Zitat da (Commit vor Deutung). Tippen öffnet den Menschen, nie versehentlich einen Anruf (iOS-Classic-Fehler vermieden). TelKontakt: Poster-Kopf (Bild trägt den Namen, Siegel-Ring statt Verifikations-Häkchen), Aktionsreihe Anrufen/Text/Meet/Teilen; darunter der Duo-Kontext: „Zwischen euch\" (geteilte Fälle), „Offen zwischen euch\" mit Minuten, letzte Vereinbarung, „Miteinander\"-Bilanz → ganzer Verlauf. TelDuo (NEU): der Verlauf als Kontext des Duos — Kopf mit beiden Bildern und der Bilanz-Zeile, angeheftet was offen ist, dann die gemeinsame Zeit: Anrufe (Dauer, Zitat, Ernte-Tags, Minuten), Texte, Dokumente (mit Atomen), bis zurück zu „hier begann euer Kontext\". Beide sehen denselben Verlauf, byte-identisch. TelVerlauf: das einzelne Gespräch als Drill-down (Ernte oben, Mitschrift als Beweis darunter)."
+  },
+  {
+   "id": "tel-momente",
+   "x": 0,
+   "y": 1030,
+   "w": 1350,
+   "page": "page-11",
+   "text": "REIHE 2 — ANRUFEN, VERPASST, ENTSTEHEN. Anrufen: „Wen — und worum geht es?\" — Mensch wählen (Siegel, keine Nummern) + Fall-Kontext anheften; der Angerufene sieht beim Klingeln, worum es geht, die Mitschrift landet im richtigen Fall; E2E, das Signaling sieht nur Chiffre-Adressen + Fall-ID (OsAnrufKommt/OsAnrufLaeuft schließen hier an). Verpasst: eine ruhige Karte mit Notiz und Fundstelle — Zurückrufen/Text/später, Rosé ist Markierung, nie Alarm (OsRueckruf schließt an). Entstehen: nach dem ersten Gespräch wird der Mensch automatisch angelegt — Einsortieren still, aber ein neuer Mensch ist NIE still: eine Karte sagt es einmal; er sieht nur den geteilten Fall; kein Kontakte-Import, kein Upload, die Kontakte verlassen das Gerät nicht."
+  },
+  {
+   "id": "startschirm",
+   "x": 0,
+   "y": 2210,
+   "w": 1350,
+   "page": "page-11",
+   "text": "REIHE 3 — DER STARTSCHIRM (iPhone-Form, aber kein nachgemaltes Springboard). Statt Icon-Gitter mit Badges: Rubriken als ruhige Kacheln — Haarlinien-Glyph, Serif-Name, eine Mono-Zustandszeile mit ECHTEN Zählern (wie das Siegel-Menü am Desktop): Telefon „lena · heute 14:36\", Stapel „liest still · 2.146/9.500\", Quellen „5 an · 22.212 atome\", Siegel „✓ · backup 03:00\". Rubriken zeigen Zustand, nie die Zahl der Pflichten — kein Badge, nirgends. Was wartet, kommt als Karte OBEN AUF den Startschirm (zweiter Screen: „Ein Ding wartet.\" mit Marc-Rückruf samt Foto-Siegel und Fundstelle); in der Rubrik selbst steht es als Wort in Rosé („marc wartet\"), nie als rote Zahl. Unten das Dock: drei Handgriffe — anrufen · fragen · hineinlegen. Tippen auf eine Rubrik öffnet den jeweiligen Bereich (Telefon → TelBereich, Stapel → Sanduhr, Quellen → Meister-Seite, Leseplatz → OsLeseplatz)."
+  },
+  {
+   "id": "dock-icons",
+   "x": 0,
+   "y": 3330,
+   "w": 1350,
+   "page": "page-11",
+   "text": "REIHE 4 — DIE LEISTE (Desktop-Dock) + ICON-SPRACHE. Das Dock schwebt wie am Mac, aber in Warmweiß: weiße Kacheln (46px, Radius 13) mit Haarlinien-Glyphs in Tinte — dieselben Sinnbilder wie auf dem Phone-Startschirm, eins pro Rubrik. Zustände ohne Badge: kleiner Punkt unter dem Fach — Olivgold = Bereich offen/aktiv, Rosé = etwas wartet (Markierung, nie Alarm), nichts = Ruhe; NIEMALS eine Zahl am Icon. Hover hebt das Fach 4px und zeigt eine Mini-Karte mit Name (Serif) + echter Zustandszeile (Mono) — dieselben Zähler wie Kachel und Siegel-Menü. Rechts vom Trenner die zwei Handgriffe: Fragen (Salbei-Kachel) und Hineinlegen (+). Das Icon-Blatt daneben ist der Vertrag: Strichstärken je Größe (21px Dock / 15px Kachel / 28px Blatt → 1,05–1,3px), Tinte auf Warmweiß, einzige volle Form ist das Siegel, einzige Farben Sand-Olivgold und die Quellen-Schalterpunkte. Pixel-Vergleich gegen dieses Blatt ist das Review-Gate für jedes neue Icon. NACHTRAG: Die Rubrik heißt Gespräche (Hörer-Sinnbild) und umfasst Anruf, Text und Meet — Meet ist ein Kanal im Gespräch, keine eigene Rubrik; der freie Platz in Kachel und Dock gehört den Berichten (signierte Fassungen, Blatt-mit-Rücken-Sinnbild)."
+  },
+  {
+   "id": "fall-kosmos",
+   "x": 0,
+   "y": -150,
+   "w": 1350,
+   "page": "page-12",
+   "text": "REIHE 1 — EIN CONTAINER IM FOKUS. FallUebersicht: der geöffnete Fall — Kopf mit Mono-Bilanz (48 eingänge · 312 atome · 3 fassungen · alles committet ✓) und den geteilten Menschen; darunter die sieben Handgriffe in einer Reihe (Hineinlegen als einziger Salbei-Knopf, dann Fragen · Anrufen · Bericht · Teilen · Zeit · Mitnehmen — keine Menüs); „Liegt oben auf\" (max 3, mit Fundstellen) neben der Inhalts-Bilanz. FallMoeglichkeiten: das Katalog-Blatt — ZWÖLF Möglichkeiten, jede mit Glyph, einem Satz und dem Gesetz dahinter: Hineinlegen, Fragen, Original ansehen, Darin sprechen, Teilen & einladen, An/Abschalten (Meister-Seite), Bericht machen, In der Zeit zurück, Mitnehmen & exportieren, Ausgründen, Unterschreiben (R3 Face ID), Wegwerfen. Die häufigsten fünf liegen als Handgriffe am Fall, der Rest eine Ebene tiefer. FallZeit: die Zeitmaschine — Commit-Spur von „Fall entstanden\" bis „Fassung 3\", Fassungen als Olivgold-Knoten; jeder Stand bleibt ansehbar, verändert wird nie rückwärts."
+  },
+  {
+   "id": "fall-rechte-wege",
+   "x": 0,
+   "y": 1030,
+   "w": 1350,
+   "page": "page-12",
+   "text": "REIHE 2 — ZUTRITT, WEGE, ENDE. FallTeilen („Sehen darf\"): Zutritte als Capabilities am Fall, nie Konten in einer Cloud — Du/Lena sehen alles und unterschreiben, Frau Berger als Rolle Sachbearbeitung sieht NUR gutachten + fassungen (keine anrufe, keine texte), befristet bis fall-ende; jede Änderung an der Liste ist selbst ein Commit. FallMitnehmen: drei Wege hinaus, keiner verliert eine Fundstelle — voller Klon aufs Phone (Mac aus, Phone antwortet trotzdem), stündliches Bundle mit git-clone-Gegenprobe, Export PDF/A + container.json als Beweis-Anhang (DATEV/WISO). FallEnde: Wegwerfen ist ein Handgriff und R3 — Face ID, dann ein bezeugter Commit; der Container geht wirklich (auch Klon + Chiffre-Spiegel), das Brain baut sich neu, die anderen Fälle bleiben heil; Lena behält ihren eigenen Stand. Rosé heißt Beenden, nicht Alarm — kein 30-Tage-Papierkorb-Theater."
   }
  ],
  "launch": {
   "view": "canvas",
-  "page": "page-10"
+  "page": "page-12"
  },
  "pages": [
   {
@@ -860,6 +1061,14 @@
   {
    "id": "page-10",
    "name": "Übergänge"
+  },
+  {
+   "id": "page-11",
+   "name": "Telefon"
+  },
+  {
+   "id": "page-12",
+   "name": "Der Fall"
   }
  ]
 }
