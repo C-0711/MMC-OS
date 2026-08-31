@@ -13,6 +13,6 @@
     "moduleResolution": "node",
     "types": ["node"]
   },
-  "include": ["**/*.ts", "../src/main/vault.ts", "../src/main/services.ts", "../src/main/deutung.ts"],
+  "include": ["**/*.ts", "../src/main/vault.ts", "../src/main/services.ts", "../src/main/deutung.ts", "../src/main/uebersicht.ts", "../src/main/anruf.ts", "../src/main/themen.ts", "../src/main/suche.ts", "../src/main/ingest.ts"],
   "exclude": ["node_modules"]
 }

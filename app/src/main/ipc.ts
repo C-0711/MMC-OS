@@ -7,6 +7,11 @@ import { ipcMain, shell } from 'electron';
 import * as vault from './vault';
 import * as services from './services';
 import * as gitchain from './gitchain';
+import * as uebersicht from './uebersicht';
+import * as anruf from './anruf';
+import * as themen from './themen';
+import * as suche from './suche';
+import * as ingest from './ingest';
 import { deutungAusOcr, deutungAusTranskript, type Transkript } from './deutung';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
@@ -169,5 +174,60 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('gitchain:registry', async () => {
     return await gitchain.registry();
+  });
+
+  // ============================================================================
+  // Fall-Übersicht (T1) — OsFall & Heute
+  // ============================================================================
+  ipcMain.handle('vault:getFallUebersicht', async (_event, fallId: string) => {
+    return await uebersicht.getFallUebersicht(fallId);
+  });
+
+  // ============================================================================
+  // Anrufe (T3) — Anrufe & Texte
+  // ============================================================================
+  ipcMain.handle('anruf:list', async (_event, fallId: string) => {
+    return await anruf.listAnrufe(fallId);
+  });
+
+  // ============================================================================
+  // Themen & Stapel (T4) — Themen-Bereich
+  // ============================================================================
+  ipcMain.handle('themen:alle', async () => {
+    return await themen.alleThemen();
+  });
+
+  ipcMain.handle('themen:stapel', async () => {
+    return await themen.stapel();
+  });
+
+  ipcMain.handle('themen:neuesThema', async () => {
+    return await themen.neuesThema();
+  });
+
+  // ============================================================================
+  // Suche (T5) — Frag alles über alle Fälle
+  // ============================================================================
+  ipcMain.handle('suche:fragAlles', async (_event, frage: string) => {
+    return await suche.fragAlles(frage);
+  });
+
+  // ============================================================================
+  // Ingest (T2) — W1a-Worker in der App (SSE → webContents.send)
+  // ============================================================================
+  ipcMain.handle('ingest:start', async (_event, quellen: string[]) => {
+    return ingest.start(quellen);
+  });
+
+  ipcMain.handle('ingest:scanReport', async (_event, quellen: string[]) => {
+    return await ingest.scanReport(quellen);
+  });
+
+  ipcMain.handle('ingest:status', async () => {
+    return ingest.status();
+  });
+
+  ipcMain.handle('ingest:ask', async (_event, frage: string) => {
+    return ingest.antwortAusAtomen(frage);
   });
 }
