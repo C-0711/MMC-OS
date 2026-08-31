@@ -683,6 +683,24 @@
    "h": 900,
    "page": "page-11",
    "title": "Telefon · Du & Lena — euer Kontext"
+  },
+  {
+   "file": "OsStartschirm.dc.html",
+   "x": 0,
+   "y": 2360,
+   "w": 390,
+   "h": 844,
+   "page": "page-11",
+   "title": "Startschirm · Alles ruhig — die Rubriken"
+  },
+  {
+   "file": "OsStartWartet.dc.html",
+   "x": 520,
+   "y": 2360,
+   "w": 390,
+   "h": 844,
+   "page": "page-11",
+   "title": "Startschirm · Ein Ding wartet"
   }
  ],
  "annotations": [
@@ -893,6 +911,14 @@
    "w": 1350,
    "page": "page-11",
    "text": "REIHE 2 — ANRUFEN, VERPASST, ENTSTEHEN. Anrufen: „Wen — und worum geht es?\" — Mensch wählen (Siegel, keine Nummern) + Fall-Kontext anheften; der Angerufene sieht beim Klingeln, worum es geht, die Mitschrift landet im richtigen Fall; E2E, das Signaling sieht nur Chiffre-Adressen + Fall-ID (OsAnrufKommt/OsAnrufLaeuft schließen hier an). Verpasst: eine ruhige Karte mit Notiz und Fundstelle — Zurückrufen/Text/später, Rosé ist Markierung, nie Alarm (OsRueckruf schließt an). Entstehen: nach dem ersten Gespräch wird der Mensch automatisch angelegt — Einsortieren still, aber ein neuer Mensch ist NIE still: eine Karte sagt es einmal; er sieht nur den geteilten Fall; kein Kontakte-Import, kein Upload, die Kontakte verlassen das Gerät nicht."
+  },
+  {
+   "id": "startschirm",
+   "x": 0,
+   "y": 2210,
+   "w": 1350,
+   "page": "page-11",
+   "text": "REIHE 3 — DER STARTSCHIRM (iPhone-Form, aber kein nachgemaltes Springboard). Statt Icon-Gitter mit Badges: Rubriken als ruhige Kacheln — Haarlinien-Glyph, Serif-Name, eine Mono-Zustandszeile mit ECHTEN Zählern (wie das Siegel-Menü am Desktop): Telefon „lena · heute 14:36\", Stapel „liest still · 2.146/9.500\", Quellen „5 an · 22.212 atome\", Siegel „✓ · backup 03:00\". Rubriken zeigen Zustand, nie die Zahl der Pflichten — kein Badge, nirgends. Was wartet, kommt als Karte OBEN AUF den Startschirm (zweiter Screen: „Ein Ding wartet.\" mit Marc-Rückruf samt Foto-Siegel und Fundstelle); in der Rubrik selbst steht es als Wort in Rosé („marc wartet\"), nie als rote Zahl. Unten das Dock: drei Handgriffe — anrufen · fragen · hineinlegen. Tippen auf eine Rubrik öffnet den jeweiligen Bereich (Telefon → TelBereich, Stapel → Sanduhr, Quellen → Meister-Seite, Leseplatz → OsLeseplatz)."
   }
  ],
  "launch": {
