@@ -806,6 +806,9 @@ class App {
   }
 
   private async handleEingang(file: File): Promise<void> {
+    // Sanduhr SOFORT: der Nutzer hat etwas geworfen — das Lesen beginnt,
+    // auch wenn die Fall-Wahl noch offen ist (W1a-Geist: nie warten ohne Zeichen)
+    this.zeigeSanduhr(`Ich lese ${file.name} — hier auf deinem Gerät.`);
     try {
       // Fall-Wahl: wenn kein Fall existiert, anlegen
       let fallId = this.aktuellerFall;
@@ -822,6 +825,7 @@ class App {
           fallId = await this.warteFallWahl(dialog);
 
           if (!fallId) {
+            this.versteckeSanduhr();
             this.showToast('Abgebrochen.');
             return;
           }
@@ -878,6 +882,7 @@ class App {
       } else {
         const dienstDa = await window.mmc.ocr.health().catch(() => false);
         if (!dienstDa) {
+          this.versteckeSanduhr();
           this.showToast(
             `Verwahrt ohne Deutung — der Lesedienst (belegsrv) läuft nicht. ${file.name} liegt sicher im Fall.`);
           await this.ladeVorschlaege();
@@ -902,19 +907,74 @@ class App {
       this.zustand = 'fragend';
       this.renderZustand();
 
+      this.versteckeSanduhr();
       this.showToast(
         deutung.atoms.length === 0
           ? (transkript
               ? 'Anruf verwahrt — nichts Verbindliches erkannt.'
-              : 'Eingang verwahrt — ich finde keine Beträge.')
+              : 'Eingang verwahrt — ich sehe nichts Verbindliches.')
           : (transkript
               ? `Anruf verarbeitet: ${deutung.atoms.length} Stellen erkannt.`
-              : `Eingang verarbeitet: ${deutung.atoms.length} Beträge erkannt.`)
+              : `Eingang verarbeitet: ${deutung.atoms.length} Stellen erkannt.`)
       );
     } catch (err) {
       console.error('Fehler beim Verarbeiten des Eingangs:', err);
       this.showToast(`Fehler: ${(err as Error).message || err}`);
+    } finally {
+      // Sanduhr NIE stehen lassen — auch bei Fehler, auch bei Abbruch
+      this.versteckeSanduhr();
     }
+  }
+
+  // ============================================================================
+  // Sanduhr (W1a-Geist): das Lesen sichtbar machen — 24px-Uhr, Körner
+  // fallen still, kein Spinner, kein Badge. Weg = 300ms fade.
+  // ============================================================================
+
+  private sanduhrElement: HTMLElement | null = null;
+
+  private zeigeSanduhr(text: string): void {
+    this.versteckeSanduhr();
+    const ov = document.createElement('div');
+    ov.id = 'sanduhr-lesend';
+    ov.style.cssText = `
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(250,247,242,.92);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 18px;
+      opacity: 0; transition: opacity 300ms ease-out;`;
+    const uhr = document.createElement('div');
+    uhr.className = 'sanduhr';
+    const satz = document.createElement('div');
+    satz.className = 'serif';
+    satz.style.cssText = 'font-size: 22px;';
+    satz.textContent = text;
+    const fuss = document.createElement('div');
+    fuss.className = 't11 sub';
+    fuss.textContent = 'alles committet vor Deutung · hier auf deinem Gerät · signatur ✓';
+    ov.append(uhr, satz, fuss);
+    document.body.appendChild(ov);
+    this.sanduhrElement = ov;
+    this.sanduhrGezeigtUm = Date.now();
+    // Doppelt-Loop gegen rAF-Rennen: inline-Style direkt, rAF als Backup
+    ov.style.opacity = '1';
+    requestAnimationFrame(() => { if (ov.isConnected) ov.style.opacity = '1'; });
+    sanduhrStarten(uhr);
+  }
+
+  private sanduhrGezeigtUm = 0;
+
+  private versteckeSanduhr(): void {
+    const ov = this.sanduhrElement;
+    if (!ov) return;
+    this.sanduhrElement = null;
+    // W1a-Geist: die Sanduhr ist kein Spinner, aber der Nutzer muss sie
+    // SEHEN — Minimum 500ms, sonst wirkt der Wurf unbeantwortet.
+    const mindest = Math.max(0, 500 - (Date.now() - this.sanduhrGezeigtUm));
+    setTimeout(() => {
+      ov.style.opacity = '0';
+      setTimeout(() => ov.remove(), 300);
+    }, mindest);
   }
 
   private erstelleFallDialog(): HTMLElement {
