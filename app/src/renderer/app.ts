@@ -869,10 +869,21 @@ class App {
 
       // 2.+3. Deutung — Anruf: direkt aus dem Transkript (Minuten statt bbox);
       // Dokument: OCR, dann Heuristik. Beides im Main-Prozess (eine Quelle der Wahrheit).
+      // Ehrlicher Fallback (Canvas-Geist): ohne laufenden OCR-Dienst wird der
+      // Eingang NUR verwahrt — Commit ist schon da, nichts geht verloren.
+      // Deutung kommt nach, sobald belegsrv erreichbar ist. Nie ein harter Fehler.
       let deutung: DeutungErgebnis;
       if (transkript) {
         deutung = await window.mmc.ocr.deutungAusTranskript(transkript, verwahrterName);
       } else {
+        const dienstDa = await window.mmc.ocr.health().catch(() => false);
+        if (!dienstDa) {
+          this.showToast(
+            `Verwahrt ohne Deutung — der Lesedienst (belegsrv) läuft nicht. ${file.name} liegt sicher im Fall.`);
+          await this.ladeVorschlaege();
+          this.renderZustand();
+          return;
+        }
         const ocr = await window.mmc.ocr.deuteBeleg({
           name: file.name,
           bytes,
