@@ -1,0 +1,36 @@
+BUDERUS HEIZTECHNIK GMBH - TECHNISCHES DATENBLATT
+======================================================================
+Geraet: Logamax plus GB192i-24 - Kompakter Gas-Brennwertkessel
+Artikel-Nr 7-719-4446
+Preisstand: 31.12.2026
+
+TECHNISCHE DATEN
+----------------------------------------------------------------------
+Nennwaermeleistung: 24 kW (bei 40/30 C)
+Normnutzungsgrad: 98 %
+Abgastemperatur (bei 40/30 C): 59 C
+Abgasverlust qA: 4 %
+NOx-Emissionen: 52 mg/kWh, NOx-Klasse 5
+Maximaler Vorlauf: 88 C, Normvorlauf: 80 C
+Elektrische Leistungsaufnahme: 110 W, 230 V / 50 Hz
+Brennstoff/Energiequelle: Erdgas ELL
+Kessel- bzw. Inhalt: 11 l
+Geraetegewicht: 48 kg
+Abmessungen B/H/T: 480/1400/350 mm
+Zulaessiger Betriebsueberdruck: 3 bar
+
+ABGASANLAGE
+----------------------------------------------------------------------
+Abgasfuehrung: jede zulaessig
+Details siehe Montageanleitung, Massenstrom siehe Typenschild
+
+EINSATZBEREICH
+----------------------------------------------------------------------
+Heizungsanlagen und Trinkwarmwasserbereitung, Klimaklasse III
+Kombinierbar mit Schichtenladespeichern und Solarstationen MSM
+
+KONFORMITAET
+----------------------------------------------------------------------
+CE-Kennzeichnung gemaess Gasgeraeterichtlinie 2016/426/EU
+Energieeffizienzklasse: A
+Hersteller: Buderus Heiztechnik GmbH, Wetzlar

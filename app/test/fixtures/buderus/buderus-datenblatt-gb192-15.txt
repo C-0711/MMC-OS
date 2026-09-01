@@ -1,0 +1,36 @@
+BUDERUS HEIZTECHNIK GMBH - TECHNISCHES DATENBLATT
+======================================================================
+Geraet: GB192-15 - Gas-Brennwertkessel kompakt
+Artikel-Nr 7-719-4441
+Preisstand: 31.12.2026
+
+TECHNISCHE DATEN
+----------------------------------------------------------------------
+Nennwaermeleistung: 15 kW (bei 40/30 C)
+Normnutzungsgrad: 98 %
+Abgastemperatur (bei 40/30 C): 60 C
+Abgasverlust qA: 5 %
+NOx-Emissionen: 54 mg/kWh, NOx-Klasse 5
+Maximaler Vorlauf: 88 C, Normvorlauf: 80 C
+Elektrische Leistungsaufnahme: 105 W, 230 V / 50 Hz
+Brennstoff/Energiequelle: Erdgas ELL
+Kessel- bzw. Inhalt: 7,0 l
+Geraetegewicht: 41 kg
+Abmessungen B/H/T: 480/850/350 mm
+Zulaessiger Betriebsueberdruck: 3 bar
+
+ABGASANLAGE
+----------------------------------------------------------------------
+Abgasfuehrung: jede zulaessig
+Details siehe Montageanleitung, Massenstrom siehe Typenschild
+
+EINSATZBEREICH
+----------------------------------------------------------------------
+Heizungsanlagen und Trinkwarmwasserbereitung, Klimaklasse III
+Kombinierbar mit Schichtenladespeichern und Solarstationen MSM
+
+KONFORMITAET
+----------------------------------------------------------------------
+CE-Kennzeichnung gemaess Gasgeraeterichtlinie 2016/426/EU
+Energieeffizienzklasse: A
+Hersteller: Buderus Heiztechnik GmbH, Wetzlar

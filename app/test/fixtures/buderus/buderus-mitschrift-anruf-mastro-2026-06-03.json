@@ -1,0 +1,57 @@
+{
+  "art": "anruf",
+  "wav": "anruf-2026-06-03-mastro.wav",
+  "dauer": "03:40",
+  "zeilen": [
+    {
+      "zeit": "00:00",
+      "sprecher": "Du",
+      "text": "Guten Morgen, Bertsch Heizungstechnik."
+    },
+    {
+      "zeit": "00:06",
+      "sprecher": "Herr Mastro",
+      "text": "Guten Morgen, Mastro, Buderus Service. Wir haben Ihren Auftrag A-2026-0214 zum Pelletkessel Logano GS242-35 auf dem Tisch."
+    },
+    {
+      "zeit": "00:15",
+      "sprecher": "Du",
+      "text": "Ja, der hat sich ja verzoegert. Was ist der Stand?"
+    },
+    {
+      "zeit": "00:21",
+      "sprecher": "Herr Mastro",
+      "text": "Der neue Liefertermin ist der 26.06.2026. Ich kann Ihnen dafuer einen Goodwill-Rabatt von 200,00 auf die Fracht anbieten."
+    },
+    {
+      "zeit": "00:32",
+      "sprecher": "Du",
+      "text": "Einverstanden, das waere fair. Rechnung R-2026-1046 koennt ihr dann entsprechend anpassen?"
+    },
+    {
+      "zeit": "00:40",
+      "sprecher": "Herr Mastro",
+      "text": "Machen wir, Sie erhalten eine Gutschrift ueber 200,00 mit der Lieferung."
+    },
+    {
+      "zeit": "00:47",
+      "sprecher": "Du",
+      "text": "Gut. Braucht ihr noch etwas von uns fuer die Anmeldung beim Bezirksschornsteinfeger?"
+    },
+    {
+      "zeit": "00:55",
+      "sprecher": "Herr Mastro",
+      "text": "Nein, die Unterlagen liegen dem Kessel bei. Wichtig: Der Kaminkehrer muss bis zum 15.10. die Abnahme machen."
+    },
+    {
+      "zeit": "01:02",
+      "sprecher": "Du",
+      "text": "Verstanden, ich sage dem Objektkunden Bescheid. Danke, Herr Mastro."
+    },
+    {
+      "zeit": "01:08",
+      "sprecher": "Herr Mastro",
+      "text": "Gern, dann bis zur Lieferung."
+    }
+  ]
+}

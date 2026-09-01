@@ -283,6 +283,16 @@ declare global {
     }>>;
   }
 
+  interface MMCShowcaseAPI {
+    stand(): Promise<{ geladen: boolean; dokumente: number; faelle: string[] }>;
+    lade(): Promise<{ fall: string; belege: number; werkstoffe: number; karten: number }>;
+  }
+
+  interface MMCStudioAPI {
+    themen(): Promise<Array<{ name: string; anzahlQuellen: number; beispiele: string[] }>>;
+    baue(art: string, thema: string): Promise<{ art: string; titel: string; inhalt: string; quellen: string[]; zeitIso: string }>;
+  }
+
   interface MMCStromAPI {
     eintrag(fallId: string, eintrag: { typ: string; inhalt: string; von: string; payload?: Record<string, unknown> }): Promise<{ nummer: number; sha: string; datei: string }>;
     liste(fallId: string): Promise<Array<{ nummer: number; typ: string; inhalt: string; von: string; zeitIso: string; sha: string }>>;
@@ -305,6 +315,8 @@ declare global {
     kontakte: MMCKontakteAPI;
     strom: MMCStromAPI;
     privat: MMCPrivatAPI;
+    studio: MMCStudioAPI;
+    showcase: MMCShowcaseAPI;
   }
 
   interface Window {

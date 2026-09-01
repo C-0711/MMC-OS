@@ -1,0 +1,212 @@
+[
+  {
+    "datei": "buderus-katalog-brennwert.txt",
+    "typ": "katalog",
+    "gattung": "werkstoff",
+    "titel": "Katalog BRENNWERTKESSEL GB142/GB162/GB192 (Preisstand 31.12.2026)"
+  },
+  {
+    "datei": "buderus-katalog-festbrennstoff.txt",
+    "typ": "katalog",
+    "gattung": "werkstoff",
+    "titel": "Katalog FESTBRENNSTOFFKESSEL LOGANO (Preisstand 31.12.2026)"
+  },
+  {
+    "datei": "buderus-katalog-solar.txt",
+    "typ": "katalog",
+    "gattung": "werkstoff",
+    "titel": "Katalog SOLARTECHNIK LOGASOL (Preisstand 31.12.2026)"
+  },
+  {
+    "datei": "buderus-datenblatt-gb142-15.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB142-15"
+  },
+  {
+    "datei": "buderus-datenblatt-gb142-24.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB142-24"
+  },
+  {
+    "datei": "buderus-datenblatt-gb142-30.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB142-30"
+  },
+  {
+    "datei": "buderus-datenblatt-gb162-45.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB162-45"
+  },
+  {
+    "datei": "buderus-datenblatt-gb162-65.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB162-65"
+  },
+  {
+    "datei": "buderus-datenblatt-gb192-15.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB192-15"
+  },
+  {
+    "datei": "buderus-datenblatt-gb192-24.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB192-24"
+  },
+  {
+    "datei": "buderus-datenblatt-gb192-30.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt GB192-30"
+  },
+  {
+    "datei": "buderus-datenblatt-gb192i-24.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt Logamax plus GB192i-24"
+  },
+  {
+    "datei": "buderus-datenblatt-g225-25.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt Logano G225-25"
+  },
+  {
+    "datei": "buderus-datenblatt-gs242-35.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt Logano GS242-35"
+  },
+  {
+    "datei": "buderus-datenblatt-logasol-sks30.txt",
+    "typ": "datenblatt",
+    "gattung": "werkstoff",
+    "titel": "Datenblatt Logasol SKS 3.0"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1041.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1041 vom 14.01.2026 (GB142-24 inkl. Zubehoerset)"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1042.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1042 vom 02.02.2026 (GB192-24 Ersatzteil-Lieferung)"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1043.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1043 vom 15.02.2026 (Schulungstag Einführung GB192i)"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1044.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1044 vom 10.03.2026 (Logasol Solar-Komplettset)"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1045.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1045 vom 22.04.2026 (Wartung Servicefahrten Q1)"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1046.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1046 vom 05.06.2026 (Logano GS242-35 Pelletkessel)"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1047.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1047 vom 18.08.2026 (Rueckrufaktion Brennermodul)"
+  },
+  {
+    "datei": "buderus-rechnung-2026-1048.txt",
+    "typ": "rechnung",
+    "gattung": "beleg",
+    "titel": "Rechnung R-2026-1048 vom 12.10.2026 (Herbst-Wartung Vertragsanlagen)"
+  },
+  {
+    "datei": "buderus-wartungsvertrag-2026-77.txt",
+    "typ": "vertrag",
+    "gattung": "beleg",
+    "titel": "Wartungsvertrag WV-2026-77 (GB142-24, Werkstraße 12 Stuttgart)"
+  },
+  {
+    "datei": "buderus-wartungsvertrag-2026-78.txt",
+    "typ": "vertrag",
+    "gattung": "beleg",
+    "titel": "Wartungsvertrag WV-2026-78 (Logano GS242-35 Pelletkessel, Objekt Lindenstraße 8 Stuttgart)"
+  },
+  {
+    "datei": "buderus-wartungsvertrag-2026-79.txt",
+    "typ": "vertrag",
+    "gattung": "beleg",
+    "titel": "Wartungsvertrag WV-2026-79 (GB162-45, Objekt Nagarbachtal 3, 70184 Stuttgart)"
+  },
+  {
+    "datei": "buderus-mahnung-2026-014.txt",
+    "typ": "mahnung",
+    "gattung": "beleg",
+    "titel": "Mahnung M-2026-014 zu Rechnung R-2026-1043"
+  },
+  {
+    "datei": "buderus-brief-rueckruf-brennermodul.txt",
+    "typ": "brief",
+    "gattung": "beleg",
+    "titel": "Technische Mitteilung - Rueckrufaktion Brennermodul GB162"
+  },
+  {
+    "datei": "buderus-brief-preisanpassung-2027.txt",
+    "typ": "brief",
+    "gattung": "beleg",
+    "titel": "Information zur Preisanpassung zum 01.01.2027"
+  },
+  {
+    "datei": "buderus-brief-lieferverzoegerung-gs242.txt",
+    "typ": "brief",
+    "gattung": "beleg",
+    "titel": "Lieferverzoegerung Logano GS242"
+  },
+  {
+    "datei": "buderus-brief-wartungsplanung-herbst.txt",
+    "typ": "brief",
+    "gattung": "beleg",
+    "titel": "Wartungsplanung Herbst 2026"
+  },
+  {
+    "datei": "buderus-mitschrift-anruf-weber-2026-05-12.json",
+    "typ": "mitschrift",
+    "gattung": "beleg",
+    "titel": "Mitschrift Anruf mit Buderus Service vom 12.05.2026"
+  },
+  {
+    "datei": "buderus-mitschrift-anruf-mastro-2026-06-03.json",
+    "typ": "mitschrift",
+    "gattung": "beleg",
+    "titel": "Mitschrift Anruf mit Buderus Service vom 03.06.2026"
+  },
+  {
+    "datei": "buderus-mitschrift-anruf-weber-2026-09-14.json",
+    "typ": "mitschrift",
+    "gattung": "beleg",
+    "titel": "Mitschrift Anruf mit Buderus Service vom 14.09.2026"
+  },
+  {
+    "datei": "buderus-angebot-2026-0302.txt",
+    "typ": "angebot",
+    "gattung": "beleg",
+    "titel": "Angebot A-2026-0302: GB192-Austausch (Kostenvoranschlag)"
+  }
+]

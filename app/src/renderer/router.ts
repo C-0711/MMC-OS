@@ -20,7 +20,7 @@ export type ScreenId =
   | 'freund' | 'ausgruendung' | 'gruppe' | 'leseplatz' | 'tisch' | 'einladen'
   | 'suche' | 'rueckruf' | 'stapel' | 'neues-thema' | 'meet' | 'divergenz'
   | 'aufzeichnung' | 'widerspruch' | 'connector-beweis' | 'revision'
-  | 'meister-seite' | 'mix-antwort' | 'kontakte' | 'fall-strom' | 'phone';
+  | 'meister-seite' | 'mix-antwort' | 'kontakte' | 'fall-strom' | 'studio' | 'showcase' | 'phone';
 
 export interface AppCtx {
   faelle?: { id: string; name: string }[];
@@ -31,7 +31,7 @@ export interface AppCtx {
 
 export type SiegelBereich =
   | 'heute' | 'faelle' | 'anrufe-texte' | 'themen' | 'leseplatz-tisch'
-  | 'leute' | 'kontakte' | 'suche' | 'meister' | 'auth';
+  | 'leute' | 'kontakte' | 'suche' | 'studio' | 'showcase' | 'meister' | 'auth';
 
 export type RenderFn = (container: HTMLElement, ctx: AppCtx) => void;
 
@@ -167,6 +167,14 @@ route('kontakte', 'kontakte', (c: HTMLElement) => { void sk.renderKontakteListe(
 // Der Fall als Chat (AUFTRAG-der-fall) — der Strom als Leitform
 import * as fs2 from './screens-fall-strom.js';
 route('fall-strom', 'faelle', (c: HTMLElement, ctxX: AppCtx) => { void fs2.renderFallStrom(c, ctxX); });
+
+// Studio — NotebookAI auf dem eigenen Schatz (Spec 23)
+import * as st from './screens-studio.js';
+route('studio', 'suche', (c: HTMLElement, ctxX: AppCtx) => { void st.renderStudio(c, ctxX); });
+
+// Buderus-Showcase — der Enterprise-Einstieg (kompletter Firmenschatz)
+import * as sc from './screens-showcase.js';
+route('showcase', 'faelle', (c: HTMLElement, ctxX: AppCtx) => { void sc.renderShowcase(c, ctxX); });
 
 // Bestehende screens.ts-Komponenten (geben HTMLElement zurück — Adapter).
 route('vereinbarung', 'leute', (c: HTMLElement) => c.appendChild(renderVereinbarung({

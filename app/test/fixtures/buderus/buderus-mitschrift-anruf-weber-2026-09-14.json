@@ -1,0 +1,47 @@
+{
+  "art": "anruf",
+  "wav": "anruf-2026-09-14-weber.wav",
+  "dauer": "02:55",
+  "zeilen": [
+    {
+      "zeit": "00:00",
+      "sprecher": "Du",
+      "text": "Bertsch Heizungstechnik, guten Tag."
+    },
+    {
+      "zeit": "00:05",
+      "sprecher": "Frau Weber",
+      "text": "Guten Tag, Weber vom Buderus Service. Geht um die offene Mahnung M-2026-014 zu Rechnung R-2026-1043."
+    },
+    {
+      "zeit": "00:14",
+      "sprecher": "Du",
+      "text": "Die 89,00 EUR. Die Schulung war leider abgesagt worden, deshalb hatten wir zurueckbehalten."
+    },
+    {
+      "zeit": "00:23",
+      "sprecher": "Frau Weber",
+      "text": "Ich sehe es. Die Absage lag bei uns, die Rechnung haette storniert werden muessen. Das tut mir leid."
+    },
+    {
+      "zeit": "00:31",
+      "sprecher": "Du",
+      "text": "Okay, dann storniert ihr die Rechnung einfach?"
+    },
+    {
+      "zeit": "00:36",
+      "sprecher": "Frau Weber",
+      "text": "Machen wir, Sie erhalten eine Stornierung bis zum 30.09., die Mahnung ist damit gegenstandslos."
+    },
+    {
+      "zeit": "00:44",
+      "sprecher": "Du",
+      "text": "Einverstanden, danke fuer die Klaerung."
+    },
+    {
+      "zeit": "00:49",
+      "sprecher": "Frau Weber",
+      "text": "Gern. Einen schoenen Herbst noch."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "art": "anruf",
+  "wav": "anruf-2026-05-12-weber.wav",
+  "dauer": "01:12",
+  "zeilen": [
+    {
+      "zeit": "00:00",
+      "sprecher": "Du",
+      "text": "Guten Tag, Bertsch Heizungstechnik, Bertsch."
+    },
+    {
+      "zeit": "00:08",
+      "sprecher": "Frau Weber",
+      "text": "Guten Tag, Weber von Buderus Service. Es geht um die Rueckrufaktion Brennermodul GB162."
+    },
+    {
+      "zeit": "00:15",
+      "sprecher": "Du",
+      "text": "Ja genau. Wir haben zwei betroffene Geraete mit Artikel-Nr 7-719-4431 im Bestand."
+    },
+    {
+      "zeit": "00:24",
+      "sprecher": "Frau Weber",
+      "text": "Ich notiere das. Wir senden Ihnen zwei Austauschmodule kostenfrei zu."
+    },
+    {
+      "zeit": "00:31",
+      "sprecher": "Du",
+      "text": "Einverstanden. Und die Einbauzeit vor Ort, uebernimmt das die Aktion?"
+    },
+    {
+      "zeit": "00:38",
+      "sprecher": "Frau Weber",
+      "text": "Ja, die Arbeitszeit rechnen Sie ueber die Rueckrufaktion ab, das regeln wir zentral."
+    },
+    {
+      "zeit": "00:45",
+      "sprecher": "Du",
+      "text": "Machen wir. Bis wann muessen die Module eingebaut sein?"
+    },
+    {
+      "zeit": "00:52",
+      "sprecher": "Frau Weber",
+      "text": "Bitte bis zum 15.10., danach schliessen wir die Aktion ab."
+    },
+    {
+      "zeit": "00:58",
+      "sprecher": "Du",
+      "text": "Alles klar, das schaffen wir. Danke, Frau Weber."
+    },
+    {
+      "zeit": "01:05",
+      "sprecher": "Frau Weber",
+      "text": "Keine Ursache, schoenen Tag noch."
+    }
+  ]
+}

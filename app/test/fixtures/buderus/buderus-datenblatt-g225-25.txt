@@ -1,0 +1,36 @@
+BUDERUS HEIZTECHNIK GMBH - TECHNISCHES DATENBLATT
+======================================================================
+Geraet: Logano G225-25 - Gasungsfester Gussgliedkessel
+Artikel-Nr 7-719-4468
+Preisstand: 31.12.2026
+
+TECHNISCHE DATEN
+----------------------------------------------------------------------
+Nennwaermeleistung: 25 kW (bei 40/30 C)
+Normnutzungsgrad: 92 %
+Abgastemperatur (bei 40/30 C): 160 C
+Abgasverlust qA: 12 %
+NOx-Emissionen: 120 mg/kWh, NOx-Klasse 5
+Maximaler Vorlauf: 95 C, Normvorlauf: 85 C
+Elektrische Leistungsaufnahme: 80 W, 230 V / 50 Hz
+Brennstoff/Energiequelle: Holz/Kohle/Oel
+Kessel- bzw. Inhalt: 68 l
+Geraetegewicht: 168 kg
+Abmessungen B/H/T: 520/1120/870 mm
+Zulaessiger Betriebsueberdruck: 3 bar
+
+ABGASANLAGE
+----------------------------------------------------------------------
+Abgasfuehrung: jede zulaessig
+Details siehe Montageanleitung, Massenstrom siehe Typenschild
+
+EINSATZBEREICH
+----------------------------------------------------------------------
+Heizungsanlagen und Trinkwarmwasserbereitung, Klimaklasse III
+Kombinierbar mit Schichtenladespeichern und Solarstationen MSM
+
+KONFORMITAET
+----------------------------------------------------------------------
+CE-Kennzeichnung gemaess Gasgeraeterichtlinie 2016/426/EU
+Energieeffizienzklasse: A
+Hersteller: Buderus Heiztechnik GmbH, Wetzlar

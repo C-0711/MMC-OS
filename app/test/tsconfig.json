@@ -42,7 +42,9 @@
     "../src/main/kontakte.ts",
     "../src/renderer/screens-kontakte.ts",
     "../src/main/fall-strom.ts",
-    "../src/renderer/screens-fall-strom.ts"
+    "../src/renderer/screens-fall-strom.ts",
+    "../src/main/notebook.ts",
+    "../src/main/showcase.ts"
   ],
   "exclude": [
     "node_modules"

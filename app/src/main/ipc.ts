@@ -14,6 +14,8 @@ import * as suche from './suche';
 import * as ingest from './ingest';
 import * as kontakte from './kontakte';
 import * as fallStrom from './fall-strom';
+import * as notebook from './notebook';
+import * as showcase from './showcase';
 import * as anrufLive from './anruf-live';
 import { deutungAusOcr, deutungAusTranskript, type Transkript } from './deutung';
 import * as fs from 'node:fs/promises';
@@ -304,5 +306,31 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('privat:teilen', async (_event, did: string, fallId: string, sha: string) => {
     return await fallStrom.teilePrivat(did, fallId, sha);
+  });
+
+  // ============================================================================
+  // Studio — NotebookAI auf dem eigenen Schatz (Spec 23)
+  // ============================================================================
+  ipcMain.handle('studio:themen', async () => {
+    return await notebook.studioThemen();
+  });
+
+  // ============================================================================
+  // Buderus-Enterprise-Showcase (Spec 23): kompletter Firmenschatz laden
+  // ============================================================================
+  ipcMain.handle('showcase:stand', async () => {
+    return await showcase.showcaseStand();
+  });
+
+  ipcMain.handle('showcase:lade', async () => {
+    return await showcase.ladeShowcase();
+  });
+
+  ipcMain.handle('studio:baue', async (_event, art: string, thema: string) => {
+    const quellen = await notebook.sammleQuellen(thema, [], null);
+    if (quellen.length === 0) {
+      throw new Error('Keine Quellen im Schatz zu diesem Thema');
+    }
+    return await notebook.baueErzeugnis(art as never, thema, quellen);
   });
 }

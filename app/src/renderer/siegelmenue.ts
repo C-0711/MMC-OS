@@ -20,6 +20,7 @@ interface MenueEintrag {
 /** Die Bereiche — Reihenfolge = Lesefluss, Anrufe & Themen wie gewünscht vom Siegel aus. */
 const EINTRAEGE: MenueEintrag[] = [
   { bereich: 'heute',      ziel: 'heute',          titel: 'Heute' },
+  { bereich: 'faelle',     ziel: 'showcase',        titel: 'Showcase' },
   { bereich: 'faelle',     ziel: 'fall-strom',     titel: 'Fälle',
     untertitel: (c) => c.faelle?.length ? `${c.faelle.length} Fall${c.faelle.length === 1 ? '' : 'fälle'}` : '' },
   { bereich: 'anrufe-texte', ziel: 'anruf-kommt',  titel: 'Anrufe & Texte' },
@@ -28,6 +29,7 @@ const EINTRAEGE: MenueEintrag[] = [
   { bereich: 'leute',      ziel: 'freund',         titel: 'Leute' },
   { bereich: 'kontakte',   ziel: 'kontakte',       titel: 'Kontakte' },
   { bereich: 'suche',      ziel: 'suche',          titel: 'Frag alles' },
+  { bereich: 'studio',     ziel: 'studio',         titel: 'Studio' },
   { bereich: 'meister',    ziel: 'meister-seite',  titel: 'Meister-Seite' },
   { bereich: 'auth',       ziel: 'auth-anmeldung', titel: 'Anmeldung' },
 ];

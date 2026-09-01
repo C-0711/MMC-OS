@@ -1,0 +1,33 @@
+BUDERUS HEIZTECHNIK GMBH - TECHNISCHES DATENBLATT
+======================================================================
+Geraet: Logasol SKS 3.0 - Vakuumrohrenkollektor
+Artikel-Nr 7-719-4484
+Preisstand: 31.12.2026
+
+TECHNISCHE DATEN
+----------------------------------------------------------------------
+Nennwaermeleistung: 3,0 kW (Kollektorleistung)
+Wirkungsgradgrad eta0: 0,72; Waermeverlust k1: 1,4 W/m2K
+Bruttoflaeche je Kollektor: 2,0 m2, 12 Vakuumrohren
+Stagnationsfest bis 250 C, Frostschutz bis -25 C
+Max. Betriebsdruck: 10 bar
+Brennstoff/Energiequelle: Solarenergie
+Waermetraegerinhalt: 2,6 l
+Geraetegewicht: 48 kg
+Abmessungen B/H/T: 1430/780/90 mm
+Zulaessiger Betriebsueberdruck: 3 bar
+
+ABGASANLAGE
+----------------------------------------------------------------------
+Nicht zutreffend (Solarkreis, geschlossener Kreislauf)
+
+EINSATZBEREICH
+----------------------------------------------------------------------
+Heizungsanlagen und Trinkwarmwasserbereitung, Klimaklasse III
+Kombinierbar mit Schichtenladespeichern und Solarstationen MSM
+
+KONFORMITAET
+----------------------------------------------------------------------
+CE-Kennzeichnung gemaess EN 12975
+Energieeffizienzklasse: A
+Hersteller: Buderus Heiztechnik GmbH, Wetzlar

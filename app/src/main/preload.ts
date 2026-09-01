@@ -273,6 +273,16 @@ export interface MMCKontakteAPI {
   commDatei(slug: string, datei: { name: string; bytes: ArrayBuffer }): Promise<{ slug: string; datei: string; sha: string }>;
 }
 
+export interface MMCShowcaseAPI {
+  stand(): Promise<{ geladen: boolean; dokumente: number; faelle: string[] }>;
+  lade(): Promise<{ fall: string; belege: number; werkstoffe: number; karten: number }>;
+}
+
+export interface MMCStudioAPI {
+  themen(): Promise<Array<{ name: string; anzahlQuellen: number; beispiele: string[] }>>;
+  baue(art: string, thema: string): Promise<{ art: string; titel: string; inhalt: string; quellen: string[]; zeitIso: string }>;
+}
+
 export interface MMCStromAPI {
   eintrag(fallId: string, eintrag: { typ: string; inhalt: string; von: string; payload?: Record<string, unknown> }): Promise<{ nummer: number; sha: string; datei: string }>;
   liste(fallId: string): Promise<Array<{ nummer: number; typ: string; inhalt: string; von: string; zeitIso: string; sha: string }>>;
@@ -295,6 +305,8 @@ export interface MMCAPI {
   kontakte: MMCKontakteAPI;
   strom: MMCStromAPI;
   privat: MMCPrivatAPI;
+  studio: MMCStudioAPI;
+  showcase: MMCShowcaseAPI;
 }
 
 // Helper: ArrayBuffer → Number-Array für IPC
@@ -305,6 +317,14 @@ function arrayBufferToNumbers(ab: ArrayBuffer): number[] {
 const api: MMCAPI = {
   update: {
     ja: () => ipcRenderer.invoke('update:ja')
+  },
+  showcase: {
+    stand: () => ipcRenderer.invoke('showcase:stand'),
+    lade: () => ipcRenderer.invoke('showcase:lade'),
+  },
+  studio: {
+    themen: () => ipcRenderer.invoke('studio:themen'),
+    baue: (art: string, thema: string) => ipcRenderer.invoke('studio:baue', art, thema),
   },
   strom: {
     eintrag: (fallId: string, eintrag: unknown) => ipcRenderer.invoke('strom:eintrag', fallId, eintrag),

@@ -1,0 +1,71 @@
+BUDERUS HEIZTECHNIK GMBH
+TECHNISCHER KATALOG SOLARTECHNIK LOGASOL
+Preisstand: 31.12.2026 - Alle Preise in EUR zzgl. USt.
+======================================================================
+
+Produktserie: Logasol Flachkollektoren
+----------------------------------------------------------------------
+Logasol KS 2,0 Flachkollektor              Artikel-Nr 7-719-4481       795,00 EUR
+Logasol KS 2,0 Set 2 Kollektoren           Artikel-Nr 7-719-4482     1.540,00 EUR
+Logasol KS 2,0 Set 4 Kollektoren           Artikel-Nr 7-719-4483     2.980,00 EUR
+Absorber: Schwarz-Chrom-Beschichtung, Absorptionsgrad 95 %.
+Wirkungsgradgrad eta0: 0,79; Waermeverlust k1: 3,6 W/m2K.
+Aperturflaeche je Kollektor 2,0 m2, Glas: 3,2 mm gehaertetes Solarglas.
+Max. Betriebsdruck: 10 bar, Frostschutz bis -25 C mit Solarfluid.
+
+Technische Hinweise Logasol Flachkollektoren: Flachkollektoren fuer Trinkwarmwasser und Heizungsunterstuetzung.
+
+Produktserie: Logasol Vakuumrohrenkollektoren
+----------------------------------------------------------------------
+Logasol SKS 3,0 Vakuumrohre                Artikel-Nr 7-719-4484     1.180,00 EUR
+Logasol SKS 4,0 Vakuumrohre Set            Artikel-Nr 7-719-4485     2.250,00 EUR
+CPC-Spiegel (Compound Parabolic Concentrator) hinter den Rohren.
+Wirkungsgradgrad eta0: 0,72; Waermeverlust k1: 1,4 W/m2K.
+Bruttoflaeche je Kollektor 2,0 m2, Anzahl Rohre: 12.
+Montage bis Dachneigung 0-90 Grad moeglich.
+
+Technische Hinweise Logasol Vakuumrohrenkollektoren: Vakuumrohrenkollektoren fuer hoechsten Ertrag auch bei Diffuslicht.
+
+Produktserie: Solarspeicher und Stationen
+----------------------------------------------------------------------
+Solarspeicher SSU 300                      Artikel-Nr 7-719-4486     1.890,00 EUR
+Solerspeicher SSU 500                      Artikel-Nr 7-719-4487     2.450,00 EUR
+Solarstation MSM 4,0                       Artikel-Nr 7-719-4488       640,00 EUR
+Regler SM10 Solar                          Artikel-Nr 7-719-4489       425,00 EUR
+Schichtenladespeicher mit innenliegendem Waermetauscher.
+Korrosionsschutz: Emailierung nach DIN 4753, Magnesiumanode.
+Solarstation mit Nasslaeuferpumpe, Durchflussmesser und Rueckflussverhinderer.
+Regler SM10: Differenztemperaturregelung, Vox- und Sternfunktion.
+
+Technische Hinweise Solarspeicher und Stationen: Solarspeicher mit Schichtenladeeinrichtung, Solarstation und Regler.
+
+Produktserie: Dachmontage und Hydraulik
+----------------------------------------------------------------------
+Dachhalterung DHK fuer Ziegel              Artikel-Nr 7-719-4490       285,00 EUR
+Dachhalterung DHK-Skistirm SN-3            Artikel-Nr 7-719-4491       320,00 EUR
+Solardichtband SDB 5 m                     Artikel-Nr 7-719-4492        89,00 EUR
+Solarflex-Schlauchset 15 m                 Artikel-Nr 7-719-4493       219,00 EUR
+Solarexpansionsgefaess SEG 18 l            Artikel-Nr 7-719-4494       165,00 EUR
+Solarfluid SF 20 l                         Artikel-Nr 7-719-4495       129,00 EUR
+Dachhalterungen fuer beliebige Ziegelprofile, hoehenverstellbar 90-160 mm.
+Solarflex-Wellrohr Doppelwand, Isleerung 13 mm, DN15.
+Expansionsgefaess mit Membran aus EPDM, Vor-druck 1,5 bar.
+Solarfluid auf Propylen-glykol-Basis, frostfest bis -25 C.
+
+Technische Hinweise Dachmontage und Hydraulik: Montagesysteme und Hydraulikkomponenten fuer Solaranlagen.
+
+Produktserie: Regelungen Solar
+----------------------------------------------------------------------
+Regler SM10 Solar                          Artikel-Nr 7-719-4496       425,00 EUR
+Regler SM20 Solar                          Artikel-Nr 7-719-4497       540,00 EUR
+Fuehler-Set FS-EFS                         Artikel-Nr 7-719-4498        78,00 EUR
+Ethernet-Gateway KM-Web                    Artikel-Nr 7-719-4499       310,00 EUR
+Regler SM10/SM20 mit Differenztemperaturregelung und Vox-Funktion.
+Anschluss bis 4 Kollektor-Fuehler, Pt1000-Standard.
+KM-Web-Gateway zur Fernueberwachung ueber Internet-Portal.
+Speichertemperatur-Begrenzung 65 C, Kuehlfunktion integriert.
+
+Technische Hinweise Regelungen Solar: Solarregelungen mit Fernueberwachungsoption.
+
+Alle Angaben ohne Gewaehr. Aenderungen vorbehalten.
+Auskunft: Technische Hotline Buderus Heiztechnik GmbH, Wetzlar.
